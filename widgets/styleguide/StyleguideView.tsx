@@ -56,7 +56,7 @@ function Swatch({ boxClass, label }: { boxClass: string; label: string }) {
   return (
     <div className="flex flex-col items-center gap-1.5">
       <div className={cn("h-12 w-20 rounded-md border border-border-neutral shadow-sm", boxClass)} />
-      <p className="max-w-[11rem] text-center text-xs leading-snug text-primary/80">{label}</p>
+      <p className="max-w-44 text-center text-xs leading-snug text-primary/80">{label}</p>
     </div>
   )
 }

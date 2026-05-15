@@ -10,7 +10,22 @@ import { CosmicInput } from "@/shared/ui/CosmicInput"
 import { CosmicTextarea } from "@/shared/ui/CosmicTextarea"
 import CardPicker from "./CardPicker"
 import type { PickedCard } from "@/shared/types/db"
+import { tarotCards } from "@/shared/data/tarotCards"
 
+function buildMeaningFromPicks(pickedCards: PickedCard[]): string {
+    return pickedCards
+        .map((picked) => {
+            const card = tarotCards.find((c) => c.id === picked.id)
+            if (!card) return ""
+
+            const orientation = picked.isReversed ? "Reversed" : "Upright"
+            const text = picked.isReversed ? card.reversed : card.upright
+
+            return `${card.name} (${orientation})\n${text}`
+        })
+        .filter((line) => line.length > 0)
+        .join("\n\n")
+}
 
 export default function AddStepForm(props: {journeyId: string, onSaveButtonClicked?: (pending: boolean) => void, setOpen: (open: boolean) => void }) {
     const router = useRouter()
@@ -18,6 +33,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
     const formSchema = z.object({
         title: z.string().min(1, { message: "Title is required" }).max(80, { message: "Title must be at most 80 characters long" }),
         cards: z.array(z.object({ id: z.number(), isReversed: z.boolean() })).min(3, { message: "Please select 3 cards" }),
+        meaning: z.string().optional(),
         note: z.string().max(500, { message: "Note must be at most 500 characters long" }).optional(),
     })
 
@@ -26,12 +42,14 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
         defaultValues: {
             title: "",
             cards: [],
+            meaning: "",
             note: "",
         },
     })
 
     const mutation = useMutation({
         mutationFn: async (values: z.infer<typeof formSchema> & { cards: PickedCard[] }) => {
+
             const response = await fetch("/api/steps", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -39,7 +57,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                     journeyId: props.journeyId,
                     title: values.title.trim(),
                     note: values.note?.trim() ?? "",
-                    meaning: "",
+                    meaning: values.meaning ?? "",
                     cards: values.cards,
                 }),
             })
@@ -110,14 +128,30 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                                  <div className="flex flex-col gap-1">
                                     <CardPicker 
                                         mode="add" 
-                                   
-                                        onCardsConfirmed={(cards: PickedCard[]) => field.onChange(cards)} />
+                                        onCardsConfirmed={(cards: PickedCard[]) => {
+                                            field.onChange(cards)
+                                            form.setValue("meaning", buildMeaningFromPicks(cards), {
+                                                shouldValidate: true,
+                                            })
+                                        }} />
                                     </div>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
+            <FormField
+                control={form.control}
+                name="meaning"
+                render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Meaning</FormLabel>
+                        <FormControl>
+                            <div>{field.value}</div>
+                        </FormControl>
+                    </FormItem>
+                )}
+            />
                
             <FormField
                 control={form.control}

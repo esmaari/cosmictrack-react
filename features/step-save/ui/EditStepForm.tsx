@@ -109,6 +109,10 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
                 <CardPicker mode="edit" selectedCardIds={selectedCards} />
             </div>
 
+            <div>
+                <p>{props.step?.meaning}</p>
+            </div>
+
                 <FormField
                     control={form.control}
                     name="note"

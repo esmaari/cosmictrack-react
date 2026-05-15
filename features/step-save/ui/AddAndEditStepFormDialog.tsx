@@ -25,11 +25,7 @@ export default function AddAndEditStepFormDialog(props: {journeyId: string, step
                 </Button>
             </DialogTrigger>
             <DialogContent
-                className={
-                    props.mode === "add"
-                        ? "max-h-[90vh] w-full max-w-[min(1100px,calc(100vw-2rem))] overflow-y-auto sm:max-w-[min(1100px,calc(100vw-2rem))]"
-                        : undefined
-                }
+                className="max-h-[90vh] w-full max-w-[min(1100px,calc(100vw-2rem))] overflow-y-auto sm:max-w-[min(1100px,calc(100vw-2rem))]"
             >
     
                 <DialogHeader>

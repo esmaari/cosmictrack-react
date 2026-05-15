@@ -18,10 +18,9 @@ function buildMeaningFromPicks(pickedCards: PickedCard[]): string {
             const card = tarotCards.find((c) => c.id === picked.id)
             if (!card) return ""
 
-            const orientation = picked.isReversed ? "Reversed" : "Upright"
             const text = picked.isReversed ? card.reversed : card.upright
 
-            return `${card.name} (${orientation})\n${text}`
+            return `${text}`
         })
         .filter((line) => line.length > 0)
         .join("\n\n")

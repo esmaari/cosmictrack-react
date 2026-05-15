@@ -3,6 +3,7 @@
 
 import { useState } from "react"
 import { tarotCards, TarotCard } from "@/shared/data/tarotCards"
+import type { PickedCard } from "@/shared/types/db"
 import { Button } from "@/components/ui/button"
 
 function shuffleDeck(): TarotCard[] {
@@ -14,89 +15,120 @@ function shuffleDeck(): TarotCard[] {
     return deck
 }
 
-export default function CardPicker(props: {mode: "add" | "edit", selectedCardIds?: number[], onCardsConfirmed: (cardIds: number[]) => void}) {
+function PickedCardsDisplay({ pickedCards }: { pickedCards: PickedCard[] }) {
+    return (
+        <div className="mx-auto mt-4 flex max-w-[min(1100px,100%)] flex-wrap justify-center gap-3">
+            {pickedCards.map((picked) => {
+                const card = tarotCards.find((c) => c.id === picked.id)
+                if (!card) return null
 
+                return (
+                    <div
+                        key={`${picked.id}-${picked.isReversed ? "reversed" : "upright"}`}
+                        className="relative aspect-6/11 w-[min(120px,28vw)] max-w-[120px] shrink-0 overflow-hidden rounded-md border-2 border-solar-gold bg-shadow-veil shadow-lg"
+                    >
+                        <img
+                            src={card.image}
+                            alt={picked.isReversed ? `${card.name} (reversed)` : card.name}
+                            className={[
+                                "h-full w-full object-cover",
+                                picked.isReversed ? "rotate-180" : "",
+                            ].join(" ")}
+                        />
+                    </div>
+                )
+            })}
+        </div>
+    )
+}
+
+export default function CardPicker(props: {
+    mode: "add" | "edit"
+    selectedCardIds?: PickedCard[]
+    onCardsConfirmed?: (cards: PickedCard[]) => void
+}) {
     const [shuffledCards] = useState<TarotCard[]>(shuffleDeck)
-    const [selectedIds, setSelectedIds] = useState<number[]>(props.selectedCardIds ?? [])
+    const [pickedCards, setPickedCards] = useState<PickedCard[]>(props.selectedCardIds ?? [])
     const [confirmed, setConfirmed] = useState(false)
 
     const toggleCard = (cardId: number): void => {
         if (confirmed) return
-        setSelectedIds((prev: number[]): number[] => {
-            if (prev.includes(cardId)) return prev.filter((id: number) => id !== cardId)
+        setPickedCards((prev) => {
+            if (prev.some((p) => p.id === cardId)) {
+                return prev.filter((p) => p.id !== cardId)
+            }
             if (prev.length >= 3) return prev
-            return [...prev, cardId]
+            return [...prev, { id: cardId, isReversed: Math.random() < 0.5 }]
         })
     }
- 
+
     const confirmCards = (): void => {
         setConfirmed(true)
-        props.onCardsConfirmed(selectedIds) 
+        props?.onCardsConfirmed?.(pickedCards)
     }
 
     if (props.mode === "edit" || confirmed) {
-        const displayIds = confirmed ? selectedIds : (props.selectedCardIds ?? [])
-        const selected = tarotCards.filter((c: TarotCard) => displayIds.includes(c.id))
-
-        return (
-            <div className="mx-auto mt-4 flex max-w-[min(1100px,100%)] flex-wrap justify-center gap-3">
-                {selected.map((card: TarotCard) => (
-                    <div
-                        key={card.id}
-                        className="aspect-6/11 w-[min(120px,28vw)] max-w-[120px] shrink-0 overflow-hidden rounded-md border-2 border-solar-gold bg-shadow-veil shadow-lg"
-                    >
-                        <img
-                            src={card.image}
-                            alt={card.name}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-                ))}
-            </div>
-        )
+        const cardsForDisplay = confirmed ? pickedCards : (props.selectedCardIds ?? [])
+        return <PickedCardsDisplay pickedCards={cardsForDisplay} />
     }
 
-    return (
-        <div className="text-center">
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-3">
-                Choose 3 cards ({selectedIds.length}/3)
-            </p>
-            <div className="mx-auto flex w-full max-w-[min(1100px,100%)] justify-center overflow-x-auto overflow-y-visible [-webkit-overflow-scrolling:touch]">
-                <div className="grid w-max grid-cols-26 gap-2 px-2 py-4 sm:px-3 max-w-[min(1000px,100%)]">
+return (
+ 
+    <div className="text-center">
+        <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-3">
+            Choose 3 cards ({pickedCards.length}/3)
+        </p>
+        <div className="mx-auto flex w-full max-w-[min(1100px,100%)] justify-center overflow-x-auto overflow-y-visible [-webkit-overflow-scrolling:touch]">
+            <div className="grid w-max grid-cols-26 gap-2 px-2 py-4 sm:px-3 max-w-[min(1000px,100%)]">
                 {shuffledCards.map((card: TarotCard) => {
-                    const isSelected = selectedIds.includes(card.id)
+                    const isSelected = pickedCards.some((p) => p.id === card.id)
+
+                    if (isSelected) {
+                        return (
+                            <div
+                                key={card.id}
+                                onClick={() => toggleCard(card.id)}
+                                className="h-30 w-14 shrink-0 cursor-pointer overflow-hidden rounded-md border-2 border-solar-gold bg-shadow-veil scale-115 z-20 shadow-lg transition-all duration-300"
+                            >
+                                <img
+                                    src="/cards/back.png"
+                                    alt="Card back"
+                                    className="h-full w-full object-cover"
+                                />
+                            </div>
+                        )
+                    }
+
                     return (
                         <div
                             key={card.id}
                             onClick={() => toggleCard(card.id)}
-                            className={[
-                                "h-30 w-14 shrink-0 cursor-pointer overflow-hidden rounded-md border bg-shadow-veil transition-all duration-300 transform",
-                                isSelected
-                                    ? "border-solar-gold border-2 scale-105 z-20 shadow-lg"
-                                    : "border-cosmic-indigo z-10 hover:-translate-y-2 hover:shadow-xl hover:brightness-110",
-                            ].join(" ")}
+                            className="h-30 w-14 shrink-0 cursor-pointer overflow-hidden rounded-md border border-cosmic-indigo bg-shadow-veil z-10 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:brightness-110"
                         >
                             <img
-                                src={isSelected ? card.image : "/cards/back.png"}
-                                alt={card.name}
-                                className="w-full h-full object-cover" 
+                                src="/cards/back.png"
+                                alt="Card back"
+                                className="h-full w-full object-cover"
                             />
                         </div>
                     )
                 })}
-                </div>
-            </div>
-            <div className="mt-4">
-                <Button
-                    type="button"
-                    variant="cosmicPrimary"
-                    size="cosmicLg"
-                    onClick={confirmCards}
-                    disabled={selectedIds.length !== 3}
-                >
-                    Confirm Cards
-                </Button>
-            </div>
+            <div>
         </div>
-    )
-}
+
+        <div className="mt-4">
+            <Button
+                type="button"
+                variant="cosmicPrimary"
+                size="cosmicLg"
+                onClick={confirmCards}
+                disabled={pickedCards.length !== 3}
+            >
+                Confirm Cards
+            </Button>
+        </div>
+    </div>
+    </div>
+    </div>
+      
+)}

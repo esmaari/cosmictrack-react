@@ -1,6 +1,8 @@
 export type DbId = string;
 export type IsoDateTime = string;
 
+export type PickedCard = { id: number; isReversed: boolean };
+
 export type Journey = {
   id: DbId;
   user_id: DbId;
@@ -16,7 +18,7 @@ export type Step = {
   user_id: DbId;
   journey_id: DbId;
   title: string;
-  cards?: number[] | null;
+  cards?: PickedCard[] | null;
   meaning?: string | null;
   note?: string | null;
   created_at: IsoDateTime;

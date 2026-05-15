@@ -1,5 +1,4 @@
 'use client'
-import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
@@ -10,13 +9,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { CosmicInput } from "@/shared/ui/CosmicInput"
 import { CosmicTextarea } from "@/shared/ui/CosmicTextarea"
 import CardPicker from "./CardPicker"
+import type { PickedCard } from "@/shared/types/db"
 
-export default function AddStepForm(props: {journeyId: string, onSaveButtonClicked?: (pending: boolean) => void }) {
-    const [selectedCards, setSelectedCards] = useState<number[]>([])
+
+export default function AddStepForm(props: {journeyId: string, onSaveButtonClicked?: (pending: boolean) => void, setOpen: (open: boolean) => void }) {
     const router = useRouter()
 
     const formSchema = z.object({
         title: z.string().min(1, { message: "Title is required" }).max(80, { message: "Title must be at most 80 characters long" }),
+        cards: z.array(z.object({ id: z.number(), isReversed: z.boolean() })).min(3, { message: "Please select 3 cards" }),
         note: z.string().max(500, { message: "Note must be at most 500 characters long" }).optional(),
     })
 
@@ -24,12 +25,13 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
+            cards: [],
             note: "",
         },
     })
 
     const mutation = useMutation({
-        mutationFn: async (values: z.infer<typeof formSchema> & { cards: number[] }) => {
+        mutationFn: async (values: z.infer<typeof formSchema> & { cards: PickedCard[] }) => {
             const response = await fetch("/api/steps", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -67,18 +69,14 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         mutation.mutate(
-            { ...values, cards: selectedCards },
+            { ...values },
             {
                 onSuccess: () => {
                     form.reset()
-                    setSelectedCards([])
+                    props.setOpen(false)
                 },
             },
         )
-    }
-
-    const handleCardToggle = (cardIds: number[]) => {
-        setSelectedCards(cardIds)
     }
 
     return (
@@ -102,13 +100,25 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                         </FormItem>
                     )}
                 />
-
-            <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Selected cards</label>
-                <CardPicker mode="add" selectedCardIds={selectedCards} onCardsConfirmed={handleCardToggle} />
-                
-            </div>
-
+                <FormField
+                    control={form.control}
+                    name="cards"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-col gap-1">
+                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Cards</FormLabel>
+                            <FormControl>
+                                 <div className="flex flex-col gap-1">
+                                    <CardPicker 
+                                        mode="add" 
+                                   
+                                        onCardsConfirmed={(cards: PickedCard[]) => field.onChange(cards)} />
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+               
             <FormField
                 control={form.control}
                 name="note"

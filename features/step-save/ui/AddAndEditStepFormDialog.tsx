@@ -9,7 +9,7 @@ import AddStepForm from "./AddStepForm"
 import EditStepForm from "./EditStepForm"
 
 export default function AddAndEditStepFormDialog(props: {journeyId: string, step?: Step, mode: "add" | "edit"}) {
-
+    const [open, setOpen] = useState(false)
     const [onPending, setOnPending] = useState(false)
     const onPendingChange = (data: boolean) => {
         setOnPending(data)
@@ -17,7 +17,7 @@ export default function AddAndEditStepFormDialog(props: {journeyId: string, step
 
     return(
 
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button type="button" variant={props.mode === "add" ? "cosmicLinkLight" : "cosmicLinkDark"} size="cosmicSm">
                     {props.mode === "add" ? <Plus className="size-4" /> : <Pencil className="size-4" />}
@@ -40,8 +40,8 @@ export default function AddAndEditStepFormDialog(props: {journeyId: string, step
                 </DialogHeader>
                     <div className="min-w-0 py-4">
                         {props.mode === "add" 
-                        ? <AddStepForm journeyId={props.journeyId} onSaveButtonClicked={onPendingChange} /> 
-                        : props.step && <EditStepForm journeyId={props.journeyId} step={props.step as Step} onSaveButtonClicked={onPendingChange}/>}
+                        ? <AddStepForm journeyId={props.journeyId} onSaveButtonClicked={onPendingChange} setOpen={setOpen} /> 
+                        : props.step && <EditStepForm journeyId={props.journeyId} step={props.step as Step} onSaveButtonClicked={onPendingChange} setOpen={setOpen} />}
 
                     </div>
 

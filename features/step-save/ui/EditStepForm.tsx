@@ -12,11 +12,12 @@ import { CosmicInput } from "@/shared/ui/CosmicInput"
 import { CosmicTextarea } from "@/shared/ui/CosmicTextarea"
 import DeleteStepButton from "@/features/step-delete/ui/DeleteStepButton"
 import CardPicker from "./CardPicker"
+import type { PickedCard } from "@/shared/types/db"
 
-export default function EditStepForm(props: {journeyId: string, step?: Step, onSaveButtonClicked?: (pending: boolean) => void}) {
+export default function EditStepForm(props: {journeyId: string, step?: Step, onSaveButtonClicked?: (pending: boolean) => void, setOpen: (open: boolean) => void }) {
     const router = useRouter()
 
-    const [selectedCards, setSelectedCards] = useState<number[]>(props.step?.cards ?? [])
+    const [selectedCards, setSelectedCards] = useState<PickedCard[]>(props.step?.cards ?? [])
 
     const formSchema = z.object({
         title: z.string().min(1, { message: "Title is required" }).max(80, { message: "Title must be at most 80 characters long" }),
@@ -32,7 +33,7 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
     })
 
     const mutation = useMutation({
-        mutationFn: async (values: z.infer<typeof formSchema> & { cards: number[] }) => {
+        mutationFn: async (values: z.infer<typeof formSchema> & { cards: PickedCard[] }) => {
             const response = await fetch("/api/steps", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -76,13 +77,10 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
             {
                 onSuccess: () => {
                     form.reset(values)
+                    props.setOpen(false)
                 },
             },
         )
-    }
-
-    const handleCardToggle = (cardIds: number[]) => {
-        setSelectedCards(cardIds)
     }
 
     return(
@@ -108,7 +106,7 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
 
             <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Selected cards</label>
-                <CardPicker mode="edit" selectedCardIds={selectedCards} onCardsConfirmed={handleCardToggle} />
+                <CardPicker mode="edit" selectedCardIds={selectedCards} />
             </div>
 
                 <FormField

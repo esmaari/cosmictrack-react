@@ -34,8 +34,12 @@ yarn-error.log*
 .env*
 !.env.example
 
-# vercel
+# vercel / netlify local state
 .vercel
+.netlify
+
+# Supabase CLI local cache (if you add supabase/ later)
+supabase/.temp/
 
 # typescript
 *.tsbuildinfo

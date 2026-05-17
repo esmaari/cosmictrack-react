@@ -1,4 +1,5 @@
 'use client'
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
@@ -12,7 +13,10 @@ import CardPicker from "./CardPicker"
 import type { PickedCard } from "@/shared/types/db"
 import { tarotCards } from "@/shared/data/tarotCards"
 import { Button } from "@/components/ui/button"
-import { askAI } from "@/shared/lib/askAI"
+import { cn } from "@/lib/utils"
+import { AskAIError, askAI } from "@/shared/lib/askAI"
+import { formatAiRemaining } from "@/shared/lib/aiCredits"
+import { useProfileContext } from "@/shared/lib/ProfileProvider"
 import { SparklesIcon } from "lucide-react"
 
 
@@ -51,6 +55,8 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
     })
 
     const cards = form.watch("cards")
+    const { credits, refetch: refetchProfile } = useProfileContext()
+    const [aiLoading, setAiLoading] = useState(false)
 
     const mutation = useMutation({
         mutationFn: async (values: z.infer<typeof formSchema> & { cards: PickedCard[] }) => {
@@ -103,9 +109,27 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
     }
 
     const getMeaningFromAI = async () => {
-        const meaning = await askAI(form.getValues("cards"), form.getValues("title"))
-        form.setValue("meaning", meaning)
+        setAiLoading(true)
+        try {
+            const result = await askAI(form.getValues("cards"), form.getValues("title"))
+            form.setValue("meaning", result.text, { shouldValidate: true })
+            await refetchProfile()
+        } catch (error) {
+            const message =
+                error instanceof AskAIError
+                    ? error.message
+                    : error instanceof Error
+                      ? error.message
+                      : "AI request failed"
+            toast.error(message)
+            await refetchProfile()
+        } finally {
+            setAiLoading(false)
+        }
     }
+
+    const aiRemainingLabel = credits ? formatAiRemaining(credits) : null
+    const aiDisabled = aiLoading || !credits || credits.remaining === 0
 
     return (
         <Form {...form}>
@@ -158,13 +182,25 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                         <div className="flex flex-row gap-2 items-center">
                                                 
                         <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Meaning</FormLabel>
-                        {cards.length === 3
-                        ? <Button type="button" size="lg" variant="cosmicLinkDark" onClick={() => getMeaningFromAI()} className="">
-                            <SparklesIcon className="w-4 h-4" />
-                            Ask AI
-                        </Button>
-                        : null
-                        }
+                        {cards.length === 3 ? (
+                            <>
+                                <Button
+                                    type="button"
+                                    size="lg"
+                                    variant="cosmicLinkDark"
+                                    disabled={aiDisabled}
+                                    onClick={() => void getMeaningFromAI()}
+                                >
+                                    <SparklesIcon className={cn("w-4 h-4", aiLoading && "animate-pulse")} />
+                                    {aiLoading ? "Generating…" : "Ask AI"}
+                                </Button>
+                                {aiRemainingLabel ? (
+                                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                                        {aiRemainingLabel}
+                                    </span>
+                                ) : null}
+                            </>
+                        ) : null}
                         </div>
                         <FormControl>
                             <div>{field.value}</div>

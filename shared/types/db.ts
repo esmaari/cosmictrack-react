@@ -3,6 +3,15 @@ export type IsoDateTime = string;
 
 export type PickedCard = { id: number; isReversed: boolean };
 
+export type UserPlan = "free" | "premium";
+
+export type Profile = {
+  id: DbId;
+  plan: UserPlan | string;
+  ai_used_count: number;
+  ai_period_start: IsoDateTime;
+};
+
 export type Journey = {
   id: DbId;
   user_id: DbId;

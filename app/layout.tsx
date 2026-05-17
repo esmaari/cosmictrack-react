@@ -3,6 +3,7 @@ import localFont from "next/font/local"
 import "./globals.css"
 
 import { ReactQueryProvider } from "@/shared/lib/react-query/ReactQueryProvider"
+import { ProfileProvider } from "@/shared/lib/ProfileProvider"
 import { Geist } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
@@ -59,11 +60,13 @@ export default function RootLayout({
      
       <body className="flex min-h-full flex-col">
         <ReactQueryProvider>
-          <Toaster />
+          <ProfileProvider>
+            <Toaster />
           <Header />
           <div className="flex min-h-0 flex-1 flex-col">{children}</div>
           <SiteFooter />
-        </ReactQueryProvider>  
+          </ProfileProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useProfileContext } from "@/shared/lib/ProfileProvider"
 
 const guestLinkClass =
   "rounded-md px-3 py-2 text-sm font-semibold text-btn-link-light hover:text-btn-link-light-hover"
@@ -19,6 +20,7 @@ export default function Header() {
   const pathname = usePathname()
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState<User | null | undefined>(undefined)
+  const { credits, loading: profileLoading } = useProfileContext()
 
   useEffect(() => {
     void supabase.auth.getUser().then(({ data: { user: u } }) => {
@@ -84,6 +86,18 @@ export default function Header() {
             <span className="h-9 w-24 shrink-0 rounded-md bg-white/5" aria-hidden />
           ) : isAuthed ? (
             <>
+              {!profileLoading && credits ? (
+                <span
+                  className={cn(
+                    "hidden rounded-full border px-2.5 py-1 text-xs font-semibold sm:inline-flex",
+                    credits.plan === "premium"
+                      ? "border-solar-gold/60 bg-solar-gold/15 text-solar-gold"
+                      : "border-white/25 bg-white/10 text-btn-link-light",
+                  )}
+                >
+                  {credits.planLabel}
+                </span>
+              ) : null}
               <Link href="/profile" className={cn(navClass("/profile"), "hidden text-base sm:inline-flex sm:text-xl")}>
                 Profile
               </Link>

@@ -11,6 +11,10 @@ import { CosmicTextarea } from "@/shared/ui/CosmicTextarea"
 import CardPicker from "./CardPicker"
 import type { PickedCard } from "@/shared/types/db"
 import { tarotCards } from "@/shared/data/tarotCards"
+import { Button } from "@/components/ui/button"
+import { askAI } from "@/shared/lib/askAI"
+import { SparklesIcon } from "lucide-react"
+
 
 function buildMeaningFromPicks(pickedCards: PickedCard[]): string {
     return pickedCards
@@ -45,6 +49,8 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
             note: "",
         },
     })
+
+    const cards = form.watch("cards")
 
     const mutation = useMutation({
         mutationFn: async (values: z.infer<typeof formSchema> & { cards: PickedCard[] }) => {
@@ -96,6 +102,11 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
         )
     }
 
+    const getMeaningFromAI = async () => {
+        const meaning = await askAI(form.getValues("cards"), form.getValues("title"))
+        form.setValue("meaning", meaning)
+    }
+
     return (
         <Form {...form}>
             
@@ -144,7 +155,17 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                 name="meaning"
                 render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
+                        <div className="flex flex-row gap-2 items-center">
+                                                
                         <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Meaning</FormLabel>
+                        {cards.length === 3
+                        ? <Button type="button" size="lg" variant="cosmicLinkDark" onClick={() => getMeaningFromAI()} className="">
+                            <SparklesIcon className="w-4 h-4" />
+                            Ask AI
+                        </Button>
+                        : null
+                        }
+                        </div>
                         <FormControl>
                             <div>{field.value}</div>
                         </FormControl>

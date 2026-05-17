@@ -8,6 +8,49 @@ const corsHeaders = {
   "Vary": "Origin",
 };
 
+const FREE_DAILY_LIMIT = 1;
+const PREMIUM_MONTHLY_LIMIT = 100;
+
+type ProfileRow = {
+  id: string;
+  plan: string;
+  ai_used_count: number;
+  ai_period_start: string;
+};
+
+function jsonResponse(body: unknown, status: number): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json", ...corsHeaders },
+  });
+}
+
+function utcDayKey(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
+function utcMonthKey(date: Date): string {
+  return date.toISOString().slice(0, 7);
+}
+
+function isPremiumPlan(plan: string): boolean {
+  return plan === "premium";
+}
+
+function getLimitForPlan(plan: string): number {
+  return isPremiumPlan(plan) ? PREMIUM_MONTHLY_LIMIT : FREE_DAILY_LIMIT;
+}
+
+function periodExpired(plan: string, periodStart: string, now: Date): boolean {
+  const start = new Date(periodStart);
+  if (Number.isNaN(start.getTime())) return true;
+
+  if (isPremiumPlan(plan)) {
+    return utcMonthKey(start) !== utcMonthKey(now);
+  }
+  return utcDayKey(start) !== utcDayKey(now);
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -15,47 +58,80 @@ Deno.serve(async (req) => {
 
   const authHeader = req.headers.get("Authorization");
   if (!authHeader) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
-    });
+    return jsonResponse({ error: "Unauthorized" }, 401);
   }
 
-  const supabase = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-    { global: { headers: { Authorization: authHeader } } },
-  );
+  const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+  const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
+  const serviceRoleKey = Deno.env.get("SERVICE_ROLE_KEY") ?? "";
 
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return jsonResponse({ error: "Missing Supabase env" }, 500);
+  }
+  if (!serviceRoleKey) {
+    return jsonResponse({ error: "Missing SERVICE_ROLE_KEY" }, 500);
+  }
+
+  const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
+    global: { headers: { Authorization: authHeader } },
+  });
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabaseAuth.auth.getUser();
+
   if (authError || !user) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
-    });
+    return jsonResponse({ error: "Unauthorized" }, 401);
   }
 
   try {
     const { prompt } = await req.json();
-    if (!prompt) {
-      return new Response(JSON.stringify({ error: "Missing prompt" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
+    if (!prompt || typeof prompt !== "string") {
+      return jsonResponse({ error: "Missing prompt" }, 400);
     }
 
-    const apiKey = Deno.env.get("OPENAI_API_KEY");
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: "No OPENAI_API_KEY" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
+    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
+
+    const { data: profile, error: profileError } = await supabaseAdmin
+      .from("profiles")
+      .select("id, plan, ai_used_count, ai_period_start")
+      .eq("id", user.id)
+      .single();
+
+    if (profileError || !profile) {
+      return jsonResponse({ error: "Profile not found" }, 404);
+    }
+
+    const row = profile as ProfileRow;
+    const now = new Date();
+    const limit = getLimitForPlan(row.plan);
+    const resetPeriod = periodExpired(row.plan, row.ai_period_start, now);
+    let usedCount = resetPeriod ? 0 : row.ai_used_count;
+
+    if (usedCount >= limit) {
+      return jsonResponse(
+        {
+          error: "AI limit reached",
+          code: "LIMIT_REACHED",
+          plan: row.plan,
+          limit,
+          used: usedCount,
+          remaining: 0,
+        },
+        403,
+      );
+    }
+
+    const openaiKey = Deno.env.get("OPENAI_API_KEY");
+    if (!openaiKey) {
+      return jsonResponse({ error: "No OPENAI_API_KEY" }, 500);
     }
 
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
+        Authorization: `Bearer ${openaiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -72,31 +148,45 @@ Deno.serve(async (req) => {
     const bodyText = await r.text();
 
     if (!r.ok) {
-      return new Response(JSON.stringify({ error: bodyText }), {
-        status: r.status,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
+      return jsonResponse({ error: bodyText }, r.status);
     }
 
-    let data: unknown;
+    let data: { choices?: Array<{ message?: { content?: string } }> };
     try {
       data = JSON.parse(bodyText);
     } catch {
-      return new Response(JSON.stringify({ error: "Invalid JSON", raw: bodyText }), {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      });
+      return jsonResponse({ error: "Invalid JSON from OpenAI", raw: bodyText }, 500);
     }
 
     const text = data?.choices?.[0]?.message?.content?.trim?.() ?? "";
+    const newCount = usedCount + 1;
 
-    return new Response(JSON.stringify({ text }), {
-      headers: { "Content-Type": "application/json", ...corsHeaders },
-    });
+    const profileUpdate: { ai_used_count: number; ai_period_start?: string } = {
+      ai_used_count: newCount,
+    };
+    if (resetPeriod) {
+      profileUpdate.ai_period_start = now.toISOString();
+    }
+
+    const { error: updateError } = await supabaseAdmin
+      .from("profiles")
+      .update(profileUpdate)
+      .eq("id", user.id);
+
+    if (updateError) {
+      console.error("Failed to update AI usage:", updateError);
+      return jsonResponse({ error: "Failed to record AI usage" }, 500);
+    }
+
+    return jsonResponse({
+      text,
+      plan: row.plan,
+      limit,
+      used: newCount,
+      remaining: Math.max(0, limit - newCount),
+    }, 200);
   } catch (e) {
-    return new Response(JSON.stringify({ error: String(e) }), {
-      status: 500,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
-    });
+    console.error("AI function error:", e);
+    return jsonResponse({ error: String(e) }, 500);
   }
 });

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import localFont from "next/font/local"
+import { getLocale } from "next-intl/server"
 import "./globals.css"
 
 import { ReactQueryProvider } from "@/shared/lib/react-query/ReactQueryProvider"
@@ -7,8 +8,6 @@ import { ProfileProvider } from "@/shared/lib/ProfileProvider"
 import { Geist } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
-import Header from "@/shared/ui/Header"
-import SiteFooter from "@/shared/ui/SiteFooter"
 
 export const metadata: Metadata = {
   title: "CosmicTrack",
@@ -47,14 +46,16 @@ const robotoFont = localFont({
   variable: "--font-roboto",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children, //destructuring the children prop: vue daki slot gibi
 }: Readonly<{ //readonly: readonly olarak tanımlanır: children propu sadece okunabilir olarak tanımlanır yani bu layout icinde degistirilemez
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale()
+
   return (
     <html
-      lang="en"
+      lang={locale}
       className={cn("h-full", "antialiased", forumFont.variable, robotoFont.variable, "font-sans", geist.variable)}
     >
      
@@ -62,9 +63,7 @@ export default function RootLayout({
         <ReactQueryProvider>
           <ProfileProvider>
             <Toaster />
-          <Header />
-          <div className="flex min-h-0 flex-1 flex-col">{children}</div>
-          <SiteFooter />
+            {children}
           </ProfileProvider>
         </ReactQueryProvider>
       </body>

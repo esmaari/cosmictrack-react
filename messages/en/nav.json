@@ -1,0 +1,15 @@
+{
+  "home": "Home",
+  "tarot": "Tarot",
+  "myJourneys": "My Journeys",
+  "profile": "Profile",
+  "login": "Login",
+  "register": "Sign up",
+  "logout": "Logout",
+  "loggingOut": "Logging out…",
+  "about": "About",
+  "impressum": "Impressum",
+  "privacy": "Privacy",
+  "styleguide": "Styleguide",
+  "copyright": "© {year} CosmicTrack. All rights reserved."
+}

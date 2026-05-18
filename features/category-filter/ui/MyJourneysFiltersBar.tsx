@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import CategoryFilterPicker from "@/features/category-filter/ui/CategoryFilterPicker";
 import type { Category } from "@/shared/types/db"
 import { Button } from "@/components/ui/button";

@@ -1,42 +1,50 @@
-import { NextResponse, type NextRequest } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import createIntlMiddleware from "next-intl/middleware"
+import { type NextRequest } from "next/server"
+import { createServerClient } from "@supabase/ssr"
+import { routing } from "./i18n/routing"
+
+const handleI18n = createIntlMiddleware(routing)
 
 export async function proxy(request: NextRequest) {
-  const response = NextResponse.next({ request });
+  const response = handleI18n(request)
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
+  // Locale redirect (e.g. detect browser language) — skip Supabase pass-through
+  if (response.headers.get("location")) {
+    return response
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    return response;
+    return response
   }
 
   if (!/^https?:\/\//i.test(supabaseUrl)) {
-    // Misconfigured env (common mistake: swapping URL and anon key)
-    return response;
+    return response
   }
 
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
-        return request.cookies.getAll();
+        return request.cookies.getAll()
       },
       setAll(cookiesToSet) {
         cookiesToSet.forEach(({ name, value, options }) => {
-          response.cookies.set(name, value, options);
-        });
+          request.cookies.set(name, value)
+          response.cookies.set(name, value, options)
+        })
       },
     },
-  });
+  })
 
-  // Refresh auth cookies if needed
-  await supabase.auth.getUser();
+  await supabase.auth.getUser()
 
-  return response;
+  return response
 }
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)",
+    "/((?!api|_next|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)",
   ],
-};
+}

@@ -1,5 +1,5 @@
 import Image from "next/image"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { Button } from "@/components/ui/button"
 
 export default function Home() {
@@ -56,13 +56,13 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
             <Button asChild variant="cosmicPrimary" size="cosmicLg">
               <Link href="/auth">Sign in / Sign up</Link>
             </Button>
 
             <Button asChild variant="cosmicSecondary" size="cosmicLg">
-              <Link href="/my-journeys">Go to My Journeys</Link>
+              <Link href="/tarot">Explore tarot</Link>
             </Button>
           </div>
 

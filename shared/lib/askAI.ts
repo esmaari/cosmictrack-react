@@ -1,6 +1,6 @@
 import { FunctionsHttpError } from "@supabase/supabase-js"
 import { createSupabaseBrowserClient } from "@/core/supabase/browser"
-import { tarotCards } from "@/shared/data/tarotCards"
+import { tarotReadingCards } from "@/shared/content/tarot"
 import type { PickedCard } from "@/shared/types/db"
 
 export type AskAIResult = {
@@ -52,7 +52,7 @@ export async function askAI(pickedCards: PickedCard[], title: string): Promise<A
 
   const cardsInfo = pickedCards
     .map((card) => {
-      const name = tarotCards.find((c) => c.id === card.id)?.name
+      const name = tarotReadingCards.find((c) => c.id === card.id)?.name
       const orientation = card.isReversed ? "Reversed" : "Upright"
       return `${name ?? card.id} (${orientation})`
     })

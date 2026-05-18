@@ -1,6 +1,7 @@
 import { createSupabaseServerClient } from "@/core/supabase/server";
 import { getJourneysByUserId } from "@/entities/journey/api/journeys";
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/navigation";
+import { getLocale } from "next-intl/server";
 import AddNewJourneyDialog from "@/features/journey-save/AddNewJourneyDialog";
 import { getFavoriteJourneyIdsByUserId } from "@/entities/favorites/api/getFavoriteJourneyIdsByUserId";
 import { getjourneyCategoryRelationsByUserId } from "@/entities/journey-category/api/getjourneyCategoryRelationsByUserId"
@@ -25,17 +26,17 @@ export default async function MyJourneys(props: { searchParams: Promise<{ fav?: 
 
     const supabase = await createSupabaseServerClient()
 
-    const {data: {user} } = await supabase.auth.getUser() 
-
-    if (!user) {
-        redirect("/auth")
+    const { data: { user } } = await supabase.auth.getUser()
+    const userId = user?.id
+    if (!userId) {
+        return redirect({ href: "/auth", locale: await getLocale() })
     }
 
     // Bu liste: kullanıcının sahip olduğu tüm journey kayıtları (SSR'da DB'den okunur).
-    const journeys = await getJourneysByUserId(user.id)
+    const journeys = await getJourneysByUserId(userId)
 
     // Bu liste: kullanıcının favori yaptığı journey'lerin sadece id listesi (filter + UI state için yeterli).
-    const favoriteJourneyIds = await getFavoriteJourneyIdsByUserId(user.id)
+    const favoriteJourneyIds = await getFavoriteJourneyIdsByUserId(userId)
 
     // Bu liste: ekranda gösterilecek journey'ler (URL'deki fav=1 moduna göre tümü veya sadece favoriler).
     const visibleJourneys = showFavMode 
@@ -43,10 +44,10 @@ export default async function MyJourneys(props: { searchParams: Promise<{ fav?: 
         : journeys;
     
     // Bu liste: kullanıcıya ait tüm journey↔category ilişki satırları (N+1 olmaması için tek sorgu).
-    const journeyCategoryRelations = await getjourneyCategoryRelationsByUserId(user.id)
+    const journeyCategoryRelations = await getjourneyCategoryRelationsByUserId(userId)
 
     // Bu liste: kullanıcının oluşturduğu tüm category kayıtları (chip render etmek için title/color lazım).
-    const allCategories = await getCategoriesByUserId(user.id)
+    const allCategories = await getCategoriesByUserId(userId)
 
     // Bu map: categoryId -> Category lookup (chip basarken hızlı erişim).
     const categoryMapById = new Map<string, Category>(allCategories.map(c => [c.id, c]))

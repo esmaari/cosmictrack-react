@@ -2,12 +2,13 @@
 "use client"
 
 import { useState } from "react"
-import { tarotCards, TarotCard } from "@/shared/data/tarotCards"
+import { tarotReadingCards, type TarotReadingCard } from "@/shared/content/tarot"
+import { buildMeaningFromPicks } from "@/shared/lib/buildMeaningFromPicks"
 import type { PickedCard } from "@/shared/types/db"
 import { Button } from "@/components/ui/button"
 
-function shuffleDeck(): TarotCard[] {
-    const deck = [...tarotCards]
+function shuffleDeck(): TarotReadingCard[] {
+    const deck = [...tarotReadingCards]
     for (let i = deck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -19,7 +20,7 @@ function PickedCardsDisplay({ pickedCards }: { pickedCards: PickedCard[] }) {
     return (
         <div className="mx-auto mt-4 flex max-w-[min(1100px,100%)] flex-wrap justify-center gap-3">
             {pickedCards.map((picked) => {
-                const card = tarotCards.find((c) => c.id === picked.id)
+                const card = tarotReadingCards.find((c) => c.id === picked.id)
                 if (!card) return null
 
                 return (
@@ -43,11 +44,12 @@ function PickedCardsDisplay({ pickedCards }: { pickedCards: PickedCard[] }) {
 }
 
 export default function CardPicker(props: {
-    mode: "add" | "edit"
+    mode: "add" | "edit" | "demo"
     selectedCardIds?: PickedCard[]
+    question?: string
     onCardsConfirmed?: (cards: PickedCard[]) => void
 }) {
-    const [shuffledCards] = useState<TarotCard[]>(shuffleDeck)
+    const [shuffledCards] = useState<TarotReadingCard[]>(shuffleDeck)
     const [pickedCards, setPickedCards] = useState<PickedCard[]>(props.selectedCardIds ?? [])
     const [confirmed, setConfirmed] = useState(false)
 
@@ -67,6 +69,24 @@ export default function CardPicker(props: {
         props?.onCardsConfirmed?.(pickedCards)
     }
 
+    if (props.mode === "demo" && confirmed) {
+        const meaning = buildMeaningFromPicks(pickedCards)
+        return (
+            <div className="text-center">
+                {props.question?.trim() ? (
+                    <p className="mb-4 text-sm text-primary/80">
+                        <span className="font-medium text-primary">Niyet:</span> {props.question.trim()}
+                    </p>
+                ) : null}
+                <PickedCardsDisplay pickedCards={pickedCards} />
+                <div className="mx-auto mt-6 max-w-2xl rounded-lg border border-cosmic-indigo/15 bg-input p-4 text-left sm:p-5">
+                    <h3 className="mb-2 text-sm font-semibold text-primary">Kart anlamları</h3>
+                    <p className="whitespace-pre-line text-sm leading-6 text-primary/85 sm:text-base">{meaning}</p>
+                </div>
+            </div>
+        )
+    }
+
     if (props.mode === "edit" || confirmed) {
         const cardsForDisplay = confirmed ? pickedCards : (props.selectedCardIds ?? [])
         return <PickedCardsDisplay pickedCards={cardsForDisplay} />
@@ -80,7 +100,7 @@ return (
         </p>
         <div className="mx-auto flex w-full max-w-[min(1100px,100%)] justify-center overflow-x-auto overflow-y-visible [-webkit-overflow-scrolling:touch]">
             <div className="grid w-max grid-cols-26 gap-2 px-2 py-4 sm:px-3 max-w-[min(1000px,100%)]">
-                {shuffledCards.map((card: TarotCard) => {
+                {shuffledCards.map((card: TarotReadingCard) => {
                     const isSelected = pickedCards.some((p) => p.id === card.id)
 
                     if (isSelected) {

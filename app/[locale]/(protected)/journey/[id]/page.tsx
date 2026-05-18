@@ -1,6 +1,7 @@
 import { createSupabaseServerClient } from "@/core/supabase/server";
 import { getJourneyById } from "@/entities/journey/api/journey";
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/navigation";
+import { getLocale } from "next-intl/server";
 import { getStepsByJourneyId } from "@/entities/step/api/steps";
 import StepsListClient from "@/features/step-save/ui/StepsListClient";
 import { getCategoryIdsByJourneyId } from "@/entities/journey-category/api/getCategoryIdsByJourneyId";
@@ -21,23 +22,23 @@ export default async function JourneyDetailPage({ params }: { params: Promise<{ 
 
     const supabase = await createSupabaseServerClient()
 
-    const {data: {user} } = await supabase.auth.getUser() 
-
-    if (!user) {
-        redirect("/auth")
+    const { data: { user } } = await supabase.auth.getUser()
+    const userId = user?.id
+    if (!userId) {
+        return redirect({ href: "/auth", locale: await getLocale() })
     }
 
-    const journey = await getJourneyById(id, user.id)
-    const steps = await getStepsByJourneyId(id, user.id)
+    const journey = await getJourneyById(id, userId)
+    const steps = await getStepsByJourneyId(id, userId)
 
 
     if (!journey) {
-        redirect("/my-journeys")
+        return redirect({ href: "/my-journeys", locale: await getLocale() })
     }
 
-    const assignedCategoryIds = await getCategoryIdsByJourneyId(id, user.id)
-    const allCategories = await getCategoriesByUserId(user.id)
-    const favoriteJourneyIds = await getFavoriteJourneyIdsByUserId(user.id)
+    const assignedCategoryIds = await getCategoryIdsByJourneyId(id, userId)
+    const allCategories = await getCategoriesByUserId(userId)
+    const favoriteJourneyIds = await getFavoriteJourneyIdsByUserId(userId)
     const isFavorite = favoriteJourneyIds.includes(id)
 
     return (

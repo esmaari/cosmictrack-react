@@ -1,5 +1,5 @@
 import type { Journey, Category } from "@/shared/types/db";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import FavoriteToggleButton from "@/features/favorites-toggle/ui/FavoriteToggleButton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatCreatedAt } from "@/lib/formatCreatedAt"

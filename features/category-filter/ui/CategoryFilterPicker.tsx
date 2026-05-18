@@ -1,6 +1,7 @@
 'use client'
 import type { Category } from "@/shared/types/db"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
+import { useSearchParams } from "next/navigation"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command"
 import { Button } from "@/components/ui/button"

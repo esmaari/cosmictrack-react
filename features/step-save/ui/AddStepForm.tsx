@@ -11,7 +11,7 @@ import { CosmicInput } from "@/shared/ui/CosmicInput"
 import { CosmicTextarea } from "@/shared/ui/CosmicTextarea"
 import CardPicker from "./CardPicker"
 import type { PickedCard } from "@/shared/types/db"
-import { tarotCards } from "@/shared/data/tarotCards"
+import { buildMeaningFromPicks } from "@/shared/lib/buildMeaningFromPicks"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { AskAIError, askAI } from "@/shared/lib/askAI"
@@ -19,20 +19,6 @@ import { formatAiRemaining } from "@/shared/lib/aiCredits"
 import { useProfileContext } from "@/shared/lib/ProfileProvider"
 import { SparklesIcon } from "lucide-react"
 
-
-function buildMeaningFromPicks(pickedCards: PickedCard[]): string {
-    return pickedCards
-        .map((picked) => {
-            const card = tarotCards.find((c) => c.id === picked.id)
-            if (!card) return ""
-
-            const text = picked.isReversed ? card.reversed : card.upright
-
-            return `${text}`
-        })
-        .filter((line) => line.length > 0)
-        .join("\n\n")
-}
 
 export default function AddStepForm(props: {journeyId: string, onSaveButtonClicked?: (pending: boolean) => void, setOpen: (open: boolean) => void }) {
     const router = useRouter()

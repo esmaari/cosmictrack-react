@@ -27,7 +27,7 @@ export default function SiteFooter() {
     )
 
   return (
-    <footer className="sticky bottom-0 z-40 mt-auto shrink-0 bg-footer-heading py-6 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+    <footer className="sticky bottom-0 z-40 mt-auto shrink-0 border-t border-heading/30 bg-footer-heading py-6 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-4 md:flex-row">
         <nav className="flex flex-wrap justify-center gap-6 md:justify-start">
           {footerHrefs.map((href) => (

@@ -18,7 +18,7 @@ export default function LocaleSwitcher() {
     <div
       role="group"
       aria-label="Language"
-      className="flex items-center rounded-md border border-white/20 p-0.5"
+      className="flex items-center rounded-md border border-heading/40 p-0.5"
     >
       {routing.locales.map((l) => (
         <Link
@@ -28,8 +28,8 @@ export default function LocaleSwitcher() {
           className={cn(
             "rounded px-2 py-1 text-xs font-bold uppercase tracking-wide transition-colors",
             locale === l
-              ? "bg-white/15 text-btn-link-light-pressed"
-              : "text-btn-link-light hover:bg-white/10 hover:text-btn-link-light-hover",
+              ? "bg-heading/15 text-heading"
+              : "text-heading/85 hover:bg-heading/10 hover:text-heading",
           )}
         >
           {l}

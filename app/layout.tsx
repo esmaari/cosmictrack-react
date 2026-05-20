@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "CosmicTrack",
   description: "Track your journey, one step at a time.",
   icons: {
-    icon: "/logos/Logo_CT_Badge.png",
+    icon: "/favicon.ico",
     apple: "/logos/Logo_CT_Badge.png",
   },
 }

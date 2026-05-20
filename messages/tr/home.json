@@ -1,0 +1,31 @@
+{
+  "brand": "COSMICTRACK",
+  "heroTitleLine1": "Yolculuğunu",
+  "heroTitleLine2": "takip et.",
+  "heroTitleLine3": "Adım adım",
+  "heroTitleLine4": "ilerle.",
+  "heroSubtitle": "Journey'lerini günlük gibi kaydet, adımları düzenle ve kategoriler ile favoriler sayesinde odağını koru.",
+  "ctaAuth": "Giriş / Kayıt",
+  "ctaTarot": "Tarot’u keşfet",
+  "ctaAskCards": "Kartlara sor",
+  "suitsTitle": "ODAK İÇİN TASARLANDI. SAKİN BİR AKIŞ.",
+  "suits": {
+    "cups": "KUPALAR",
+    "swords": "KILIÇLAR",
+    "wands": "ASALAR",
+    "pentacles": "TILSIMLAR"
+  },
+  "features": {
+    "journeyTitle": "Journey günlüğü",
+    "journeyBody": "Okumalarını adım adım kaydet. Zaman içinde tarot yolculuğunun canlı bir günlüğünü tut.",
+    "categoriesTitle": "Kategoriler & favoriler",
+    "categoriesBody": "Enerji, aşk, doğa, iş ve daha fazlasına göre düzenle. Önemlileri yıldızla.",
+    "aiTitle": "AI yorumlama",
+    "aiBody": "Niyetini ve tüm journey bağlamını dikkate alan kişiselleştirilmiş bir AI tarot yorumu al."
+  },
+  "ctaPanel": {
+    "title": "Bugün başla.",
+    "body": "Ücretsiz başla. Kart bilgisi gerekmez.",
+    "button": "Ücretsiz hesap oluştur"
+  }
+}

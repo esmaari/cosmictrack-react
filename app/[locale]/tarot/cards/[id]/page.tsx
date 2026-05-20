@@ -1,8 +1,6 @@
 import Image from "next/image"
-import { Link } from "@/i18n/navigation"
 import { notFound } from "next/navigation"
 import TarotPageShell from "@/features/tarot-public/ui/TarotPageShell"
-import { Button } from "@/components/ui/button"
 import { getEncyclopediaEntryById, tarotEncyclopediaEntries } from "@/shared/content/tarot"
 
 type PageProps = {
@@ -62,14 +60,6 @@ export default async function TarotCardDetailPage({ params }: PageProps) {
             <p className="text-base leading-7 text-primary/85">{card.symbolism}</p>
           </section>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button asChild variant="cosmicSecondary" size="cosmicMd">
-              <Link href="/tarot/ask">Kartlara sor (demo)</Link>
-            </Button>
-            <Button asChild variant="cosmicPrimary" size="cosmicMd">
-              <Link href="/auth?mode=register">Okumayı kaydet</Link>
-            </Button>
-          </div>
         </div>
       </div>
     </TarotPageShell>

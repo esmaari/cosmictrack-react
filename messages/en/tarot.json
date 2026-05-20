@@ -1,0 +1,60 @@
+{
+  "eyebrow": "TAROT",
+  "titleLine1": "Learn the cards,",
+  "titleLine2": "explore the symbols.",
+  "intro": "Learn the cards, explore symbols, or try a three-card demo draw. Create a free account to save journeys and unlock AI readings.",
+  "tiles": {
+    "encyclopedia": {
+      "number": "01",
+      "eyebrow": "KEYWORDS + SYMBOLISM",
+      "title": "78 Cards",
+      "body": "Quick summaries, keywords, and symbolism for every Major & Minor Arcana card.",
+      "cta": "78 CARDS",
+      "href": "/tarot/cards"
+    },
+    "suits": {
+      "number": "02",
+      "eyebrow": "SYMBOLS",
+      "title": "Tarot Symbols",
+      "body": "Themes of the tarot symbols and Major Arcana. A practical symbolism overview.",
+      "cta": "CUPS  SWORDS  WANDS  PENTACLES",
+      "href": "/tarot/symbols"
+    },
+    "history": {
+      "number": "03",
+      "eyebrow": "HISTORY",
+      "title": "Tarot roots",
+      "body": "Where tarot comes from and how it connects to CosmicTrack’s journey approach.",
+      "cta": "READ HISTORY",
+      "href": "/tarot/history"
+    },
+    "demo": {
+      "number": "04",
+      "eyebrow": "DEMO DRAW",
+      "title": "Ask the cards",
+      "body": "Pick 3 cards, read classic upright/reversed meanings. Demo — no AI.",
+      "cta": "FREE · NO ACCOUNT REQUIRED",
+      "href": "/tarot/ask"
+    }
+  },
+  "demoPanel": {
+    "eyebrow": "DEMO DRAW",
+    "title": "Ask the cards",
+    "subtitle": "Pick three cards — no sign-up required.",
+    "hint": "Need AI interpretation? Create an account first.",
+    "button": "Try the full demo draw →"
+  },
+  "savePanel": {
+    "title": "Save your journeys",
+    "body": "Store readings step by step, organize them with categories, and get AI interpretations based on your plan.",
+    "button": "Create free account"
+  },
+  "cardsPage": {
+    "title": "Card encyclopedia",
+    "intro": "Short summaries, keywords, and symbolism for every card. Upright/reversed reading lines are only used in demo draws and member areas."
+  },
+  "symbolsPage": {
+    "title": "Tarot symbols",
+    "intro": "Symbols are tarot’s hidden keys. Pick a symbol from the list and read its meaning on the right."
+  }
+}

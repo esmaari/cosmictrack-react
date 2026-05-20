@@ -8,9 +8,11 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? requested
     : routing.defaultLocale
 
-  const [nav, common] = await Promise.all([
+  const [nav, common, home, tarot] = await Promise.all([
     import(`../messages/${locale}/nav.json`),
     import(`../messages/${locale}/common.json`),
+    import(`../messages/${locale}/home.json`),
+    import(`../messages/${locale}/tarot.json`)
   ])
 
   return {
@@ -18,6 +20,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     messages: {
       nav: nav.default,
       common: common.default,
+      home: home.default,
+      tarot: tarot.default,
     },
   }
 })

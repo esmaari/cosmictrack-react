@@ -21,8 +21,8 @@
       /* moonlight-cream */
       --color-input: #fffdf7;
       /* lunar-ivory */
-      --color-footer-heading: #6B4B21;
-      /* dark-gold */
+      /* Header/Footer background (now matches app background) */
+      --color-footer-heading: var(--color-app);
 
       /* Text */
       --color-heading: #dcc48e;

@@ -1,0 +1,31 @@
+{
+  "brand": "COSMICTRACK",
+  "heroTitleLine1": "Track your",
+  "heroTitleLine2": "journey.",
+  "heroTitleLine3": "One step",
+  "heroTitleLine4": "at a time.",
+  "heroSubtitle": "A calm space for journaling your journeys, organizing steps, and keeping focus with categories and favorites.",
+  "ctaAuth": "Sign in / Sign up",
+  "ctaTarot": "Explore tarot",
+  "ctaAskCards": "Ask the cards",
+  "suitsTitle": "BUILT FOR FOCUS. DESIGNED FOR CALM.",
+  "suits": {
+    "cups": "CUPS",
+    "swords": "SWORDS",
+    "wands": "WANDS",
+    "pentacles": "PENTACLES"
+  },
+  "features": {
+    "journeyTitle": "Journey journaling",
+    "journeyBody": "Record your readings step by step. Keep a living log of your tarot journey over time.",
+    "categoriesTitle": "Categories & favorites",
+    "categoriesBody": "Organize by energy, love, nature, work and more. Star what matters most.",
+    "aiTitle": "AI interpretation",
+    "aiBody": "Get a personalized AI reading that considers your full journey context and intentions."
+  },
+  "ctaPanel": {
+    "title": "Begin your journey today.",
+    "body": "Free to start. No card required.",
+    "button": "Create free account"
+  }
+}

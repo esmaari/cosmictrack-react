@@ -7,7 +7,6 @@ import StepsListClient from "@/features/step-save/ui/StepsListClient";
 import { getCategoryIdsByJourneyId } from "@/entities/journey-category/api/getCategoryIdsByJourneyId";
 import { getCategoriesByUserId } from "@/entities/category/api/getCategoriesByUserId";
 import CategoriesToggleList from "@/features/journey-category-toggle/ui/CategoriesToggleList";
-import DeleteJourneyButton from "@/features/journey-delete/DeleteJourneyButton";
 import AddNewCategoryFormDialog from "@/features/category-save/AddNewCategoryFormDialog";
 import JourneyDetailsEditable from "@/features/journey-edit/JourneyDetailsEditable";
 import AddAndEditStepFormDialog from "@/features/step-save/ui/AddAndEditStepFormDialog";

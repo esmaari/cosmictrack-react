@@ -1,0 +1,60 @@
+{
+  "eyebrow": "TAROT",
+  "titleLine1": "Kartları öğren,",
+  "titleLine2": "sembolleri keşfet.",
+  "intro": "Kartları öğren, sembolleri keşfet veya üç kartlık bir demo çekim dene. Journey kaydı ve AI yorumu için ücretsiz hesap oluşturabilirsin.",
+  "tiles": {
+    "encyclopedia": {
+      "number": "01",
+      "eyebrow": "KARTLAR + SEMBOLİZM",
+      "title": "78 Kart",
+      "body": "78 kartın özeti, anahtar kelimeleri ve sembolizmi. Major / Minor Arcana.",
+      "cta": "78 KART",
+      "href": "/tarot/cards"
+    },
+    "suits": {
+      "number": "02",
+      "eyebrow": "SEMBOLLER",
+      "title": "Deste Sembolleri",
+      "body": "Deste sembolleri ve Major Arcana temaları. Sembollerin anlamlarını keşfet.",
+      "cta": "CUPS  SWORDS  WANDS  PENTACLES",
+      "href": "/tarot/symbols"
+    },
+    "history": {
+      "number": "03",
+      "eyebrow": "TARİH",
+      "title": "Tarotun kökleri",
+      "body": "Tarotun kökenleri ve CosmicTrack ile ilişkisi. Geçmişten bugüne yolculuk.",
+      "cta": "TARİHİ OKU",
+      "href": "/tarot/history"
+    },
+    "demo": {
+      "number": "04",
+      "eyebrow": "DEMO ÇEKİM",
+      "title": "Kartlara sor",
+      "body": "Üç kart seç, klasik düz/ters anlamları oku. Demo — AI yok.",
+      "cta": "ÜCRETSİZ · HESAP GEREKMEZ",
+      "href": "/tarot/ask"
+    }
+  },
+  "demoPanel": {
+    "eyebrow": "DEMO ÇEKİM",
+    "title": "Kartlara sor",
+    "subtitle": "Üç kart seç — hesap oluşturmana gerek yok.",
+    "hint": "AI yorumu için önce hesap oluştur.",
+    "button": "Tüm demo çekimi dene →"
+  },
+  "savePanel": {
+    "title": "Journey’lerini kaydet",
+    "body": "Okumalarını adım adım sakla, kategorilere ayır ve planına göre AI yorumu al.",
+    "button": "Ücretsiz hesap oluştur"
+  },
+  "cardsPage": {
+    "title": "Kart ansiklopedisi",
+    "intro": "Her kart için kısa özet, anahtar kelimeler ve sembolizm. Okuma satırları (düz/ters) yalnızca demo çekim ve üye alanında kullanılır."
+  },
+  "symbolsPage": {
+    "title": "Tarot Sembolleri",
+    "intro": "Semboller tarot dilinin gizli anahtarlarıdır. Soldan bir sembol seç ve anlamını sağ panelden oku."
+  }
+}

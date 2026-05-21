@@ -92,9 +92,8 @@ export default function CardPicker(props: {
         return <PickedCardsDisplay pickedCards={cardsForDisplay} />
     }
 
-return (
- 
-    <div className="text-center">
+    return (
+        <div className="text-center">
         <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-3">
             Choose 3 cards ({pickedCards.length}/3)
         </p>
@@ -133,10 +132,10 @@ return (
                         </div>
                     )
                 })}
-            <div>
+            </div>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-4 text-center">
             <Button
                 type="button"
                 variant="cosmicPrimary"
@@ -148,7 +147,5 @@ return (
             </Button>
         </div>
     </div>
-    </div>
-    </div>
-      
-)}
+    )
+}

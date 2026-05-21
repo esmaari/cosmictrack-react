@@ -56,5 +56,16 @@
   "symbolsPage": {
     "title": "Tarot Sembolleri",
     "intro": "Semboller tarot dilinin gizli anahtarlarıdır. Soldan bir sembol seç ve anlamını sağ panelden oku."
+  },
+  "askPage": {
+    "title": "Kartlara sor",
+    "intro": "Üç kart seç ve onayla. Düz veya ters pozisyona göre klasik anlamlar gösterilir — yapay zeka kullanılmaz."
+  },
+  "askDemo": {
+    "disclaimer": "Bu demo yalnızca CosmicTrack kart metinlerini gösterir. AI veya hesap kaydı kullanılmaz.",
+    "questionLabel": "Soru veya niyet (isteğe bağlı)",
+    "questionPlaceholder": "Örn. Bu ay neye odaklanmalıyım?",
+    "ctaBody": "Okumalarını journey olarak kaydetmek ve planına göre AI yorumu almak için hesap oluştur.",
+    "signUpFree": "Ücretsiz kayıt ol"
   }
 }

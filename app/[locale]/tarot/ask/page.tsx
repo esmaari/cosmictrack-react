@@ -1,12 +1,12 @@
+import { getTranslations } from "next-intl/server"
 import TarotAskDemo from "@/features/tarot-public/ui/TarotAskDemo"
 import TarotPageShell from "@/features/tarot-public/ui/TarotPageShell"
 
-export default function TarotAskPage() {
+export default async function TarotAskPage() {
+  const t = await getTranslations("tarot.askPage")
+
   return (
-    <TarotPageShell
-      title="Kartlara sor"
-      intro="Üç kart seç ve onayla. Düz veya ters pozisyona göre klasik anlamlar gösterilir — yapay zeka kullanılmaz."
-    >
+    <TarotPageShell title={t("title")} intro={t("intro")}>
       <TarotAskDemo />
     </TarotPageShell>
   )

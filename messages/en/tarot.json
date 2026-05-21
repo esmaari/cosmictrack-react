@@ -56,5 +56,16 @@
   "symbolsPage": {
     "title": "Tarot symbols",
     "intro": "Symbols are tarot’s hidden keys. Pick a symbol from the list and read its meaning on the right."
+  },
+  "askPage": {
+    "title": "Ask the cards",
+    "intro": "Pick three cards and confirm. Classic upright or reversed meanings are shown — no AI is used."
+  },
+  "askDemo": {
+    "disclaimer": "This demo only shows CosmicTrack card meanings. No AI or account saving is used.",
+    "questionLabel": "Question or intention (optional)",
+    "questionPlaceholder": "e.g. What should I focus on this month?",
+    "ctaBody": "Create an account to save your readings as journeys and get AI interpretation based on your plan.",
+    "signUpFree": "Create free account"
   }
 }

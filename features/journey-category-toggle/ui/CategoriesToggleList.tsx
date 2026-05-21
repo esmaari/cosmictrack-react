@@ -7,8 +7,12 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import EditCategoryFormDialog from "@/features/category-save/EditCategoryFormDialog";
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 export default function CategoriesToggleList(props: { journeyId: string; categories: Category[]; assignedCategoryIds: string[] }) {
+
+    const t = useTranslations("categories.toggle")
+    const tToast = useTranslations("common.toast")
 
     const router = useRouter();
       
@@ -34,7 +38,7 @@ export default function CategoriesToggleList(props: { journeyId: string; categor
 
             if (!response.ok) {
                 const payload = await response.json().catch(() => null)
-                throw new Error(payload?.error ?? "Failed to update categories")
+                throw new Error(payload?.error ?? t("toastFailed"))
             }
             return true
             
@@ -59,14 +63,14 @@ export default function CategoriesToggleList(props: { journeyId: string; categor
         onSuccess: (_data, variables) => {
             router.refresh()
             if (variables.nextChecked) {
-                toast.success("Category added to journey")
+                toast.success(t("toastAdded"))
             } else {
-                toast.success("Category removed from journey")
+                toast.success(t("toastRemoved"))
             }
         },
         onError: (error, _variables, ctx) => {
             if(ctx?.prevIds) setOptimisticIds(ctx.prevIds)
-            const errorMessage = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+            const errorMessage = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
             toast.error(errorMessage)
         }
 
@@ -77,9 +81,11 @@ export default function CategoriesToggleList(props: { journeyId: string; categor
     if (props.categories.length === 0) {
         return (
             <div className="mt-3 rounded-lg border border-border-neutral bg-input/50 px-4 py-6 text-center">
-                <p className="font-semibold text-primary">No categories yet</p>
+                <p className="font-semibold text-primary">{t("emptyTitle")}</p>
                 <p className="mt-1 text-sm text-primary/70">
-                    Create one with <span className="font-medium text-secondary">Add new category</span> below.
+                    {t("emptyHintBefore")}{" "}
+                    <span className="font-medium text-secondary">{t("emptyHintButton")}</span>{" "}
+                    {t("emptyHintAfter")}
                 </p>
             </div>
         )
@@ -104,8 +110,8 @@ export default function CategoriesToggleList(props: { journeyId: string; categor
                             })}
                             disabled={addRemoveCategoryToJourney.isPending}
                             aria-busy={addRemoveCategoryToJourney.isPending}
-                            aria-label={`${checked ? "Remove" : "Add"} category to journey`}
-                            title={`${checked ? "Remove" : "Add"} category to journey`}
+                            aria-label={checked ? t("removeAria") : t("addAria")}
+                            title={checked ? t("removeAria") : t("addAria")}
                             className="h-4 w-4 rounded border-zinc-300 bg-transparent
                             accent-zinc-900 dark:border-zinc-600 dark:accent-zinc-100"
                         />

@@ -14,21 +14,34 @@ import { CosmicInput } from "@/shared/ui/CosmicInput"
 import DeleteCategoryIcon from "@/features/category-delete/DeleteCategoryIcon"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger, DialogClose} from "@/components/ui/dialog"
 import { Pencil } from "lucide-react"
+import { useMemo } from "react"
 import { cn } from "@/lib/utils"
 import { CATEGORY_COLOR_OPTIONS } from "@/features/category-save/categoryColorOptions"
+import { getCategoryColorLabel } from "@/shared/lib/categoryColorLabels"
+import { useTranslations } from "next-intl"
 
 export default function EditCategoryFormDialog(props: {category: Category}  ) {
+    const t = useTranslations("categories")
+    const tFields = useTranslations("common.fields")
+    const tPlaceholders = useTranslations("common.placeholders")
+    const tValidation = useTranslations("common.validation")
+    const tColors = useTranslations("common.colors")
+    const tActions = useTranslations("common.actions")
+    const tToast = useTranslations("common.toast")
+
     const router = useRouter()
 
-    const formSchema = z.object({
-        title: z
-            .string()
-            .min(2, { message: "Title must be at least 2 characters long" }) 
-            .max(50, { message: "Title must be at most 50 characters long" }),          
-        color: z
-            .string()
-            .min(1, { message: "Please select a color" }),    
-    })
+    const formSchema = useMemo(
+        () =>
+            z.object({
+                title: z
+                    .string()
+                    .min(2, { message: tValidation("titleMin", { min: 2 }) })
+                    .max(50, { message: tValidation("titleMax", { max: 50 }) }),
+                color: z.string().min(1, { message: tValidation("colorRequired") }),
+            }),
+        [tValidation],
+    )
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -51,14 +64,14 @@ export default function EditCategoryFormDialog(props: {category: Category}  ) {
 
             if (!response.ok) {
                 const payload = await response.json().catch(() => null)
-                throw new Error(payload?.error ?? "Failed to edit category")
+                throw new Error(payload?.error ?? t("editDialog.toastFailed"))
             }
 
             const data = await response.json()
             const categoryId = data.categoryId
 
             if(!categoryId) {
-                throw new Error("Failed to edit category")
+                throw new Error(t("editDialog.toastFailed"))
             }
 
             return { categoryId: data.categoryId }
@@ -66,10 +79,10 @@ export default function EditCategoryFormDialog(props: {category: Category}  ) {
         },
         onSuccess: () => {
             router.refresh()
-            toast.success("Category saved")
+            toast.success(t("editDialog.toastSaved"))
         },
         onError: (error) => {
-            const errorMessage = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+            const errorMessage = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
             toast.error(errorMessage)
         }
     })
@@ -92,9 +105,9 @@ export default function EditCategoryFormDialog(props: {category: Category}  ) {
             <DialogContent>
     
                 <DialogHeader>
-                <DialogTitle>Edit Category</DialogTitle>
+                <DialogTitle>{t("editDialog.title")}</DialogTitle>
                 <DialogDescription>
-                    Edit the category details below.
+                    {t("editDialog.description")}
                 </DialogDescription>
                 </DialogHeader>
                     <div className="stack-card">
@@ -106,7 +119,7 @@ export default function EditCategoryFormDialog(props: {category: Category}  ) {
                                 name="title"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Title:</FormLabel>
+                                        <FormLabel>{tFields("title")}</FormLabel>
                                         <FormControl>
                                             <CosmicInput {...field}/>
                                         </FormControl>
@@ -120,11 +133,11 @@ export default function EditCategoryFormDialog(props: {category: Category}  ) {
                                 name="color"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Color:</FormLabel>
+                                        <FormLabel>{tFields("color")}</FormLabel>
                                         <Select onValueChange={field.onChange} value={field.value}>
                                             <FormControl>
                                                 <SelectTrigger className="w-full min-w-0">
-                                                    <SelectValue placeholder="Select color…" />
+                                                    <SelectValue placeholder={tPlaceholders("selectColor")} />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent className="min-w-(--radix-select-trigger-width)">
@@ -137,7 +150,7 @@ export default function EditCategoryFormDialog(props: {category: Category}  ) {
                                                                     opt.value,
                                                                 )}
                                                             />
-                                                            {opt.label}
+                                                            {getCategoryColorLabel(opt.value, tColors)}
                                                         </span>
                                                     </SelectItem>
                                                 ))}
@@ -154,11 +167,11 @@ export default function EditCategoryFormDialog(props: {category: Category}  ) {
 
                 <DialogFooter>
                     <DialogClose asChild>   
-                        <Button type="button" variant="cosmicTertiary" size="cosmicMd">Cancel</Button>
+                        <Button type="button" variant="cosmicTertiary" size="cosmicMd">{tActions("cancel")}</Button>
                     </DialogClose>
 
                 <Button type="submit" form={`edit-category-form${props.category.id}`} disabled={mutation.isPending} variant="cosmicPrimary" size="cosmicMd">
-                        {mutation.isPending ? "Saving..." : "Save"}
+                        {mutation.isPending ? tActions("saving") : tActions("save")}
                     </Button>
                 </DialogFooter>
 

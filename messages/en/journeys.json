@@ -1,0 +1,60 @@
+{
+  "pageTitle": "My Journeys",
+  "pageSubtitle": "Your saved journeys.",
+  "newJourneyButton": "New Journey",
+  "addDialog": {
+    "title": "Add New Journey",
+    "description": "Fill in the details below to create a new journey.",
+    "toastAdded": "Journey added",
+    "toastFailed": "Failed to add journey"
+  },
+  "edit": {
+    "editAria": "Edit journey",
+    "toastSaved": "Journey saved!",
+    "toastFailed": "Failed to save journey"
+  },
+  "delete": {
+    "button": "Delete Journey",
+    "title": "Delete Journey",
+    "description": "Are you sure you want to delete this journey?",
+    "toastDeleted": "Journey deleted",
+    "toastFailed": "Failed to delete journey"
+  },
+  "detail": {
+    "title": "Journey Details",
+    "stepsHeading": "Steps",
+    "categoriesHeading": "Categories"
+  },
+  "empty": {
+    "none": {
+      "title": "No journeys yet",
+      "hint": "Add your first journey with the New journey button (top right)."
+    },
+    "noFavorites": {
+      "title": "No favorites yet",
+      "hint": "Open a journey and tap the star to save it here."
+    },
+    "favoritesNoMatch": {
+      "title": "No favorite journeys match",
+      "hint": "Try turning off favorites-only or pick another filter."
+    },
+    "searchNoMatch": {
+      "title": "No journeys match your search",
+      "hint": "Try a different title keyword or clear the search."
+    },
+    "categoriesNoMatch": {
+      "title": "No journeys match these categories",
+      "hint": "Remove a category chip or add those categories to a journey."
+    },
+    "default": {
+      "title": "Nothing to show",
+      "hint": "Adjust filters or add a new journey."
+    }
+  },
+  "filters": {
+    "showAll": "Show All",
+    "showFavorites": "Show Favorites",
+    "categoriesSelected": "{count} categories selected",
+    "noCategoriesFound": "No categories found."
+  }
+}

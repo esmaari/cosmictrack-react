@@ -6,10 +6,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command"
 import { Button } from "@/components/ui/button"
 import { Check, ListFilter, ChevronDown } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export default function CategoryFilterPicker(props: {
     categories: Pick<Category, "id" | "title" | "color">[]
 }) {
+    const t = useTranslations("journeys.filters")
+    const tPlaceholders = useTranslations("common.placeholders")
+
     const router = useRouter()
     const searchParams = useSearchParams()
 
@@ -45,8 +49,8 @@ export default function CategoryFilterPicker(props: {
                     <ListFilter className="size-4 text-zinc-500" />
                     <span className={selectedIds.size > 0 ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-400 dark:text-zinc-500"}>
                         {selectedIds.size > 0
-                            ? `${selectedIds.size} categories selected`
-                            : "Filter categories..."}
+                            ? t("categoriesSelected", { count: selectedIds.size })
+                            : tPlaceholders("filterCategories")}
                     </span>
                     <ChevronDown className="size-3.5 text-zinc-400" />
                 </Button>
@@ -54,9 +58,9 @@ export default function CategoryFilterPicker(props: {
 
             <PopoverContent className="w-[220px] p-0" align="start">
                 <Command>
-                    <CommandInput placeholder="Search categories..." />
+                    <CommandInput placeholder={tPlaceholders("searchCategories")} />
                     <CommandList>
-                        <CommandEmpty>No categories found.</CommandEmpty>
+                        <CommandEmpty>{t("noCategoriesFound")}</CommandEmpty>
                         <CommandGroup>
                             {props.categories.map((cat) => (
                                 <CommandItem

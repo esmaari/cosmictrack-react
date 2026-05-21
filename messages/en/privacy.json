@@ -1,0 +1,33 @@
+{
+  "title": "Privacy Notice",
+  "intro": "How we handle your email and account data on CosmicTrack.",
+  "collect": {
+    "title": "What we collect",
+    "item1": "Email address (required for login/register and account recovery).",
+    "item2": "Basic profile data you provide (e.g., name, avatar).",
+    "item3": "Usage data you create in the app (journeys, steps, categories, favorites)."
+  },
+  "why": {
+    "title": "Why we collect it",
+    "item1": "Authenticate you and secure your account.",
+    "item2": "Sync your journeys and categories across devices.",
+    "item3": "Send essential account emails (confirmation, reset, security)."
+  },
+  "dosAndDonts": {
+    "title": "What we do",
+    "titleSuffix": "(and don't do)",
+    "item1": "No selling or sharing emails with third parties for marketing.",
+    "item2": "No marketing emails without your explicit opt-in.",
+    "item3": "We use Supabase as our backend; data is stored and secured there."
+  },
+  "choices": {
+    "title": "Your choices",
+    "item1": "Request account deletion to remove your data from our systems.",
+    "item2": "Update your profile info anytime in the app."
+  },
+  "questions": {
+    "title": "Questions",
+    "bodyBefore": "If you have any privacy questions or requests, contact us at",
+    "bodyAfter": "."
+  }
+}

@@ -12,20 +12,32 @@ import { CosmicInput } from "@/shared/ui/CosmicInput"
 import { CosmicTextarea } from "@/shared/ui/CosmicTextarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger, DialogClose } from "@/components/ui/dialog"
 import { Plus } from "lucide-react"
-import { useState } from "react"
-
-const formSchema = z.object({
-    title: z
-        .string()
-        .min(3, { message: "Title must be at least 3 characters long" })
-        .max(50, { message: "Title must be at most 50 characters long" }),
-    description: z
-        .string()
-        .max(200, { message: "Description must be at most 200 characters long" })
-        .optional(),
-})
+import { useMemo, useState } from "react"
+import { useTranslations } from "next-intl"
 
 export default function AddNewJourneyDialog() {
+    const t = useTranslations("journeys")
+    const tFields = useTranslations("common.fields")
+    const tPlaceholders = useTranslations("common.placeholders")
+    const tValidation = useTranslations("common.validation")
+    const tActions = useTranslations("common.actions")
+    const tToast = useTranslations("common.toast")
+
+    const formSchema = useMemo(
+        () =>
+            z.object({
+                title: z
+                    .string()
+                    .min(3, { message: tValidation("titleMin", { min: 3 }) })
+                    .max(50, { message: tValidation("titleMax", { max: 50 }) }),
+                description: z
+                    .string()
+                    .max(200, { message: tValidation("descriptionMax", { max: 200 }) })
+                    .optional(),
+            }),
+        [tValidation],
+    )
+
     const router = useRouter()
     const [open, setOpen] = useState(false)
 
@@ -46,24 +58,24 @@ export default function AddNewJourneyDialog() {
             })
 
             if (!response.ok) {
-                throw new Error("Failed to add journey")
+                throw new Error(t("addDialog.toastFailed"))
             }
 
             const data = await response.json()
             const journeyId = data.journeyId
 
             if (!journeyId) {
-                throw new Error("Failed to add journey")
+                throw new Error(t("addDialog.toastFailed"))
             }
 
             return journeyId
         },
         onSuccess: () => {
-            toast.success("Journey added")
+            toast.success(t("addDialog.toastAdded"))
             router.refresh()
         },
         onError: (error) => {
-            const errorMessage = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+            const errorMessage = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
             toast.error(errorMessage)
         },
     })
@@ -84,14 +96,14 @@ export default function AddNewJourneyDialog() {
             <DialogTrigger asChild>
                 <Button type="button" variant="cosmicPrimary" size="cosmicMd">
                     <Plus className="size-4" />
-                    New Journey
+                    {t("newJourneyButton")}
                 </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Add New Journey</DialogTitle>
+                    <DialogTitle>{t("addDialog.title")}</DialogTitle>
                     <DialogDescription>
-                        Fill in the details below to create a new journey.
+                        {t("addDialog.description")}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -106,9 +118,9 @@ export default function AddNewJourneyDialog() {
                                 name="title"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Title</FormLabel>
+                                        <FormLabel>{tFields("title")}</FormLabel>
                                         <FormControl>
-                                            <CosmicInput placeholder="New journey" {...field} />
+                                            <CosmicInput placeholder={tPlaceholders("newJourney")} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -120,9 +132,9 @@ export default function AddNewJourneyDialog() {
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Description</FormLabel>
+                                        <FormLabel>{tFields("description")}</FormLabel>
                                         <FormControl>
-                                            <CosmicTextarea placeholder="Optional" {...field} />
+                                            <CosmicTextarea placeholder={tPlaceholders("optional")} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -134,7 +146,7 @@ export default function AddNewJourneyDialog() {
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button type="button" variant="cosmicTertiary" size="cosmicMd">
-                            Cancel
+                            {tActions("cancel")}
                         </Button>
                     </DialogClose>
                     <Button
@@ -144,7 +156,7 @@ export default function AddNewJourneyDialog() {
                         variant="cosmicPrimary"
                         size="cosmicMd"
                     >
-                        {mutation.isPending ? "Saving..." : "Save"}
+                        {mutation.isPending ? tActions("saving") : tActions("save")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

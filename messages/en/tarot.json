@@ -67,5 +67,28 @@
     "questionPlaceholder": "e.g. What should I focus on this month?",
     "ctaBody": "Create an account to save your readings as journeys and get AI interpretation based on your plan.",
     "signUpFree": "Create free account"
+  },
+  "pageShell": {
+    "backToTarot": "Tarot",
+    "backToCards": "Cards"
+  },
+  "cardsBrowser": {
+    "filterAll": "All",
+    "filterMajor": "Major",
+    "filterWands": "Wands",
+    "filterCups": "Cups",
+    "filterSwords": "Swords",
+    "filterPentacles": "Pentacles",
+    "cardCount": "{count} cards"
+  },
+  "cardDetail": {
+    "majorArcana": "Major Arcana",
+    "minorArcana": "Minor Arcana",
+    "summaryHeading": "Summary",
+    "symbolismHeading": "Symbolism"
+  },
+  "symbolsExplorer": {
+    "meaningHeading": "MEANING",
+    "majorArcanaSummary": "Archetypes · Turning points"
   }
 }

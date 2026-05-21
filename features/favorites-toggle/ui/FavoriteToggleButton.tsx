@@ -5,9 +5,13 @@ import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { Heart } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export default function FavoriteToggleButton(props: {journeyId: string, isFavorite: boolean}) {
     
+    const t = useTranslations("favorites")
+    const tToast = useTranslations("common.toast")
+
     const router = useRouter()
                 
     const [optimisticIsFavorite, setIsOptimisticIsFavorite] = useState(props.isFavorite)
@@ -27,7 +31,7 @@ export default function FavoriteToggleButton(props: {journeyId: string, isFavori
 
                 if(!response.ok) {
                     const payload = await response.json().catch(() => null)
-                    throw new Error(payload?.error ?? "Failed to add Journey to the favorites")
+                    throw new Error(payload?.error ?? t("toastAddFailed"))
                 }
                 return true
             },
@@ -44,11 +48,11 @@ export default function FavoriteToggleButton(props: {journeyId: string, isFavori
             },
             onSuccess: () => {
                 router.refresh()
-                toast.success("Journey added to favorites")
+                toast.success(t("toastAdded"))
             },
             onError: (error, _vars, ctx) => {
                 if(ctx) setIsOptimisticIsFavorite(ctx.prevFav)
-                const errorMessage = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+                const errorMessage = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
                 toast.error(errorMessage)
             }
     })
@@ -63,7 +67,7 @@ export default function FavoriteToggleButton(props: {journeyId: string, isFavori
 
             if(!response.ok) {
                 const payload = await response.json().catch(() => null)
-                throw new Error(payload?.error ?? "Failed to delete Journey from the favorites")
+                throw new Error(payload?.error ?? t("toastRemoveFailed"))
             }
 
             return true
@@ -81,11 +85,11 @@ export default function FavoriteToggleButton(props: {journeyId: string, isFavori
         },
         onSuccess: () => {
                 router.refresh()
-                toast.success("Journey removed from favorites")
+                toast.success(t("toastRemoved"))
         },
         onError: (error, _vars, ctx) => {
             if(ctx) setIsOptimisticIsFavorite(ctx.prevFav)
-            const errorMessage = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+            const errorMessage = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
             toast.error(errorMessage)
         }
     })
@@ -106,8 +110,8 @@ export default function FavoriteToggleButton(props: {journeyId: string, isFavori
             type="button"
             className={className}
             onClick={() => removeFavoriteMutation.mutate()}
-            aria-label="Remove from favorites"
-            title="Unfavorite"
+            aria-label={t("removeAria")}
+            title={t("removeTitle")}
             disabled={pending}
             aria-busy={pending}
 
@@ -119,8 +123,8 @@ export default function FavoriteToggleButton(props: {journeyId: string, isFavori
             type="button"
             className={className}
             onClick={() => addFavoriteMutation.mutate()}
-            aria-label="Add to favorites"
-            title="Favorite"
+            aria-label={t("addAria")}
+            title={t("addTitle")}
             disabled={pending}
             aria-busy={pending}
 

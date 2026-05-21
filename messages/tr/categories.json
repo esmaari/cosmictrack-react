@@ -1,0 +1,33 @@
+{
+  "addButton": "Kategori Ekle",
+  "addDialog": {
+    "title": "Yeni Kategori Ekle",
+    "description": "Yeni bir kategori oluşturmak için aşağıdaki alanları doldur.",
+    "toastAdded": "Kategori eklendi",
+    "toastFailed": "Kategori eklenemedi"
+  },
+  "editDialog": {
+    "title": "Kategoriyi Düzenle",
+    "description": "Kategori bilgilerini aşağıdan düzenle.",
+    "toastSaved": "Kategori kaydedildi",
+    "toastFailed": "Kategori düzenlenemedi"
+  },
+  "delete": {
+    "triggerTitle": "Kategoriyi sil",
+    "title": "Kategoriyi Sil",
+    "description": "Bu kategori kalıcı olarak kaldırılacak. Bu işlem geri alınamaz.",
+    "toastDeleted": "Kategori silindi",
+    "toastFailed": "Kategori silinemedi"
+  },
+  "toggle": {
+    "emptyTitle": "Henüz kategori yok",
+    "emptyHintBefore": "Aşağıdaki",
+    "emptyHintButton": "Yeni kategori ekle",
+    "emptyHintAfter": "ile bir tane oluştur.",
+    "addAria": "Journey'ye kategori ekle",
+    "removeAria": "Journey'den kategoriyi kaldır",
+    "toastAdded": "Kategori journey'ye eklendi",
+    "toastRemoved": "Kategori journey'den kaldırıldı",
+    "toastFailed": "Kategoriler güncellenemedi"
+  }
+}

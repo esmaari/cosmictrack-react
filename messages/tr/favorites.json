@@ -1,0 +1,10 @@
+{
+  "addAria": "Favorilere ekle",
+  "addTitle": "Favorile",
+  "removeAria": "Favorilerden kaldır",
+  "removeTitle": "Favoriyi kaldır",
+  "toastAdded": "Journey favorilere eklendi",
+  "toastRemoved": "Journey favorilerden kaldırıldı",
+  "toastAddFailed": "Journey favorilere eklenemedi",
+  "toastRemoveFailed": "Journey favorilerden kaldırılamadı"
+}

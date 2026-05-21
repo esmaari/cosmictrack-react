@@ -4,13 +4,13 @@ import { Link, usePathname } from "@/i18n/navigation"
 import { cn } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 
-const footerHrefs = ["/about", "/impressum", "/privacy", "/styleguide"] as const
+const footerHrefs = ["/about", "/impressum", "/privacy"] as const
 
 const footerMessageKeys = {
   "/about": "about",
   "/impressum": "impressum",
-  "/privacy": "privacy",
-  "/styleguide": "styleguide",
+  "/privacy": "privacy"
+
 } as const satisfies Record<(typeof footerHrefs)[number], string>
 
 export default function SiteFooter() {
@@ -20,10 +20,8 @@ export default function SiteFooter() {
 
   const linkClass = (href: string) =>
     cn(
-      "text-sm transition-colors",
-      pathname === href
-        ? "text-btn-link-light-pressed"
-        : "text-btn-link-light hover:text-btn-link-light-hover",
+      "text-sm font-semibold transition-colors",
+      pathname === href ? "text-btn-link-light" : "text-heading/85 hover:text-btn-link-light",
     )
 
   return (

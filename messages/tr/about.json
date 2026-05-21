@@ -1,0 +1,8 @@
+{
+  "title": "CosmicTrack Hakkında",
+  "paragraph1": "CosmicTrack, tarot yolculuklarını takip etmen, içgörüleri kategorilere ayırman ve sembolik kalıplar üzerinden düşünmen için kişisel bir projedir.",
+  "paragraph2": "Next.js, Supabase ve Tailwind CSS ile ❤️ ile geliştirildi.",
+  "emailLabel": "E-posta",
+  "instagramLabel": "Instagram",
+  "githubLabel": "GitHub"
+}

@@ -1,0 +1,8 @@
+{
+  "title": "About CosmicTrack",
+  "paragraph1": "CosmicTrack is a personal project to help you track your tarot journeys, categorize insights, and reflect through symbolic patterns.",
+  "paragraph2": "Built with ❤️ using Next.js, Supabase and Tailwind CSS.",
+  "emailLabel": "Email",
+  "instagramLabel": "Instagram",
+  "githubLabel": "GitHub"
+}

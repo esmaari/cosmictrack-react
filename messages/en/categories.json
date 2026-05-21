@@ -1,0 +1,33 @@
+{
+  "addButton": "Add Category",
+  "addDialog": {
+    "title": "Add New Category",
+    "description": "Fill in the details below to create a new category.",
+    "toastAdded": "Category added",
+    "toastFailed": "Failed to add category"
+  },
+  "editDialog": {
+    "title": "Edit Category",
+    "description": "Edit the category details below.",
+    "toastSaved": "Category saved",
+    "toastFailed": "Failed to edit category"
+  },
+  "delete": {
+    "triggerTitle": "Delete category",
+    "title": "Delete Category",
+    "description": "This will permanently remove this category. This action cannot be undone.",
+    "toastDeleted": "Category deleted",
+    "toastFailed": "Failed to delete category"
+  },
+  "toggle": {
+    "emptyTitle": "No categories yet",
+    "emptyHintBefore": "Create one with",
+    "emptyHintButton": "Add new category",
+    "emptyHintAfter": "below.",
+    "addAria": "Add category to journey",
+    "removeAria": "Remove category from journey",
+    "toastAdded": "Category added to journey",
+    "toastRemoved": "Category removed from journey",
+    "toastFailed": "Failed to update categories"
+  }
+}

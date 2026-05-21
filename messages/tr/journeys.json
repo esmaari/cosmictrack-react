@@ -1,0 +1,60 @@
+{
+  "pageTitle": "Journey'lerim",
+  "pageSubtitle": "Kayıtlı journey'lerin.",
+  "newJourneyButton": "Yeni Journey",
+  "addDialog": {
+    "title": "Yeni Journey Ekle",
+    "description": "Yeni bir journey oluşturmak için aşağıdaki alanları doldur.",
+    "toastAdded": "Journey eklendi",
+    "toastFailed": "Journey eklenemedi"
+  },
+  "edit": {
+    "editAria": "Journey'yi düzenle",
+    "toastSaved": "Journey kaydedildi!",
+    "toastFailed": "Journey kaydedilemedi"
+  },
+  "delete": {
+    "button": "Journey'yi Sil",
+    "title": "Journey'yi Sil",
+    "description": "Bu journey'yi silmek istediğine emin misin?",
+    "toastDeleted": "Journey silindi",
+    "toastFailed": "Journey silinemedi"
+  },
+  "detail": {
+    "title": "Journey Detayları",
+    "stepsHeading": "Adımlar",
+    "categoriesHeading": "Kategoriler"
+  },
+  "empty": {
+    "none": {
+      "title": "Henüz journey yok",
+      "hint": "Sağ üstteki Yeni Journey düğmesiyle ilk journey'ni ekle."
+    },
+    "noFavorites": {
+      "title": "Henüz favori yok",
+      "hint": "Bir journey aç ve yıldıza dokunarak buraya kaydet."
+    },
+    "favoritesNoMatch": {
+      "title": "Eşleşen favori journey yok",
+      "hint": "Sadece favoriler modunu kapat veya başka bir filtre dene."
+    },
+    "searchNoMatch": {
+      "title": "Aramana uyan journey yok",
+      "hint": "Farklı bir başlık anahtar kelimesi dene veya aramayı temizle."
+    },
+    "categoriesNoMatch": {
+      "title": "Bu kategorilere uyan journey yok",
+      "hint": "Bir kategori çipini kaldır veya journey'lere bu kategorileri ekle."
+    },
+    "default": {
+      "title": "Gösterilecek bir şey yok",
+      "hint": "Filtreleri ayarla veya yeni bir journey ekle."
+    }
+  },
+  "filters": {
+    "showAll": "Tümünü Göster",
+    "showFavorites": "Favorileri Göster",
+    "categoriesSelected": "{count} kategori seçildi",
+    "noCategoriesFound": "Kategori bulunamadı."
+  }
+}

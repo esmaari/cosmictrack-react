@@ -1,8 +1,11 @@
+'use client'
+
 import { Link } from "@/i18n/navigation";
 import CategoryFilterPicker from "@/features/category-filter/ui/CategoryFilterPicker";
 import type { Category } from "@/shared/types/db"
 import { Button } from "@/components/ui/button";
 import { List, Heart } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function MyJourneysFiltersBar(
     props: {
@@ -11,6 +14,7 @@ export default function MyJourneysFiltersBar(
         allCategories: Category[]
     }) 
     {
+    const t = useTranslations("journeys.filters")
 
     const params = new URLSearchParams()
 
@@ -30,7 +34,7 @@ export default function MyJourneysFiltersBar(
                     }
                     >
                         <List className="size-4" />
-                        Show All
+                        {t("showAll")}
                     </Link>
                 </Button>
 
@@ -42,7 +46,7 @@ export default function MyJourneysFiltersBar(
                     }
                     >
                         <Heart className="size-4" />
-                        Show Favorites
+                        {t("showFavorites")}
                     </Link>
                 </Button>
 

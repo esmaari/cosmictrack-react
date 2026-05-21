@@ -9,27 +9,38 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useMutation } from "@tanstack/react-query"
 import { Pencil } from "lucide-react"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { CosmicInput } from "@/shared/ui/CosmicInput"
 import { CosmicTextarea } from "@/shared/ui/CosmicTextarea"
 import DeleteJourneyButton from "@/features/journey-delete/DeleteJourneyButton"
+import { useTranslations } from "next-intl"
 
 export default function JourneyDetailsEditable(props: {journey: Journey}) {
+
+    const t = useTranslations("journeys")
+    const tFields = useTranslations("common.fields")
+    const tValidation = useTranslations("common.validation")
+    const tActions = useTranslations("common.actions")
+    const tToast = useTranslations("common.toast")
 
     const router = useRouter()
     const [isEditing, setIsEditing] = useState(false)
 
-    const formSchema = z.object({
-        title: z
-            .string()
-            .min(3, { message: "Title must be at least 3 characters long" }) 
-            .max(50, { message: "Title must be at most 50 characters long" }),          
-        description: z
-            .string() 
-            .max(200, { message: "Description must be at most 200 characters long" })
-            .optional()
-    })
+    const formSchema = useMemo(
+        () =>
+            z.object({
+                title: z
+                    .string()
+                    .min(3, { message: tValidation("titleMin", { min: 3 }) })
+                    .max(50, { message: tValidation("titleMax", { max: 50 }) }),
+                description: z
+                    .string()
+                    .max(200, { message: tValidation("descriptionMax", { max: 200 }) })
+                    .optional(),
+            }),
+        [tValidation],
+    )
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -50,18 +61,18 @@ export default function JourneyDetailsEditable(props: {journey: Journey}) {
 
             if(!response.ok) {
                 const payload = await response.json().catch(() => null)
-                throw new Error(payload?.error ?? "Failed to save journey")
+                throw new Error(payload?.error ?? t("edit.toastFailed"))
             }
 
             return true
         },
         onSuccess: () => {
-            toast.success("Journey saved!")
+            toast.success(t("edit.toastSaved"))
             setIsEditing(false)
             router.refresh()
         },
         onError: (error) => {
-            const errorMessage = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+            const errorMessage = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
             toast.error(errorMessage)
         }
     })
@@ -90,15 +101,15 @@ export default function JourneyDetailsEditable(props: {journey: Journey}) {
                     variant="cosmicPrimary"
                     size="icon"
                     className="shrink-0 mb-3"
-                    aria-label="Edit journey"
-                    title="Edit journey"
+                    aria-label={t("edit.editAria")}
+                    title={t("edit.editAria")}
                 >
                     <Pencil className="size-4" />
                 </Button>
             </div>
 
             <p className="mt-2 text-sm text-primary/70">
-                {props.journey.description || "No description"}
+                {props.journey.description || tFields("noDescription")}
             </p>
 
         </div>
@@ -111,7 +122,7 @@ export default function JourneyDetailsEditable(props: {journey: Journey}) {
                 name="title"
                 render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
-                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Title</FormLabel>
+                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("title")}</FormLabel>
                         <FormControl>
                             <CosmicInput {...field} />
                         </FormControl>
@@ -125,7 +136,7 @@ export default function JourneyDetailsEditable(props: {journey: Journey}) {
                 name="description"
                 render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
-                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Description</FormLabel>
+                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("description")}</FormLabel>
                         <FormControl>
                             <CosmicTextarea {...field} />
                         </FormControl>
@@ -146,10 +157,10 @@ export default function JourneyDetailsEditable(props: {journey: Journey}) {
                     variant="cosmicTertiary"
                     size="cosmicMd"
                 >
-                    {mutation.isPending ? "Cancelling..." : "Cancel"}
+                    {mutation.isPending ? tActions("cancelling") : tActions("cancel")}
                 </Button>
                 <Button type="submit" disabled={mutation.isPending} variant="cosmicPrimary" size="cosmicMd">
-                    {mutation.isPending ? "Saving..." : "Save"}
+                    {mutation.isPending ? tActions("saving") : tActions("save")}
                 </Button>
             </div>
           </form>

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Step } from "@/shared/types"
 import { toast } from "sonner"
@@ -13,16 +13,28 @@ import { CosmicTextarea } from "@/shared/ui/CosmicTextarea"
 import DeleteStepButton from "@/features/step-delete/ui/DeleteStepButton"
 import CardPicker from "./CardPicker"
 import type { PickedCard } from "@/shared/types/db"
+import { useTranslations } from "next-intl"
 
 export default function EditStepForm(props: {journeyId: string, step?: Step, onSaveButtonClicked?: (pending: boolean) => void, setOpen: (open: boolean) => void }) {
     const router = useRouter()
+    const t = useTranslations("steps")
+    const tFields = useTranslations("common.fields")
+    const tValidation = useTranslations("common.validation")
+    const tToast = useTranslations("common.toast")
 
     const [selectedCards, setSelectedCards] = useState<PickedCard[]>(props.step?.cards ?? [])
 
-    const formSchema = z.object({
-        title: z.string().min(1, { message: "Title is required" }).max(80, { message: "Title must be at most 80 characters long" }),
-        note: z.string().max(500, { message: "Note must be at most 500 characters long" }).optional(),
-    })
+    const formSchema = useMemo(
+        () =>
+            z.object({
+                title: z
+                    .string()
+                    .min(1, { message: tValidation("titleRequired") })
+                    .max(80, { message: tValidation("titleMax", { max: 80 }) }),
+                note: z.string().max(500, { message: tValidation("noteMax", { max: 500 }) }).optional(),
+            }),
+        [tValidation],
+    )
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -49,17 +61,17 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
 
             if (!response.ok) {
                 const payload = await response.json().catch(() => null)
-                throw new Error(payload?.error ?? "Failed to save step")
+                throw new Error(payload?.error ?? t("form.toastSaveFailed"))
             }
 
             return true
         },
         onSuccess: () => {
             router.refresh()
-            toast.success("Step saved")
+            toast.success(t("form.toastSaved"))
         },
         onError: (error) => {
-            const errorMessage = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+            const errorMessage = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
             toast.error(errorMessage)
         },
         onMutate: () => {
@@ -95,7 +107,7 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
                     name="title"
                     render={({ field }) => (
                         <FormItem className="flex flex-col gap-1">
-                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Title</FormLabel>
+                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("title")}</FormLabel>
                             <FormControl>
                                 <CosmicInput {...field} />
                             </FormControl>
@@ -105,7 +117,7 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
                 />
 
             <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Selected cards</label>
+                <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("selectedCards")}</label>
                 <CardPicker mode="edit" selectedCardIds={selectedCards} />
             </div>
 
@@ -118,7 +130,7 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
                     name="note"
                     render={({ field }) => (
                         <FormItem className="flex flex-col gap-1">
-                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Note</FormLabel>
+                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("note")}</FormLabel>
                             <FormControl>
                                 <CosmicTextarea {...field} />
                             </FormControl>

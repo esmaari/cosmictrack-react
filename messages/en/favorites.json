@@ -1,0 +1,10 @@
+{
+  "addAria": "Add to favorites",
+  "addTitle": "Favorite",
+  "removeAria": "Remove from favorites",
+  "removeTitle": "Unfavorite",
+  "toastAdded": "Journey added to favorites",
+  "toastRemoved": "Journey removed from favorites",
+  "toastAddFailed": "Failed to add journey to favorites",
+  "toastRemoveFailed": "Failed to remove journey from favorites"
+}

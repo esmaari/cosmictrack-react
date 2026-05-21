@@ -1,0 +1,41 @@
+{
+  "addButton": "Add Step",
+  "addDialog": {
+    "title": "Add New Step",
+    "description": "Fill in the details below to create a new step."
+  },
+  "editDialog": {
+    "title": "Edit Step",
+    "description": "Fill in the details below to edit the step."
+  },
+  "form": {
+    "generating": "Generating…",
+    "askAi": "Ask AI",
+    "toastAdded": "Step added",
+    "toastSaved": "Step saved",
+    "toastFailed": "Failed to add step",
+    "toastSaveFailed": "Failed to save step",
+    "aiFailed": "AI request failed"
+  },
+  "delete": {
+    "button": "Delete Step",
+    "triggerTitle": "Delete step from this journey",
+    "description": "This will permanently remove this step from the journey. This action cannot be undone.",
+    "toastDeleted": "Step deleted",
+    "toastFailed": "Failed to delete step"
+  },
+  "list": {
+    "emptyTitle": "No steps yet",
+    "emptyHintBefore": "Add your first step with the",
+    "emptyHintButton": "Add step",
+    "emptyHintAfter": "button above."
+  },
+  "cardPicker": {
+    "choose": "Choose 3 cards ({count}/3)",
+    "confirm": "Confirm Cards",
+    "cardBackAlt": "Card back",
+    "intentionLabel": "Intention:",
+    "meaningsTitle": "Card meanings",
+    "reversedSuffix": "(reversed)"
+  }
+}

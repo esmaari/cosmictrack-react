@@ -6,8 +6,13 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Trash2 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export default function DeleteStep(props: {stepId: string}) {
+    const t = useTranslations("steps.delete")
+    const tActions = useTranslations("common.actions")
+    const tToast = useTranslations("common.toast")
+
     const router = useRouter()
     const [pending, setPending] = useState(false)
     const handleDeleteStep = async () => {
@@ -20,13 +25,13 @@ export default function DeleteStep(props: {stepId: string}) {
             })
             
             if (!result.ok) {
-                throw new Error("Failed to delete step")
+                throw new Error(t("toastFailed"))
             }
 
             router.refresh()
-            toast.success("Step deleted")
+            toast.success(t("toastDeleted"))
         } catch(error: unknown){
-            const errorMessage = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+            const errorMessage = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
             toast.error(errorMessage)
         } finally {
             setPending(false)
@@ -42,19 +47,19 @@ export default function DeleteStep(props: {stepId: string}) {
                     size="cosmicSm"
                 >
                     <Trash2 className="size-4" />
-                    {pending ? "Deleting..." : "Delete step from this journey"}
+                    {pending ? tActions("deleting") : t("triggerTitle")}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="space-y-2">
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Step</AlertDialogTitle>
+                    <AlertDialogTitle>{t("button")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This will permanently remove this step from the journey. This action cannot be undone.
+                        {t("description")}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel disabled={pending} variant="cosmicTertiary" size="cosmicMd">
-                        Cancel
+                        {tActions("cancel")}
                     </AlertDialogCancel>
                     <AlertDialogAction
                         variant="cosmicError"
@@ -62,7 +67,7 @@ export default function DeleteStep(props: {stepId: string}) {
                         disabled={pending}
                         onClick={() => void handleDeleteStep()}
                     >
-                        {pending ? "Deleting..." : "Delete"}
+                        {pending ? tActions("deleting") : tActions("delete")}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

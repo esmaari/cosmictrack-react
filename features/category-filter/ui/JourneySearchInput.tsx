@@ -2,9 +2,11 @@
 import { useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function JourneySearchInput() {
 
+    const tPlaceholders = useTranslations("common.placeholders")
     const router = useRouter()
     const searchParams = useSearchParams()
 
@@ -29,7 +31,7 @@ export default function JourneySearchInput() {
             <input
                 type="text"
                 id="searchTerm"
-                placeholder="Search journeys..."
+                placeholder={tPlaceholders("searchJourneys")}
                 onChange={(e) => handleInput(e.target.value)}
                 className="h-9 w-full rounded-lg border border-zinc-200 bg-white pl-9 pr-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-200 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-600 dark:focus:ring-zinc-800"
             />

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
@@ -18,17 +18,29 @@ import { AskAIError, askAI } from "@/shared/lib/askAI"
 import { formatAiRemaining } from "@/shared/lib/aiCredits"
 import { useProfileContext } from "@/shared/lib/ProfileProvider"
 import { SparklesIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 
 export default function AddStepForm(props: {journeyId: string, onSaveButtonClicked?: (pending: boolean) => void, setOpen: (open: boolean) => void }) {
     const router = useRouter()
+    const t = useTranslations("steps")
+    const tFields = useTranslations("common.fields")
+    const tValidation = useTranslations("common.validation")
+    const tToast = useTranslations("common.toast")
 
-    const formSchema = z.object({
-        title: z.string().min(1, { message: "Title is required" }).max(80, { message: "Title must be at most 80 characters long" }),
-        cards: z.array(z.object({ id: z.number(), isReversed: z.boolean() })).min(3, { message: "Please select 3 cards" }),
-        meaning: z.string().optional(),
-        note: z.string().max(500, { message: "Note must be at most 500 characters long" }).optional(),
-    })
+    const formSchema = useMemo(
+        () =>
+            z.object({
+                title: z
+                    .string()
+                    .min(1, { message: tValidation("titleRequired") })
+                    .max(80, { message: tValidation("titleMax", { max: 80 }) }),
+                cards: z.array(z.object({ id: z.number(), isReversed: z.boolean() })).min(3, { message: tValidation("cardsRequired") }),
+                meaning: z.string().optional(),
+                note: z.string().max(500, { message: tValidation("noteMax", { max: 500 }) }).optional(),
+            }),
+        [tValidation],
+    )
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -61,17 +73,17 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
 
             if (!response.ok) {
                 const payload = await response.json().catch(() => null)
-                throw new Error(payload?.error ?? "Failed to add step")
+                throw new Error(payload?.error ?? t("form.toastFailed"))
             }
 
             return true
         },
         onSuccess: () => {
             router.refresh()
-            toast.success("Step added")
+            toast.success(t("form.toastAdded"))
         },
         onError: (error) => {
-            const errorMessage = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+            const errorMessage = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
             toast.error(errorMessage)
         },
         onMutate: () => {
@@ -106,7 +118,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                     ? error.message
                     : error instanceof Error
                       ? error.message
-                      : "AI request failed"
+                      : t("form.aiFailed")
             toast.error(message)
             await refetchProfile()
         } finally {
@@ -130,7 +142,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                     name="title"
                     render={({ field }) => (
                         <FormItem className="flex flex-col gap-1">
-                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Title</FormLabel>
+                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("title")}</FormLabel>
                             <FormControl>
                                 <CosmicInput {...field} />
                             </FormControl>
@@ -143,7 +155,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                     name="cards"
                     render={({ field }) => (
                         <FormItem className="flex flex-col gap-1">
-                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Cards</FormLabel>
+                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("cards")}</FormLabel>
                             <FormControl>
                                  <div className="flex flex-col gap-1">
                                     <CardPicker 
@@ -167,7 +179,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                     <FormItem className="flex flex-col gap-1">
                         <div className="flex flex-row gap-2 items-center">
                                                 
-                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Meaning</FormLabel>
+                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("meaning")}</FormLabel>
                         {cards.length === 3 ? (
                             <>
                                 <Button
@@ -178,7 +190,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                                     onClick={() => void getMeaningFromAI()}
                                 >
                                     <SparklesIcon className={cn("w-4 h-4", aiLoading && "animate-pulse")} />
-                                    {aiLoading ? "Generating…" : "Ask AI"}
+                                    {aiLoading ? t("form.generating") : t("form.askAi")}
                                 </Button>
                                 {aiRemainingLabel ? (
                                     <span className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -200,7 +212,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                 name="note"
                 render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
-                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Note</FormLabel>
+                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("note")}</FormLabel>
                         <FormControl>
                             <CosmicTextarea {...field} />
                         </FormControl>
@@ -213,4 +225,3 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
     )
 
 }
-

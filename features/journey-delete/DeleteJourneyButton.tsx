@@ -6,8 +6,13 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Trash2 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export default function DeleteJourneyButton(props: {journeyId: string}) {
+
+    const t = useTranslations("journeys.delete")
+    const tActions = useTranslations("common.actions")
+    const tToast = useTranslations("common.toast")
 
     const router = useRouter()
     const [pending, setPending] = useState(false)
@@ -22,16 +27,16 @@ export default function DeleteJourneyButton(props: {journeyId: string}) {
 
             if (!response.ok) {
                 const payload = await response.json().catch(() => null)
-                throw new Error(payload?.error ?? "Failed to delete journey")
+                throw new Error(payload?.error ?? t("toastFailed"))
             }
 
             router.push("/my-journeys")
-            toast.success("Journey deleted")      
+            toast.success(t("toastDeleted"))      
         } catch (error: unknown) { 
             if (error instanceof Error) {
                 toast.error(error.message)
             } else {
-                toast.error("Unexpected error occurred")
+                toast.error(tToast("unexpectedError"))
             }
         } finally {
             setPending(false)
@@ -47,19 +52,19 @@ export default function DeleteJourneyButton(props: {journeyId: string}) {
                     variant="cosmicError"
                 >
                     <Trash2 className="w-4 h-4" />
-                    {pending ? "Deleting..." : "Delete Journey"}
+                    {pending ? tActions("deleting") : t("button")}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Journey</AlertDialogTitle>
+                    <AlertDialogTitle>{t("title")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to delete this journey?
+                        {t("description")}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel disabled={pending} variant="cosmicTertiary">
-                        Cancel
+                        {tActions("cancel")}
                     </AlertDialogCancel>
                     <AlertDialogAction
                         variant="cosmicError"
@@ -67,7 +72,7 @@ export default function DeleteJourneyButton(props: {journeyId: string}) {
                         disabled={pending}
                         onClick={() => void handleDeleteJourney()}
                     >
-                        {pending ? "Deleting..." : "Delete"}
+                        {pending ? tActions("deleting") : tActions("delete")}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

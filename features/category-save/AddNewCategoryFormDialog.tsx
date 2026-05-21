@@ -12,21 +12,33 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CosmicInput } from "@/shared/ui/CosmicInput"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger, DialogClose } from "@/components/ui/dialog"
 import { Plus } from "lucide-react"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { cn } from "@/lib/utils"
 import { CATEGORY_COLOR_OPTIONS } from "@/features/category-save/categoryColorOptions"
-
-const formSchema = z.object({
-    title: z
-        .string()
-        .min(2, { message: "Title must be at least 2 characters long" })
-        .max(50, { message: "Title must be at most 50 characters long" }),
-    color: z
-        .string()
-        .min(1, { message: "Please select a color" }),
-})
+import { getCategoryColorLabel } from "@/shared/lib/categoryColorLabels"
+import { useTranslations } from "next-intl"
 
 export default function AddNewCategoryFormDialog() {
+    const t = useTranslations("categories")
+    const tFields = useTranslations("common.fields")
+    const tPlaceholders = useTranslations("common.placeholders")
+    const tValidation = useTranslations("common.validation")
+    const tColors = useTranslations("common.colors")
+    const tActions = useTranslations("common.actions")
+    const tToast = useTranslations("common.toast")
+
+    const formSchema = useMemo(
+        () =>
+            z.object({
+                title: z
+                    .string()
+                    .min(2, { message: tValidation("titleMin", { min: 2 }) })
+                    .max(50, { message: tValidation("titleMax", { max: 50 }) }),
+                color: z.string().min(1, { message: tValidation("colorRequired") }),
+            }),
+        [tValidation],
+    )
+
     const router = useRouter()
     const [open, setOpen] = useState(false)
 
@@ -48,23 +60,23 @@ export default function AddNewCategoryFormDialog() {
 
             if (!response.ok) {
                 const payload = await response.json().catch(() => null)
-                throw new Error(payload?.error ?? "Failed to add category")
+                throw new Error(payload?.error ?? t("addDialog.toastFailed"))
             }
 
             const data = await response.json()
             const categoryId = data.categoryId
 
             if (!categoryId) {
-                throw new Error("Failed to add category")
+                throw new Error(t("addDialog.toastFailed"))
             }
             return categoryId
         },
         onSuccess: () => {
             router.refresh()
-            toast.success("Category added")
+            toast.success(t("addDialog.toastAdded"))
         },
         onError: (error) => {
-            const errorMessage = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+            const errorMessage = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
             toast.error(errorMessage)
         },
     })
@@ -85,14 +97,14 @@ export default function AddNewCategoryFormDialog() {
             <DialogTrigger asChild>
                 <Button type="button" variant="cosmicLinkDark" size="cosmicSm">
                     <Plus className="size-4" />
-                    Add Category
+                    {t("addButton")}
                 </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Add New Category</DialogTitle>
+                    <DialogTitle>{t("addDialog.title")}</DialogTitle>
                     <DialogDescription>
-                        Fill in the details below to create a new category.
+                        {t("addDialog.description")}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -107,9 +119,9 @@ export default function AddNewCategoryFormDialog() {
                                 name="title"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Title</FormLabel>
+                                        <FormLabel>{tFields("title")}</FormLabel>
                                         <FormControl>
-                                            <CosmicInput placeholder="New category" {...field} />
+                                            <CosmicInput placeholder={tPlaceholders("newCategory")} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -121,11 +133,11 @@ export default function AddNewCategoryFormDialog() {
                                 name="color"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Color</FormLabel>
+                                        <FormLabel>{tFields("color")}</FormLabel>
                                         <Select onValueChange={field.onChange} value={field.value}>
                                             <FormControl>
                                                 <SelectTrigger className="w-full min-w-0">
-                                                    <SelectValue placeholder="Select color…" />
+                                                    <SelectValue placeholder={tPlaceholders("selectColor")} />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent className="min-w-(--radix-select-trigger-width)">
@@ -138,7 +150,7 @@ export default function AddNewCategoryFormDialog() {
                                                                     opt.value,
                                                                 )}
                                                             />
-                                                            {opt.label}
+                                                            {getCategoryColorLabel(opt.value, tColors)}
                                                         </span>
                                                     </SelectItem>
                                                 ))}
@@ -154,7 +166,7 @@ export default function AddNewCategoryFormDialog() {
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button type="button" variant="cosmicTertiary" size="cosmicMd">
-                            Cancel
+                            {tActions("cancel")}
                         </Button>
                     </DialogClose>
                     <Button
@@ -164,7 +176,7 @@ export default function AddNewCategoryFormDialog() {
                         variant="cosmicPrimary"
                         size="cosmicMd"
                     >
-                        {mutation.isPending ? "Saving..." : "Save"}
+                        {mutation.isPending ? tActions("saving") : tActions("save")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

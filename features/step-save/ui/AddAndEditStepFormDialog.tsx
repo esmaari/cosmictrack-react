@@ -7,8 +7,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Plus, Pencil } from "lucide-react"
 import AddStepForm from "./AddStepForm"
 import EditStepForm from "./EditStepForm"
+import { useTranslations } from "next-intl"
 
 export default function AddAndEditStepFormDialog(props: {journeyId: string, step?: Step, mode: "add" | "edit"}) {
+    const t = useTranslations("steps")
+    const tActions = useTranslations("common.actions")
     const [open, setOpen] = useState(false)
     const [onPending, setOnPending] = useState(false)
     const onPendingChange = (data: boolean) => {
@@ -21,7 +24,7 @@ export default function AddAndEditStepFormDialog(props: {journeyId: string, step
             <DialogTrigger asChild>
                 <Button type="button" variant={props.mode === "add" ? "cosmicLinkLight" : "cosmicLinkDark"} size="cosmicSm">
                     {props.mode === "add" ? <Plus className="size-4" /> : <Pencil className="size-4" />}
-                    {props.mode === "add" ? "Add Step" : ""}
+                    {props.mode === "add" ? t("addButton") : ""}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -29,9 +32,9 @@ export default function AddAndEditStepFormDialog(props: {journeyId: string, step
             >
     
                 <DialogHeader>
-                    <DialogTitle>{props.mode === "add" ? "Add New Step" : "Edit Step"}</DialogTitle>
+                    <DialogTitle>{props.mode === "add" ? t("addDialog.title") : t("editDialog.title")}</DialogTitle>
                 <DialogDescription>
-                    Fill in the details below to {props.mode === "add" ? "create a new step" : "edit the step"}.
+                    {props.mode === "add" ? t("addDialog.description") : t("editDialog.description")}
                 </DialogDescription>
                 </DialogHeader>
                     <div className="min-w-0 py-4">
@@ -43,18 +46,18 @@ export default function AddAndEditStepFormDialog(props: {journeyId: string, step
 
                 <DialogFooter>
                     <DialogClose asChild>   
-                        <Button type="button" variant="cosmicTertiary" size="cosmicMd">Cancel</Button>
+                        <Button type="button" variant="cosmicTertiary" size="cosmicMd">{tActions("cancel")}</Button>
                     </DialogClose>
                     {props.mode === "edit" 
                         ? <Button type="submit" form={`edit-step-form-${props.step?.id}`} disabled={onPending} variant="cosmicPrimary" size="cosmicMd">
                             { onPending 
-                            ? "Saving..." 
-                            : "Save" }
+                            ? tActions("saving") 
+                            : tActions("save") }
                         </Button>   
                         : <Button type="submit" form="add-new-step-form" disabled={onPending} variant="cosmicPrimary" size="cosmicMd">
                             { onPending 
-                            ? "Saving..." 
-                            : "Save" }
+                            ? tActions("saving") 
+                            : tActions("save") }
                         </Button>}
                   
                 </DialogFooter>

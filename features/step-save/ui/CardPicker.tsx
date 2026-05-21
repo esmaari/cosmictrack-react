@@ -6,6 +6,7 @@ import { tarotReadingCards, type TarotReadingCard } from "@/shared/content/tarot
 import { buildMeaningFromPicks } from "@/shared/lib/buildMeaningFromPicks"
 import type { PickedCard } from "@/shared/types/db"
 import { Button } from "@/components/ui/button"
+import { useTranslations } from "next-intl"
 
 function shuffleDeck(): TarotReadingCard[] {
     const deck = [...tarotReadingCards]
@@ -17,6 +18,8 @@ function shuffleDeck(): TarotReadingCard[] {
 }
 
 function PickedCardsDisplay({ pickedCards }: { pickedCards: PickedCard[] }) {
+    const t = useTranslations("steps.cardPicker")
+
     return (
         <div className="mx-auto mt-4 flex max-w-[min(1100px,100%)] flex-wrap justify-center gap-3">
             {pickedCards.map((picked) => {
@@ -30,7 +33,7 @@ function PickedCardsDisplay({ pickedCards }: { pickedCards: PickedCard[] }) {
                     >
                         <img
                             src={card.image}
-                            alt={picked.isReversed ? `${card.name} (reversed)` : card.name}
+                            alt={picked.isReversed ? `${card.name} ${t("reversedSuffix")}` : card.name}
                             className={[
                                 "h-full w-full object-cover",
                                 picked.isReversed ? "rotate-180" : "",
@@ -49,6 +52,7 @@ export default function CardPicker(props: {
     question?: string
     onCardsConfirmed?: (cards: PickedCard[]) => void
 }) {
+    const t = useTranslations("steps.cardPicker")
     const [shuffledCards] = useState<TarotReadingCard[]>(shuffleDeck)
     const [pickedCards, setPickedCards] = useState<PickedCard[]>(props.selectedCardIds ?? [])
     const [confirmed, setConfirmed] = useState(false)
@@ -75,12 +79,12 @@ export default function CardPicker(props: {
             <div className="text-center">
                 {props.question?.trim() ? (
                     <p className="mb-4 text-sm text-primary/80">
-                        <span className="font-medium text-primary">Niyet:</span> {props.question.trim()}
+                        <span className="font-medium text-primary">{t("intentionLabel")}</span> {props.question.trim()}
                     </p>
                 ) : null}
                 <PickedCardsDisplay pickedCards={pickedCards} />
                 <div className="mx-auto mt-6 max-w-2xl rounded-lg border border-cosmic-indigo/15 bg-input p-4 text-left sm:p-5">
-                    <h3 className="mb-2 text-sm font-semibold text-primary">Kart anlamları</h3>
+                    <h3 className="mb-2 text-sm font-semibold text-primary">{t("meaningsTitle")}</h3>
                     <p className="whitespace-pre-line text-sm leading-6 text-primary/85 sm:text-base">{meaning}</p>
                 </div>
             </div>
@@ -95,7 +99,7 @@ export default function CardPicker(props: {
     return (
         <div className="text-center">
         <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-3">
-            Choose 3 cards ({pickedCards.length}/3)
+            {t("choose", { count: pickedCards.length })}
         </p>
         <div className="mx-auto flex w-full max-w-[min(1100px,100%)] justify-center overflow-x-auto overflow-y-visible [-webkit-overflow-scrolling:touch]">
             <div className="grid w-max grid-cols-26 gap-2 px-2 py-4 sm:px-3 max-w-[min(1000px,100%)]">
@@ -111,7 +115,7 @@ export default function CardPicker(props: {
                             >
                                 <img
                                     src="/cards/back.png"
-                                    alt="Card back"
+                                    alt={t("cardBackAlt")}
                                     className="h-full w-full object-cover"
                                 />
                             </div>
@@ -126,7 +130,7 @@ export default function CardPicker(props: {
                         >
                             <img
                                 src="/cards/back.png"
-                                alt="Card back"
+                                alt={t("cardBackAlt")}
                                 className="h-full w-full object-cover"
                             />
                         </div>
@@ -143,7 +147,7 @@ export default function CardPicker(props: {
                 onClick={confirmCards}
                 disabled={pickedCards.length !== 3}
             >
-                Confirm Cards
+                {t("confirm")}
             </Button>
         </div>
     </div>

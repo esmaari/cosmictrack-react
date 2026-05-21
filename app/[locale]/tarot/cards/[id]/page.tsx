@@ -2,6 +2,7 @@ import Image from "next/image"
 import { notFound } from "next/navigation"
 import TarotPageShell from "@/features/tarot-public/ui/TarotPageShell"
 import { getEncyclopediaEntryById, tarotEncyclopediaEntries } from "@/shared/content/tarot"
+import { getTranslations } from "next-intl/server"
 
 type PageProps = {
   params: Promise<{ id: string }>
@@ -13,6 +14,9 @@ export function generateStaticParams() {
 
 export default async function TarotCardDetailPage({ params }: PageProps) {
   const { id } = await params
+  const t = await getTranslations("tarot.cardDetail")
+  const tShell = await getTranslations("tarot.pageShell")
+
   const cardId = Number(id)
   if (Number.isNaN(cardId)) notFound()
 
@@ -20,7 +24,7 @@ export default async function TarotCardDetailPage({ params }: PageProps) {
   if (!card) notFound()
 
   return (
-    <TarotPageShell title={card.name} backHref="/tarot/cards" backLabel="Kartlar">
+    <TarotPageShell title={card.name} backHref="/tarot/cards" backLabel={tShell("backToCards")}>
       <div className="grid gap-8 lg:grid-cols-[minmax(0,240px)_1fr] lg:items-start">
         <div className="relative mx-auto aspect-6/11 w-full max-w-[240px] overflow-hidden rounded-lg border-2 border-solar-gold bg-shadow-veil shadow-md">
           <Image
@@ -35,7 +39,7 @@ export default async function TarotCardDetailPage({ params }: PageProps) {
 
         <div className="stack-section min-w-0">
           <p className="text-sm font-medium text-secondary">
-            {card.arcana === "Major" ? "Major Arcana" : card.suit ?? "Minor Arcana"}
+            {card.arcana === "Major" ? t("majorArcana") : card.suit ?? t("minorArcana")}
             {card.arcana === "Minor" ? ` · ${card.number}` : ` · ${card.number}`}
           </p>
 
@@ -51,12 +55,12 @@ export default async function TarotCardDetailPage({ params }: PageProps) {
           </div>
 
           <section className="stack-card">
-            <h2 className="text-lg font-semibold text-primary">Özet</h2>
+            <h2 className="text-lg font-semibold text-primary">{t("summaryHeading")}</h2>
             <p className="text-base leading-7 text-primary/85">{card.summary}</p>
           </section>
 
           <section className="stack-card">
-            <h2 className="text-lg font-semibold text-primary">Sembolizm</h2>
+            <h2 className="text-lg font-semibold text-primary">{t("symbolismHeading")}</h2>
             <p className="text-base leading-7 text-primary/85">{card.symbolism}</p>
           </section>
 

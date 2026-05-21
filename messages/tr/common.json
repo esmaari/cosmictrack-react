@@ -1,1 +1,68 @@
-{}
+{
+  "actions": {
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor…",
+    "deleting": "Siliniyor…",
+    "delete": "Sil",
+    "cancelling": "İptal ediliyor…",
+    "edit": "Düzenle",
+    "add": "Ekle",
+    "confirm": "Onayla",
+    "loading": "Yükleniyor…"
+  },
+  "fields": {
+    "title": "Başlık",
+    "description": "Açıklama",
+    "note": "Not",
+    "meaning": "Anlam",
+    "cards": "Kartlar",
+    "email": "E-posta",
+    "password": "Şifre",
+    "confirmPassword": "Şifre tekrar",
+    "color": "Renk",
+    "optional": "İsteğe bağlı",
+    "noDescription": "Açıklama yok",
+    "noNote": "Not yok",
+    "selectedCards": "Seçilen kartlar",
+    "createdPrefix": "Oluşturuldu "
+  },
+  "placeholders": {
+    "email": "ornek@email.com",
+    "password": "••••••••",
+    "newJourney": "Yeni journey",
+    "newCategory": "Yeni kategori",
+    "optional": "İsteğe bağlı",
+    "selectColor": "Renk seç…",
+    "searchJourneys": "Journey ara…",
+    "searchCategories": "Kategori ara…",
+    "filterCategories": "Kategori filtrele…"
+  },
+  "toast": {
+    "unknownError": "Bilinmeyen hata",
+    "unexpectedError": "Beklenmeyen bir hata oluştu"
+  },
+  "validation": {
+    "email": "Geçerli bir e-posta girin",
+    "passwordMin": "Şifre en az 6 karakter olmalı",
+    "confirmPassword": "Şifrenizi onaylayın",
+    "passwordsNoMatch": "Şifreler eşleşmiyor",
+    "titleRequired": "Başlık gerekli",
+    "titleMin": "Başlık en az {min} karakter olmalı",
+    "titleMax": "Başlık en fazla {max} karakter olabilir",
+    "descriptionMax": "Açıklama en fazla {max} karakter olabilir",
+    "noteMax": "Not en fazla {max} karakter olabilir",
+    "cardsRequired": "Lütfen 3 kart seçin",
+    "colorRequired": "Lütfen bir renk seçin"
+  },
+  "colors": {
+    "neutral": "Nötr",
+    "energy": "Enerji",
+    "love": "Aşk",
+    "nature": "Doğa",
+    "spiritual": "Ruhsal",
+    "priority": "Öncelik",
+    "knowledge": "Bilgi",
+    "work": "İş"
+  }
+}

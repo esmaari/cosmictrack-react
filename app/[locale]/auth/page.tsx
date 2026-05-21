@@ -9,6 +9,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 import { createSupabaseBrowserClient } from "@/core/supabase/browser"
 import { Button } from "@/components/ui/button"
@@ -16,23 +17,38 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { CosmicInput } from "@/shared/ui/CosmicInput"
 
-const loginSchema = z.object({
-  email: z.string().email("Enter a valid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-})
-
-const registerSchema = z
-  .object({
-    email: z.string().email("Enter a valid email"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirm: z.string().min(6, "Confirm your password"),
-  })
-  .refine((data) => data.password === data.confirm, {
-    message: "Passwords do not match",
-    path: ["confirm"],
-  })
-
 function AuthPageContent() {
+  const t = useTranslations("auth")
+  const tFields = useTranslations("common.fields")
+  const tPlaceholders = useTranslations("common.placeholders")
+  const tValidation = useTranslations("common.validation")
+  const tToast = useTranslations("common.toast")
+  const tActions = useTranslations("common.actions")
+
+  const loginSchema = useMemo(
+    () =>
+      z.object({
+        email: z.string().email(tValidation("email")),
+        password: z.string().min(6, tValidation("passwordMin")),
+      }),
+    [tValidation],
+  )
+
+  const registerSchema = useMemo(
+    () =>
+      z
+        .object({
+          email: z.string().email(tValidation("email")),
+          password: z.string().min(6, tValidation("passwordMin")),
+          confirm: z.string().min(6, tValidation("confirmPassword")),
+        })
+        .refine((data) => data.password === data.confirm, {
+          message: tValidation("passwordsNoMatch"),
+          path: ["confirm"],
+        }),
+    [tValidation],
+  )
+
   const supabase = useMemo(() => createSupabaseBrowserClient(), [])
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -62,7 +78,7 @@ function AuthPageContent() {
       router.push("/")
     },
     onError: (error) => {
-      const message = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+      const message = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
       loginForm.setError("root", { message })
     },
   })
@@ -82,12 +98,12 @@ function AuthPageContent() {
         router.push("/")
         return
       }
-      toast.success("Check your email to confirm your account, then sign in.")
+      toast.success(t("confirmEmailToast"))
       router.replace("/auth")
       registerForm.reset()
     },
     onError: (error) => {
-      const message = error instanceof Error ? error.message : String(error) ?? "Unknown error"
+      const message = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
       registerForm.setError("root", { message })
     },
   })
@@ -106,20 +122,18 @@ function AuthPageContent() {
           />
         </div>
         <h1 className="heading-3 mb-2 p-4 font-semibold text-on-dark">
-          {isRegister ? "Create account" : "Sign in"}
+          {isRegister ? t("registerTitle") : t("signInTitle")}
         </h1>
         <p className="text-sm text-on-dark/75">
-          {isRegister
-            ? "Choose an email and password to register."
-            : "Welcome back — use your email and password."}
+          {isRegister ? t("registerSubtitle") : t("signInSubtitle")}
         </p>
       </div>
 
       <Card className="mx-auto w-full max-w-md border-border-neutral bg-surface text-primary shadow-lg">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-primary">{isRegister ? "Register" : "Login"}</CardTitle>
+          <CardTitle className="text-primary">{isRegister ? t("registerCardTitle") : t("loginCardTitle")}</CardTitle>
           <CardDescription className="text-primary/70">
-            {isRegister ? "Create your CosmicTrack account." : "Sign in to continue."}
+            {isRegister ? t("registerCardDescription") : t("loginCardDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -137,9 +151,9 @@ function AuthPageContent() {
                   name="email"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{tFields("email")}</FormLabel>
                       <FormControl>
-                        <CosmicInput type="email" placeholder="you@example.com" {...field} />
+                        <CosmicInput type="email" placeholder={tPlaceholders("email")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -150,9 +164,9 @@ function AuthPageContent() {
                   name="password"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>{tFields("password")}</FormLabel>
                       <FormControl>
-                        <CosmicInput type="password" placeholder="••••••••" {...field} />
+                        <CosmicInput type="password" placeholder={tPlaceholders("password")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -163,9 +177,9 @@ function AuthPageContent() {
                   name="confirm"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
-                      <FormLabel>Confirm password</FormLabel>
+                      <FormLabel>{tFields("confirmPassword")}</FormLabel>
                       <FormControl>
-                        <CosmicInput type="password" placeholder="••••••••" {...field} />
+                        <CosmicInput type="password" placeholder={tPlaceholders("password")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -183,12 +197,12 @@ function AuthPageContent() {
                   size="cosmicMd"
                   className="w-full"
                 >
-                  {registerMutation.isPending ? "Creating account…" : "Create account"}
+                  {registerMutation.isPending ? t("creatingAccount") : t("createAccountButton")}
                 </Button>
                 <p className="text-center text-sm text-primary/75">
-                  Already have an account?{" "}
+                  {t("hasAccount")}{" "}
                   <Link href="/auth" className="font-medium text-secondary underline-offset-2 hover:underline">
-                    Sign in
+                    {t("signInLink")}
                   </Link>
                 </p>
               </form>
@@ -207,9 +221,9 @@ function AuthPageContent() {
                   name="email"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{tFields("email")}</FormLabel>
                       <FormControl>
-                        <CosmicInput type="email" placeholder="you@example.com" {...field} />
+                        <CosmicInput type="email" placeholder={tPlaceholders("email")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -220,9 +234,9 @@ function AuthPageContent() {
                   name="password"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>{tFields("password")}</FormLabel>
                       <FormControl>
-                        <CosmicInput type="password" placeholder="••••••••" {...field} />
+                        <CosmicInput type="password" placeholder={tPlaceholders("password")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -240,15 +254,15 @@ function AuthPageContent() {
                   size="cosmicMd"
                   className="w-full"
                 >
-                  {loginMutation.isPending ? "Signing in…" : "Login"}
+                  {loginMutation.isPending ? t("signingIn") : t("loginButton")}
                 </Button>
                 <p className="text-center text-sm text-primary/75">
-                  No account yet?{" "}
+                  {t("noAccount")}{" "}
                   <Link
                     href="/auth?mode=register"
                     className="text-btn-link-dark  hover:text-btn-link-dark-hover"
                   >
-                    Register
+                    {t("registerLink")}
                   </Link>
                 </p>
               </form>
@@ -261,9 +275,10 @@ function AuthPageContent() {
 }
 
 function AuthFallback() {
+  const t = useTranslations("common.actions")
   return (
     <div className="flex min-h-[40vh] flex-1 items-center justify-center bg-app px-4 text-on-dark">
-      <p className="text-sm text-on-dark/70">Loading…</p>
+      <p className="text-sm text-on-dark/70">{t("loading")}</p>
     </div>
   )
 }

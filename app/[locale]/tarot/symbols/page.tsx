@@ -18,7 +18,7 @@ export default async function TarotSymbolsPage() {
     {
       id: "major-arcana",
       title: tarotSymbolsContent.majorArcanaNote.heading,
-      summary: "Arketipler · Dönüm noktaları",
+      summary: t("symbolsExplorer.majorArcanaSummary"),
       meaning: tarotSymbolsContent.majorArcanaNote.body,
     },
   ]

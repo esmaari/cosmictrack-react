@@ -1,0 +1,33 @@
+{
+  "title": "Gizlilik Bildirimi",
+  "intro": "CosmicTrack'te e-posta ve hesap verilerinizi nasıl işlediğimiz.",
+  "collect": {
+    "title": "Topladıklarımız",
+    "item1": "E-posta adresi (giriş/kayıt ve hesap kurtarma için gerekli).",
+    "item2": "Sağladığın temel profil verileri (ör. ad, avatar).",
+    "item3": "Uygulamada oluşturduğun kullanım verileri (journey'ler, adımlar, kategoriler, favoriler)."
+  },
+  "why": {
+    "title": "Neden topluyoruz",
+    "item1": "Kimliğini doğrulamak ve hesabını güvence altına almak.",
+    "item2": "Journey ve kategorilerini cihazlar arasında senkronize etmek.",
+    "item3": "Zorunlu hesap e-postaları göndermek (onay, sıfırlama, güvenlik)."
+  },
+  "dosAndDonts": {
+    "title": "Ne yapıyoruz",
+    "titleSuffix": "(ve yapmıyoruz)",
+    "item1": "E-postaları pazarlama için üçüncü taraflarla satmıyor veya paylaşmıyoruz.",
+    "item2": "Açık onayın olmadan pazarlama e-postası göndermiyoruz.",
+    "item3": "Backend olarak Supabase kullanıyoruz; veriler orada saklanır ve korunur."
+  },
+  "choices": {
+    "title": "Seçeneklerin",
+    "item1": "Hesap silme talep ederek verilerinin sistemlerimizden kaldırılmasını isteyebilirsin.",
+    "item2": "Profil bilgilerini uygulama içinde istediğin zaman güncelleyebilirsin."
+  },
+  "questions": {
+    "title": "Sorular",
+    "bodyBefore": "Gizlilikle ilgili soru veya taleplerin için bize ulaş:",
+    "bodyAfter": "."
+  }
+}

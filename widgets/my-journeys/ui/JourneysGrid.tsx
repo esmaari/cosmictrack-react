@@ -1,9 +1,12 @@
+'use client'
+
 import type { Journey, Category } from "@/shared/types/db";
 import { Link } from "@/i18n/navigation";
 import FavoriteToggleButton from "@/features/favorites-toggle/ui/FavoriteToggleButton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatCreatedAt } from "@/lib/formatCreatedAt"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 export default function JourneysGrid(
     props: {
@@ -14,17 +17,19 @@ export default function JourneysGrid(
 
     }) {
 
+        const tFields = useTranslations("common.fields")
+
         const isCategory = (c: Category | undefined): c is Category => c != null
 
         return(
             <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                
                     {props.journeys.map((journey) => {
-                        const categories = Array.from(// 3. "Tekrar listeye çevir" ki .map yapabilelim
-                            new Set(props.journeyCategoryRelationsMap.get(journey.id) ?? []),// 1. "ID'leri getir ve tekrarları sil"
+                        const categories = Array.from(
+                            new Set(props.journeyCategoryRelationsMap.get(journey.id) ?? []),
                         )
-                            .map((categoryId) => props.categoryMapById.get(categoryId))// 2. "ID'leri gerçek bilgilere dönüştür"
-                            .filter(isCategory)// 4. "Hatalıları süz"
+                            .map((categoryId) => props.categoryMapById.get(categoryId))
+                            .filter(isCategory)
 
                         return (
                             <Link href={`/journey/${journey.id}`} key={journey.id}>
@@ -32,10 +37,10 @@ export default function JourneysGrid(
                                     <CardHeader>
                                         <CardTitle>{journey.title}</CardTitle>
                                         <CardDescription>
-                                        {journey.description || "No description"}
+                                        {journey.description || tFields("noDescription")}
                                         </CardDescription>
                                         <p className="text-xs text-on-dark/55">
-                                            Created {formatCreatedAt(journey.created_at)}
+                                            {tFields("createdPrefix")}{formatCreatedAt(journey.created_at)}
                                         </p>
                                     </CardHeader>
                                     <CardContent>

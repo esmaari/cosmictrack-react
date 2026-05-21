@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from "@/core/supabase/server";
 import { getJourneyById } from "@/entities/journey/api/journey";
 import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { getStepsByJourneyId } from "@/entities/step/api/steps";
 import StepsListClient from "@/features/step-save/ui/StepsListClient";
 import { getCategoryIdsByJourneyId } from "@/entities/journey-category/api/getCategoryIdsByJourneyId";
@@ -18,6 +18,7 @@ import { Card, CardContent } from "@/components/ui/card";
 export default async function JourneyDetailPage({ params }: { params: Promise<{ id: string }> }) {
 
     const { id } = await params
+    const t = await getTranslations("journeys")
 
     const supabase = await createSupabaseServerClient()
 
@@ -43,10 +44,9 @@ export default async function JourneyDetailPage({ params }: { params: Promise<{ 
     return (
         <div className="space-y-6">
             <header className="stack-card">
-                <h1 className="heading-3 mb-0 font-semibold text-on-dark">Journey Details</h1>               
+                <h1 className="heading-3 mb-0 font-semibold text-on-dark">{t("detail.title")}</h1>               
             </header>
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
-            {/* Sol kolon: Journey detay + stepler */}
             <div className="space-y-6">
                 <Card>
                     <CardContent>
@@ -59,20 +59,19 @@ export default async function JourneyDetailPage({ params }: { params: Promise<{ 
 
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                        <h2 className="heading-4 mb-0 text-on-dark">Steps</h2>
+                        <h2 className="heading-4 mb-0 text-on-dark">{t("detail.stepsHeading")}</h2>
                         <AddAndEditStepFormDialog journeyId={id} mode="add" />
                     </div>
                     <StepsListClient journeyId={id} steps={steps} />
                 </div>
             </div>
 
-            {/* Sag kolon: Kategoriler + yeni kategori ekleme */}
             <div className="space-y-4">
                
                 <Card>
                     <CardContent>
                          <div className="flex items-center justify-between">
-                            <h2 className="heading-4 text-primary">Categories</h2>
+                            <h2 className="heading-4 text-primary">{t("detail.categoriesHeading")}</h2>
                             <AddNewCategoryFormDialog />
                         </div>
                         <CategoriesToggleList journeyId={id} categories={allCategories} assignedCategoryIds={assignedCategoryIds} />

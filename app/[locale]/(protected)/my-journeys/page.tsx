@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from "@/core/supabase/server";
 import { getJourneysByUserId } from "@/entities/journey/api/journeys";
 import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import AddNewJourneyDialog from "@/features/journey-save/AddNewJourneyDialog";
 import { getFavoriteJourneyIdsByUserId } from "@/entities/favorites/api/getFavoriteJourneyIdsByUserId";
 import { getjourneyCategoryRelationsByUserId } from "@/entities/journey-category/api/getjourneyCategoryRelationsByUserId"
@@ -24,6 +24,8 @@ export default async function MyJourneys(props: { searchParams: Promise<{ fav?: 
         ? [catParam]
         : [];
 
+    const t = await getTranslations("journeys")
+
     const supabase = await createSupabaseServerClient()
 
     const { data: { user } } = await supabase.auth.getUser()
@@ -32,34 +34,26 @@ export default async function MyJourneys(props: { searchParams: Promise<{ fav?: 
         return redirect({ href: "/auth", locale: await getLocale() })
     }
 
-    // Bu liste: kullanıcının sahip olduğu tüm journey kayıtları (SSR'da DB'den okunur).
     const journeys = await getJourneysByUserId(userId)
 
-    // Bu liste: kullanıcının favori yaptığı journey'lerin sadece id listesi (filter + UI state için yeterli).
     const favoriteJourneyIds = await getFavoriteJourneyIdsByUserId(userId)
 
-    // Bu liste: ekranda gösterilecek journey'ler (URL'deki fav=1 moduna göre tümü veya sadece favoriler).
     const visibleJourneys = showFavMode 
         ? journeys.filter(j => favoriteJourneyIds.includes(j.id)) 
         : journeys;
     
-    // Bu liste: kullanıcıya ait tüm journey↔category ilişki satırları (N+1 olmaması için tek sorgu).
     const journeyCategoryRelations = await getjourneyCategoryRelationsByUserId(userId)
 
-    // Bu liste: kullanıcının oluşturduğu tüm category kayıtları (chip render etmek için title/color lazım).
     const allCategories = await getCategoriesByUserId(userId)
 
-    // Bu map: categoryId -> Category lookup (chip basarken hızlı erişim).
     const categoryMapById = new Map<string, Category>(allCategories.map(c => [c.id, c]))
 
-    // Bu map: journeyId -> categoryId[] lookup (her journey kartına bağlı kategorileri hızlı bulmak için).
     const journeyCategoryRelationsMap = new Map<string, string[]>()
 
     for (const row of journeyCategoryRelations) {
         const journeyId = row.journey_id as string
         const categoryId = row.category_id as string
 
-        // Bu liste: ilgili journey için biriken categoryId'ler (aynı journey'e yeni id eklemek için).
         const existingCategoryIds = journeyCategoryRelationsMap.get(journeyId)
         
         if (existingCategoryIds) {
@@ -84,52 +78,33 @@ export default async function MyJourneys(props: { searchParams: Promise<{ fav?: 
 
     const emptyMyJourneysCopy = (() => {
         if (journeys.length === 0) {
-            return {
-                title: "No journeys yet",
-                hint: "Add your first journey with the New journey button (top right).",
-            }
+            return { title: t("empty.none.title"), hint: t("empty.none.hint") }
         }
         if (showFavMode && favoriteJourneyIds.length === 0) {
-            return {
-                title: "No favorites yet",
-                hint: "Open a journey and tap the star to save it here.",
-            }
+            return { title: t("empty.noFavorites.title"), hint: t("empty.noFavorites.hint") }
         }
         if (showFavMode) {
-            return {
-                title: "No favorite journeys match",
-                hint: "Try turning off favorites-only or pick another filter.",
-            }
+            return { title: t("empty.favoritesNoMatch.title"), hint: t("empty.favoritesNoMatch.hint") }
         }
         if (searchQuery.trim()) {
-            return {
-                title: "No journeys match your search",
-                hint: "Try a different title keyword or clear the search.",
-            }
+            return { title: t("empty.searchNoMatch.title"), hint: t("empty.searchNoMatch.hint") }
         }
         if (filteredCategoryIds.length > 0) {
-            return {
-                title: "No journeys match these categories",
-                hint: "Remove a category chip or add those categories to a journey.",
-            }
+            return { title: t("empty.categoriesNoMatch.title"), hint: t("empty.categoriesNoMatch.hint") }
         }
-        return {
-            title: "Nothing to show",
-            hint: "Adjust filters or add a new journey.",
-        }
+        return { title: t("empty.default.title"), hint: t("empty.default.hint") }
     })()
 
     return (
         <div className="stack-section">
             <header className="stack-card">
-                <h1 className="heading-3 mb-0 font-semibold text-on-dark">My Journeys</h1>
+                <h1 className="heading-3 mb-0 font-semibold text-on-dark">{t("pageTitle")}</h1>
                 <div className="stack-row justify-between">
-                    <p className="sm text-light">Your saved journeys.</p>
+                    <p className="sm text-light">{t("pageSubtitle")}</p>
                     <AddNewJourneyDialog />
                 </div>
             </header>
 
-            {/* Toolbar: arama + filtreler */}
             <div className="stack-row justify-between">
                 <JourneySearchInput />
                 <MyJourneysFiltersBar
@@ -139,7 +114,6 @@ export default async function MyJourneys(props: { searchParams: Promise<{ fav?: 
                 />
             </div>
 
-            {/* Journey listesi veya bos durum */}
             {searchFilteredJourneys.length === 0 ? (
                 <div className="stack-card rounded-xl border border-white/10 bg-app-darker/50 px-6 py-12 text-center">
                     <p className="heading-4 mb-0 font-semibold text-on-dark">{emptyMyJourneysCopy.title}</p>

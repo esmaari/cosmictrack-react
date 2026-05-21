@@ -10,20 +10,22 @@ import {
 } from "@/shared/content/tarot"
 import type { TarotSuit } from "@/shared/content/tarot"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 type Filter = "all" | "major" | TarotSuit
 
-const FILTERS: { id: Filter; label: string }[] = [
-  { id: "all", label: "Tümü" },
-  { id: "major", label: "Major" },
-  { id: "Wands", label: "Asalar" },
-  { id: "Cups", label: "Kupalar" },
-  { id: "Swords", label: "Kılıçlar" },
-  { id: "Pentacles", label: "Tılsımlar" },
-]
-
 export default function TarotCardsBrowser() {
+  const t = useTranslations("tarot.cardsBrowser")
   const [filter, setFilter] = useState<Filter>("all")
+
+  const filters: { id: Filter; labelKey: "filterAll" | "filterMajor" | "filterWands" | "filterCups" | "filterSwords" | "filterPentacles" }[] = [
+    { id: "all", labelKey: "filterAll" },
+    { id: "major", labelKey: "filterMajor" },
+    { id: "Wands", labelKey: "filterWands" },
+    { id: "Cups", labelKey: "filterCups" },
+    { id: "Swords", labelKey: "filterSwords" },
+    { id: "Pentacles", labelKey: "filterPentacles" },
+  ]
 
   const cards = useMemo(() => {
     if (filter === "all") return tarotEncyclopediaEntries
@@ -34,7 +36,7 @@ export default function TarotCardsBrowser() {
   return (
     <div className="stack-section">
       <div className="flex flex-wrap gap-2">
-        {FILTERS.map((item) => (
+        {filters.map((item) => (
           <button
             key={item.id}
             type="button"
@@ -46,12 +48,12 @@ export default function TarotCardsBrowser() {
                 : "border-cosmic-indigo/25 bg-input text-primary hover:border-secondary/40",
             )}
           >
-            {item.label}
+            {t(item.labelKey)}
           </button>
         ))}
       </div>
 
-      <p className="text-sm text-primary/70">{cards.length} kart</p>
+      <p className="text-sm text-primary/70">{t("cardCount", { count: cards.length })}</p>
 
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:gap-4">
         {cards.map((card) => (

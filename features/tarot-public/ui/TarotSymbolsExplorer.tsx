@@ -1,9 +1,9 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { useEffect, useMemo, useState } from "react"
-import { usePathname, useRouter } from "next/navigation"
-import { useSearchParams } from "next/navigation"
+import { useEffect, useMemo } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 
 export type TarotSymbolEntry = {
   id: string
@@ -18,38 +18,31 @@ type Props = {
 }
 
 export default function TarotSymbolsExplorer({ symbols, defaultSymbolId }: Props) {
+  const t = useTranslations("tarot.symbolsExplorer")
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
 
   const byId = useMemo(() => new Map(symbols.map((s) => [s.id, s])), [symbols])
-  const selectedFromUrl = searchParams.get("symbol") ?? undefined
+  const selectedFromUrl = searchParams.get("symbol")
 
-  const initialId =
-    (selectedFromUrl && byId.has(selectedFromUrl) ? selectedFromUrl : undefined) ??
-    (defaultSymbolId && byId.has(defaultSymbolId) ? defaultSymbolId : undefined) ??
-    symbols[0]?.id
+  const selectedId = useMemo(() => {
+    if (selectedFromUrl && byId.has(selectedFromUrl)) return selectedFromUrl
+    if (defaultSymbolId && byId.has(defaultSymbolId)) return defaultSymbolId
+    return symbols[0]?.id
+  }, [selectedFromUrl, defaultSymbolId, byId, symbols])
 
-  const [selectedId, setSelectedId] = useState<string | undefined>(initialId)
-
+  // Seed URL when landing without ?symbol= (router only — no setState in effect)
   useEffect(() => {
-    if (!selectedFromUrl && selectedId) {
-      const next = new URLSearchParams(searchParams.toString())
-      next.set("symbol", selectedId)
-      router.replace(`${pathname}?${next.toString()}`, { scroll: false })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (!selectedFromUrl) return
-    if (byId.has(selectedFromUrl)) setSelectedId(selectedFromUrl)
-  }, [byId, selectedFromUrl])
+    if (selectedFromUrl || !selectedId) return
+    const next = new URLSearchParams(searchParams.toString())
+    next.set("symbol", selectedId)
+    router.replace(`${pathname}?${next.toString()}`, { scroll: false })
+  }, [selectedFromUrl, selectedId, pathname, router, searchParams])
 
   const selected = (selectedId && byId.get(selectedId)) || symbols[0]
 
   const onSelect = (id: string) => {
-    setSelectedId(id)
     const next = new URLSearchParams(searchParams.toString())
     next.set("symbol", id)
     router.replace(`${pathname}?${next.toString()}`, { scroll: false })
@@ -93,11 +86,10 @@ export default function TarotSymbolsExplorer({ symbols, defaultSymbolId }: Props
         </header>
 
         <div className="mt-6 stack-card">
-          <h3 className="text-sm font-semibold tracking-[0.16em] text-on-dark/60">ANLAM</h3>
+          <h3 className="text-sm font-semibold tracking-[0.16em] text-on-dark/60">{t("meaningHeading")}</h3>
           <p className="text-base leading-7 text-on-dark/80">{selected.meaning}</p>
         </div>
       </section>
     </div>
   )
 }
-

@@ -67,5 +67,28 @@
     "questionPlaceholder": "Örn. Bu ay neye odaklanmalıyım?",
     "ctaBody": "Okumalarını journey olarak kaydetmek ve planına göre AI yorumu almak için hesap oluştur.",
     "signUpFree": "Ücretsiz kayıt ol"
+  },
+  "pageShell": {
+    "backToTarot": "Tarot",
+    "backToCards": "Kartlar"
+  },
+  "cardsBrowser": {
+    "filterAll": "Tümü",
+    "filterMajor": "Major",
+    "filterWands": "Asalar",
+    "filterCups": "Kupalar",
+    "filterSwords": "Kılıçlar",
+    "filterPentacles": "Tılsımlar",
+    "cardCount": "{count} kart"
+  },
+  "cardDetail": {
+    "majorArcana": "Major Arcana",
+    "minorArcana": "Minor Arcana",
+    "summaryHeading": "Özet",
+    "symbolismHeading": "Sembolizm"
+  },
+  "symbolsExplorer": {
+    "meaningHeading": "ANLAM",
+    "majorArcanaSummary": "Arketipler · Dönüm noktaları"
   }
 }

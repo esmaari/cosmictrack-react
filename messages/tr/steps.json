@@ -1,0 +1,41 @@
+{
+  "addButton": "Adım Ekle",
+  "addDialog": {
+    "title": "Yeni Adım Ekle",
+    "description": "Yeni bir adım oluşturmak için aşağıdaki alanları doldur."
+  },
+  "editDialog": {
+    "title": "Adımı Düzenle",
+    "description": "Adımı düzenlemek için aşağıdaki alanları doldur."
+  },
+  "form": {
+    "generating": "Üretiliyor…",
+    "askAi": "AI'ya sor",
+    "toastAdded": "Adım eklendi",
+    "toastSaved": "Adım kaydedildi",
+    "toastFailed": "Adım eklenemedi",
+    "toastSaveFailed": "Adım kaydedilemedi",
+    "aiFailed": "AI isteği başarısız"
+  },
+  "delete": {
+    "button": "Adımı Sil",
+    "triggerTitle": "Bu journey'den adımı sil",
+    "description": "Bu adım journey'den kalıcı olarak kaldırılacak. Bu işlem geri alınamaz.",
+    "toastDeleted": "Adım silindi",
+    "toastFailed": "Adım silinemedi"
+  },
+  "list": {
+    "emptyTitle": "Henüz adım yok",
+    "emptyHintBefore": "İlk adımını",
+    "emptyHintButton": "Adım ekle",
+    "emptyHintAfter": "düğmesiyle yukarıdan ekle."
+  },
+  "cardPicker": {
+    "choose": "3 kart seç ({count}/3)",
+    "confirm": "Kartları Onayla",
+    "cardBackAlt": "Kart arkası",
+    "intentionLabel": "Niyet:",
+    "meaningsTitle": "Kart anlamları",
+    "reversedSuffix": "(ters)"
+  }
+}

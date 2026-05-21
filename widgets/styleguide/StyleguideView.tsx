@@ -116,14 +116,15 @@ export default function StyleguideView() {
         <SectionTitle>Text & accents</SectionTitle>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
           <Swatch boxClass="bg-heading" label="bg-heading — cosmic-gold" />
-          <Swatch boxClass="bg-secondary" label="bg-secondary — mystic-violet (theme)" />
+          <Swatch boxClass="bg-btn-primary" label="bg-btn-primary — mystic-violet" />
           <Swatch boxClass="bg-light" label="bg-light — star-ash" />
           <Swatch boxClass="bg-on-dark" label="bg-on-dark — button-text" />
           <Swatch boxClass="bg-favorite" label="bg-favorite — cosmic-amethyst" />
         </div>
         <p className="mt-3 text-sm text-primary/70">
           Typography defaults use <code className="text-xs">text-primary</code> on headings/body;{" "}
-          <code className="text-xs">heading-secondary</code> → <code className="text-xs">text-secondary</code>.
+          brand accent on light surfaces: <code className="text-xs">text-btn-primary</code> (not{" "}
+          <code className="text-xs">text-secondary</code> — shadcn overrides that token).
         </p>
       </section>
 
@@ -290,10 +291,10 @@ export default function StyleguideView() {
             cosmicFull
           </Button>
           <Button type="button" variant="cosmicPrimary" size="icon" aria-label="Play">
-            <Play className="size-4" />
+            <Play className="size-4 text-current" />
           </Button>
           <Button type="button" variant="cosmicSecondary" size="icon-sm" aria-label="Heart">
-            <Heart className="size-4" />
+            <Heart className="size-4 text-current" />
           </Button>
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg bg-footer-heading p-3">
@@ -303,7 +304,7 @@ export default function StyleguideView() {
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <Button type="button" variant="cosmicPrimary" size="cosmicLg">
-            <Play className="size-4" /> With icon
+            <Play className="size-4 text-current" /> With icon
           </Button>
           <Button type="button" variant="cosmicError" size="cosmicSm" disabled>
             Disabled
@@ -467,7 +468,7 @@ export default function StyleguideView() {
             { Icon: Trash2, name: "Trash2" },
           ].map(({ Icon, name }) => (
             <li key={name} className="flex items-center gap-2 text-primary/90">
-              <Icon className="size-5 shrink-0 text-secondary" />
+              <Icon className="size-5 shrink-0 text-btn-primary" strokeWidth={2} />
               <span>
                 <code className="text-xs">{name}</code>
               </span>

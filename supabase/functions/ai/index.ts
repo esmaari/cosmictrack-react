@@ -107,7 +107,7 @@ Deno.serve(async (req) => {
     const now = new Date();
     const limit = getLimitForPlan(row.plan);
     const resetPeriod = periodExpired(row.plan, row.ai_period_start, now);
-    let usedCount = resetPeriod ? 0 : row.ai_used_count;
+    const usedCount = resetPeriod ? 0 : row.ai_used_count;
 
     if (usedCount >= limit) {
       return jsonResponse(

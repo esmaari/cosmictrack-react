@@ -43,7 +43,10 @@ export function useProfile() {
   }, [supabase])
 
   useEffect(() => {
-    void refetch()
+    const id = window.setTimeout(() => {
+      void refetch()
+    }, 0)
+    return () => window.clearTimeout(id)
   }, [refetch])
 
   useEffect(() => {

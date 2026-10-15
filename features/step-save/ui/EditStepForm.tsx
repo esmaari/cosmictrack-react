@@ -14,6 +14,7 @@ import DeleteStepButton from "@/features/step-delete/ui/DeleteStepButton"
 import CardPicker from "./CardPicker"
 import type { PickedCard } from "@/shared/types/db"
 import { useTranslations } from "next-intl"
+import { createEditStepSchema } from "@/shared/lib/formSchemas"
 
 export default function EditStepForm(props: {journeyId: string, step?: Step, onSaveButtonClicked?: (pending: boolean) => void, setOpen: (open: boolean) => void }) {
     const router = useRouter()
@@ -22,16 +23,14 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
     const tValidation = useTranslations("common.validation")
     const tToast = useTranslations("common.toast")
 
-    const [selectedCards, setSelectedCards] = useState<PickedCard[]>(props.step?.cards ?? [])
+    const [selectedCards] = useState<PickedCard[]>(props.step?.cards ?? [])
 
     const formSchema = useMemo(
         () =>
-            z.object({
-                title: z
-                    .string()
-                    .min(1, { message: tValidation("titleRequired") })
-                    .max(80, { message: tValidation("titleMax", { max: 80 }) }),
-                note: z.string().max(500, { message: tValidation("noteMax", { max: 500 }) }).optional(),
+            createEditStepSchema({
+                titleRequired: tValidation("titleRequired"),
+                titleMax: tValidation("titleMax", { max: 80 }),
+                noteMax: tValidation("noteMax", { max: 500 }),
             }),
         [tValidation],
     )
@@ -54,7 +53,7 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
                     id: props.step?.id,
                     title: values.title.trim(),
                     note: values.note?.trim() ?? "",
-                    meaning: "",
+                    meaning: props.step?.meaning ?? "",
                     cards: values.cards,
                 }),
             })
@@ -107,7 +106,7 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
                     name="title"
                     render={({ field }) => (
                         <FormItem className="flex flex-col gap-1">
-                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("title")}</FormLabel>
+                            <FormLabel>{tFields("title")}</FormLabel>
                             <FormControl>
                                 <CosmicInput {...field} />
                             </FormControl>
@@ -117,20 +116,25 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
                 />
 
             <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("selectedCards")}</label>
+                <label className="text-sm font-medium text-primary">{tFields("selectedCards")}</label>
                 <CardPicker mode="edit" selectedCardIds={selectedCards} />
             </div>
 
-            <div>
-                <p>{props.step?.meaning}</p>
-            </div>
+            {props.step?.meaning ? (
+                <div className="flex flex-col gap-1">
+                    <p className="text-sm font-medium text-primary">{tFields("meaning")}</p>
+                    <div className="whitespace-pre-line rounded-md border border-border-neutral bg-input px-3 py-2 text-sm leading-6 text-primary/85">
+                        {props.step.meaning}
+                    </div>
+                </div>
+            ) : null}
 
                 <FormField
                     control={form.control}
                     name="note"
                     render={({ field }) => (
                         <FormItem className="flex flex-col gap-1">
-                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("note")}</FormLabel>
+                            <FormLabel>{tFields("note")}</FormLabel>
                             <FormControl>
                                 <CosmicTextarea {...field} />
                             </FormControl>
@@ -138,7 +142,12 @@ export default function EditStepForm(props: {journeyId: string, step?: Step, onS
                         </FormItem>
                     )}
                 />
-                <DeleteStepButton stepId={props.step?.id ?? "" as string} />
+                <div className="border-t border-border-neutral pt-3">
+                  <DeleteStepButton
+                    stepId={props.step?.id ?? ("" as string)}
+                    onDeleted={() => props.setOpen(false)}
+                  />
+                </div>
             </form>
         </Form>
     )

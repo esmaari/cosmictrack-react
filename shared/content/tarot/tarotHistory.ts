@@ -1,5 +1,6 @@
-/** Editorial copy for /tarot/history — update without touching components */
-
+/**
+ * @deprecated Prefer `tarot.historyPage` messages (en/tr). Kept for reference only.
+ */
 export const tarotHistoryContent = {
   title: "Tarot Tarihine Kısa Bakış",
   intro:
@@ -15,7 +16,7 @@ export const tarotHistoryContent = {
     },
     {
       heading: "CosmicTrack'te tarot",
-      body: "Bu sitede kartların anlamlarını ücretsiz keşfedebilir, 'Kartlara sor' demosunda üç kartlık bir çekim deneyebilirsin. Okumalarını kaydetmek ve AI destekli yorum için ücretsiz hesap oluşturabilirsin.",
+      body: "Bu sitede kartların anlamlarını ücretsiz keşfedebilir, 'Kartlara sor' demosunda üç kartlık bir çekim deneyebilirsin. Okumalarını journey olarak kaydetmek için ücretsiz hesap oluşturabilirsin.",
     },
   ],
 } as const

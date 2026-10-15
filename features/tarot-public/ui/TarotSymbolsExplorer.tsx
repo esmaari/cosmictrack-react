@@ -52,7 +52,7 @@ export default function TarotSymbolsExplorer({ symbols, defaultSymbolId }: Props
 
   return (
     <div className="grid gap-4 md:grid-cols-[260px_minmax(0,1fr)] md:gap-6">
-      <aside className="rounded-2xl border border-white/10 bg-black/10 p-3 shadow-sm backdrop-blur-[1px]">
+      <aside className="rounded-xl border border-heading/25 bg-app-darker/60 p-3">
         <ul className="max-h-[420px] overflow-auto pr-1">
           {symbols.map((symbol) => {
             const active = symbol.id === selected.id
@@ -60,16 +60,17 @@ export default function TarotSymbolsExplorer({ symbols, defaultSymbolId }: Props
               <li key={symbol.id}>
                 <button
                   type="button"
+                  aria-current={active ? "true" : undefined}
                   onClick={() => onSelect(symbol.id)}
                   className={cn(
-                    "w-full rounded-xl px-3 py-2 text-left transition-colors",
+                    "min-h-11 w-full rounded-xl px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral",
                     active
                       ? "bg-heading/10 text-heading"
-                      : "text-on-dark/80 hover:bg-white/5 hover:text-btn-link-light",
+                      : "text-on-dark/85 hover:bg-white/5 hover:text-btn-link-light",
                   )}
                 >
                   <div className="text-sm font-semibold">{symbol.title}</div>
-                  <div className={cn("mt-0.5 text-xs leading-5", active ? "text-on-dark/70" : "text-on-dark/55")}>
+                  <div className={cn("mt-0.5 text-xs leading-5", active ? "text-on-dark/75" : "text-on-dark/70")}>
                     {symbol.summary}
                   </div>
                 </button>
@@ -79,15 +80,15 @@ export default function TarotSymbolsExplorer({ symbols, defaultSymbolId }: Props
         </ul>
       </aside>
 
-      <section className="rounded-2xl border border-white/10 bg-black/10 p-5 shadow-sm backdrop-blur-[1px] sm:p-6">
+      <section className="rounded-xl border border-heading/25 bg-app-darker/60 p-5 sm:p-6">
         <header className="stack-tight">
-          <h2 className="heading-4 font-semibold text-heading">{selected.title}</h2>
-          <p className="text-sm leading-6 text-on-dark/70">{selected.summary}</p>
+          <h2 className="heading-4 mb-0 font-semibold text-heading">{selected.title}</h2>
+          <p className="text-sm leading-6 text-on-dark/75">{selected.summary}</p>
         </header>
 
         <div className="mt-6 stack-card">
-          <h3 className="text-sm font-semibold tracking-[0.16em] text-on-dark/60">{t("meaningHeading")}</h3>
-          <p className="text-base leading-7 text-on-dark/80">{selected.meaning}</p>
+          <h3 className="text-sm font-semibold text-heading">{t("meaningHeading")}</h3>
+          <p className="text-base leading-7 text-on-dark/85">{selected.meaning}</p>
         </div>
       </section>
     </div>

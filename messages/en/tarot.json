@@ -1,8 +1,75 @@
 {
+  "brand": "CosmicTrack · Tarot",
   "eyebrow": "TAROT",
-  "titleLine1": "Learn the cards,",
-  "titleLine2": "explore the symbols.",
-  "intro": "Learn the cards, explore symbols, or try a three-card demo draw. Create a free account to save journeys and unlock AI readings.",
+  "title": "Tarot library",
+  "titleLine1": "Open a card.",
+  "titleLine2": "Stay with it.",
+  "intro": "Card meanings, symbols, suits, and a short history of tarot — this is where you learn the deck.",
+  "topics": {
+    "title": "Topics",
+    "items": {
+      "meanings": {
+        "title": "Card meanings",
+        "body": "Summaries, keywords, and symbolism for all 78 cards — Major and Minor Arcana.",
+        "cta": "Browse cards"
+      },
+      "symbols": {
+        "title": "Symbols",
+        "body": "Read the language in the pictures: suit themes and Major Arcana keys.",
+        "cta": "Browse symbols"
+      },
+      "history": {
+        "title": "Tarot history",
+        "body": "Where tarot comes from, and how CosmicTrack turns readings into journeys.",
+        "cta": "Read history"
+      }
+    }
+  },
+  "suits": {
+    "title": "Browse by suit",
+    "intro": "The Minor Arcana is divided into four suits. Pick one to open that suit’s cards.",
+    "majorCta": "See Major Arcana",
+    "cta": "Go deeper into symbols",
+    "items": {
+      "cups": { "name": "Cups", "hint": "Feeling · heart · flow" },
+      "swords": { "name": "Swords", "hint": "Mind · truth · air" },
+      "wands": { "name": "Wands", "hint": "Fire · will · spark" },
+      "pentacles": { "name": "Pentacles", "hint": "Body · earth · craft" }
+    }
+  },
+  "practice": {
+    "title": "Practice draw",
+    "body": "Try a classic three-card draw to practice what you learn — no account needed.",
+    "cta": "Ask the cards"
+  },
+  "hero": {
+    "primaryCta": "Ask the cards",
+    "secondaryCta": "Browse the 78 cards",
+    "featuredAlt": "The Moon",
+    "featuredHint": "Tonight’s door: The Moon — intuition, shadow, dream.",
+    "featuredLink": "Read The Moon →"
+  },
+  "learn": {
+    "title": "Where do you want to start?",
+    "intro": "Three quiet doors into the deck. Pick the one that pulls you — not a checklist.",
+    "paths": {
+      "cards": {
+        "title": "78 cards",
+        "body": "Short summaries and symbolism. Open one card and sit with it for a while.",
+        "cta": "Enter"
+      },
+      "symbols": {
+        "title": "The hidden language",
+        "body": "Cups, swords, wands, pentacles — keys behind the pictures.",
+        "cta": "Explore"
+      },
+      "history": {
+        "title": "Roots & road",
+        "body": "Where tarot comes from, and how CosmicTrack turns readings into journeys.",
+        "cta": "Read"
+      }
+    }
+  },
   "tiles": {
     "encyclopedia": {
       "number": "01",
@@ -45,8 +112,8 @@
     "button": "Try the full demo draw →"
   },
   "savePanel": {
-    "title": "Save your journeys",
-    "body": "Store readings step by step, organize them with categories, and get AI interpretations based on your plan.",
+    "title": "Keep your readings as journeys",
+    "body": "When a card stays with you, save the steps — categories, notes, and your own path through the deck.",
     "button": "Create free account"
   },
   "cardsPage": {
@@ -59,20 +126,39 @@
   },
   "askPage": {
     "title": "Ask the cards",
-    "intro": "Pick three cards and confirm. Classic upright or reversed meanings are shown — no AI is used."
+    "intro": "Pick three cards and confirm. Classic upright or reversed meanings from the CosmicTrack deck."
   },
   "askDemo": {
-    "disclaimer": "This demo only shows CosmicTrack card meanings. No AI or account saving is used.",
+    "disclaimer": "This demo shows CosmicTrack card meanings only. Nothing is saved until you create an account.",
     "questionLabel": "Question or intention (optional)",
     "questionPlaceholder": "e.g. What should I focus on this month?",
-    "ctaBody": "Create an account to save your readings as journeys and get AI interpretation based on your plan.",
+    "ctaBody": "Create an account to keep readings as journeys — steps, categories, and notes in one place.",
     "signUpFree": "Create free account"
+  },
+  "historyPage": {
+    "title": "A short look at tarot history",
+    "intro": "Tarot moved from early game decks to a symbolic language for reflection. On CosmicTrack you can learn the cards and record your own path.",
+    "sections": {
+      "origins": {
+        "heading": "Origins",
+        "body": "Early examples linked to 15th-century Italian trionfi and similar decks form tarot’s roots. Different regions later developed their own deck styles."
+      },
+      "symbolism": {
+        "heading": "Symbolism and reading",
+        "body": "In the 19th and 20th centuries, occult and psychological readings grew; decks like Rider–Waite became common references. Many people now use the cards for awareness and reflection."
+      },
+      "cosmictrack": {
+        "heading": "Tarot on CosmicTrack",
+        "body": "Explore meanings freely, try a three-card draw in Ask the cards, and save journeys when you want to keep a reading as steps over time."
+      }
+    }
   },
   "pageShell": {
     "backToTarot": "Tarot",
     "backToCards": "Cards"
   },
   "cardsBrowser": {
+    "filtersLabel": "Card filters",
     "filterAll": "All",
     "filterMajor": "Major",
     "filterWands": "Wands",
@@ -90,5 +176,37 @@
   "symbolsExplorer": {
     "meaningHeading": "MEANING",
     "majorArcanaSummary": "Archetypes · Turning points"
+  },
+  "symbolsContent": {
+    "suits": {
+      "wands": {
+        "name": "Wands",
+        "element": "Fire",
+        "themes": "Inspiration, passion, creativity, movement",
+        "body": "Wands show where intention and energy are flowing. New beginnings, projects, and inner drive often appear in this suit."
+      },
+      "cups": {
+        "name": "Cups",
+        "element": "Water",
+        "themes": "Feeling, relationship, intuition, harmony",
+        "body": "Cups speak to the heart: love, bonding, empathy, and inner fulfillment. Emotional awareness sits at the center of these cards."
+      },
+      "swords": {
+        "name": "Swords",
+        "element": "Air",
+        "themes": "Thought, decision, communication, tension",
+        "body": "Swords represent the mind and facing truths. Clarity, boundaries, and hard choices are this suit’s territory."
+      },
+      "pentacles": {
+        "name": "Pentacles",
+        "element": "Earth",
+        "themes": "Work, money, health, concrete results",
+        "body": "Pentacles describe the material world and the return on effort. Security, skill, and long-term stability stand out here."
+      }
+    },
+    "major": {
+      "heading": "Major Arcana",
+      "body": "The 22 major cards (The Fool through The World) mark archetypal life lessons and turning points. In journey records they often carry strong themes."
+    }
   }
 }

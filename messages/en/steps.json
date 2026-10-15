@@ -15,7 +15,14 @@
     "toastSaved": "Step saved",
     "toastFailed": "Failed to add step",
     "toastSaveFailed": "Failed to save step",
-    "aiFailed": "AI request failed"
+    "aiFailed": "AI request failed",
+    "aiLimitReached": "You've used all your AI interpretations for this period. Free plan: 1 per day. Premium: 100 per month.",
+    "aiRemainingPremium": "{remaining}/{limit} AI left {period}",
+    "aiRemainingFree": "{remaining} AI left {period}",
+    "aiExhaustedPremium": "Monthly AI limit reached ({limit}/{period})",
+    "aiExhaustedFree": "Daily AI limit reached (resets {period})",
+    "aiPeriodToday": "today",
+    "aiPeriodMonth": "this month"
   },
   "delete": {
     "button": "Delete Step",
@@ -26,9 +33,7 @@
   },
   "list": {
     "emptyTitle": "No steps yet",
-    "emptyHintBefore": "Add your first step with the",
-    "emptyHintButton": "Add step",
-    "emptyHintAfter": "button above."
+    "emptyHint": "Capture a reading or note as your first step on this journey."
   },
   "cardPicker": {
     "choose": "Choose 3 cards ({count}/3)",

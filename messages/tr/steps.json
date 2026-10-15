@@ -15,7 +15,14 @@
     "toastSaved": "Adım kaydedildi",
     "toastFailed": "Adım eklenemedi",
     "toastSaveFailed": "Adım kaydedilemedi",
-    "aiFailed": "AI isteği başarısız"
+    "aiFailed": "AI isteği başarısız",
+    "aiLimitReached": "Bu dönem için tüm AI yorum haklarını kullandın. Ücretsiz plan: günde 1. Premium: ayda 100.",
+    "aiRemainingPremium": "{period} {remaining}/{limit} AI kaldı",
+    "aiRemainingFree": "{period} {remaining} AI kaldı",
+    "aiExhaustedPremium": "Aylık AI limiti doldu ({limit}/{period})",
+    "aiExhaustedFree": "Günlük AI limiti doldu ({period} sıfırlanır)",
+    "aiPeriodToday": "bugün",
+    "aiPeriodMonth": "bu ay"
   },
   "delete": {
     "button": "Adımı Sil",
@@ -26,9 +33,7 @@
   },
   "list": {
     "emptyTitle": "Henüz adım yok",
-    "emptyHintBefore": "İlk adımını",
-    "emptyHintButton": "Adım ekle",
-    "emptyHintAfter": "düğmesiyle yukarıdan ekle."
+    "emptyHint": "Bu journey’de ilk adım olarak bir okuma veya not kaydet."
   },
   "cardPicker": {
     "choose": "3 kart seç ({count}/3)",

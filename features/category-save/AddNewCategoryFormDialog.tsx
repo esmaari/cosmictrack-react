@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils"
 import { CATEGORY_COLOR_OPTIONS } from "@/features/category-save/categoryColorOptions"
 import { getCategoryColorLabel } from "@/shared/lib/categoryColorLabels"
 import { useTranslations } from "next-intl"
+import { createCategorySchema } from "@/shared/lib/formSchemas"
 
 export default function AddNewCategoryFormDialog() {
     const t = useTranslations("categories")
@@ -29,12 +30,10 @@ export default function AddNewCategoryFormDialog() {
 
     const formSchema = useMemo(
         () =>
-            z.object({
-                title: z
-                    .string()
-                    .min(2, { message: tValidation("titleMin", { min: 2 }) })
-                    .max(50, { message: tValidation("titleMax", { max: 50 }) }),
-                color: z.string().min(1, { message: tValidation("colorRequired") }),
+            createCategorySchema({
+                titleMin: tValidation("titleMin", { min: 2 }),
+                titleMax: tValidation("titleMax", { max: 50 }),
+                colorRequired: tValidation("colorRequired"),
             }),
         [tValidation],
     )
@@ -93,14 +92,21 @@ export default function AddNewCategoryFormDialog() {
     const formId = "add-new-category-form"
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog
+            open={open}
+            onOpenChange={(next) => {
+                if (mutation.isPending) return
+                setOpen(next)
+                if (!next) form.reset()
+            }}
+        >
             <DialogTrigger asChild>
-                <Button type="button" variant="cosmicLinkDark" size="cosmicSm">
+                <Button type="button" variant="cosmicSecondary" size="cosmicSm" className="shrink-0">
                     <Plus className="size-4" />
                     {t("addButton")}
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent size="md">
                 <DialogHeader>
                     <DialogTitle>{t("addDialog.title")}</DialogTitle>
                     <DialogDescription>
@@ -121,7 +127,7 @@ export default function AddNewCategoryFormDialog() {
                                     <FormItem>
                                         <FormLabel>{tFields("title")}</FormLabel>
                                         <FormControl>
-                                            <CosmicInput placeholder={tPlaceholders("newCategory")} {...field} />
+                                            <CosmicInput placeholder={tPlaceholders("newCategory")} disabled={mutation.isPending} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -134,13 +140,13 @@ export default function AddNewCategoryFormDialog() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>{tFields("color")}</FormLabel>
-                                        <Select onValueChange={field.onChange} value={field.value}>
+                                        <Select onValueChange={field.onChange} value={field.value} disabled={mutation.isPending}>
                                             <FormControl>
-                                                <SelectTrigger className="w-full min-w-0">
+                                                <SelectTrigger className="h-auto w-full min-w-0 rounded-md border border-border-neutral bg-input px-3 py-2 text-primary data-placeholder:text-light focus-visible:border-ring-neutral focus-visible:ring-1 focus-visible:ring-ring-neutral dark:bg-input">
                                                     <SelectValue placeholder={tPlaceholders("selectColor")} />
                                                 </SelectTrigger>
                                             </FormControl>
-                                            <SelectContent className="min-w-(--radix-select-trigger-width)">
+                                            <SelectContent className="min-w-(--radix-select-trigger-width) border border-border-neutral bg-surface text-primary">
                                                 {CATEGORY_COLOR_OPTIONS.map((opt) => (
                                                     <SelectItem key={opt.value} value={opt.value}>
                                                         <span className="flex items-center gap-2">
@@ -165,7 +171,7 @@ export default function AddNewCategoryFormDialog() {
 
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button type="button" variant="cosmicTertiary" size="cosmicMd">
+                        <Button type="button" variant="cosmicTertiary" size="cosmicMd" disabled={mutation.isPending}>
                             {tActions("cancel")}
                         </Button>
                     </DialogClose>

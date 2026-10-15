@@ -15,6 +15,7 @@ const CosmicTextarea = React.forwardRef<
 >(({ className, readOnly, ...props }, ref) => {
   return (
     <Textarea
+      {...props}
       ref={ref}
       readOnly={readOnly}
       className={cn(
@@ -29,7 +30,6 @@ const CosmicTextarea = React.forwardRef<
             ],
         className,
       )}
-      {...props}
     />
   )
 })

@@ -13,12 +13,12 @@ export default function TarotAskDemo() {
 
   return (
     <div className="stack-section">
-      <p className="rounded-md border border-cosmic-indigo/20 bg-input px-3 py-2 text-sm leading-6 text-primary/80">
+      <p className="rounded-md border border-border-neutral bg-input px-3 py-2.5 text-sm leading-6 text-primary/85">
         {t("disclaimer")}
       </p>
 
       <div className="max-w-xl">
-        <label className="mb-1 block text-xs font-medium text-primary">{t("questionLabel")}</label>
+        <label className="mb-1.5 block text-sm font-medium text-primary">{t("questionLabel")}</label>
         <CosmicInput
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
@@ -28,9 +28,9 @@ export default function TarotAskDemo() {
 
       <CardPicker mode="demo" question={question} />
 
-      <div className="flex flex-col gap-3 border-t border-cosmic-indigo/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <p className="max-w-md text-sm leading-6 text-primary/80">{t("ctaBody")}</p>
-        <Button asChild variant="cosmicPrimary" size="cosmicMd" className="shrink-0">
+      <div className="flex flex-col gap-3 border-t border-border-neutral pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <p className="max-w-md text-sm leading-6 text-primary/85">{t("ctaBody")}</p>
+        <Button asChild variant="cosmicSecondary" size="cosmicMd" className="shrink-0">
           <Link href="/auth?mode=register">{t("signUpFree")}</Link>
         </Button>
       </div>

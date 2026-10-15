@@ -22,8 +22,10 @@
   "toggle": {
     "emptyTitle": "No categories yet",
     "emptyHintBefore": "Create one with",
-    "emptyHintButton": "Add new category",
-    "emptyHintAfter": "below.",
+    "emptyHintButton": "Add Category",
+    "emptyHintAfter": "above.",
+    "assigned": "On",
+    "notAssigned": "Off",
     "addAria": "Add category to journey",
     "removeAria": "Remove category from journey",
     "toastAdded": "Category added to journey",

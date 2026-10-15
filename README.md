@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CosmicTrack
+
+Next.js (App Router) + Supabase + next-intl. Default locale: Turkish (`tr`); English under `/en/...`.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
+cp .env.example .env.local   # fill NEXT_PUBLIC_SUPABASE_URL + ANON_KEY
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tests
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+All test code is **TypeScript**. Unit tests use **Vitest**; browser smoke uses **Playwright**.
+
+### Commands
+
+| Command | What it does |
+|---------|----------------|
+| `npm test` | Unit tests once (Vitest) |
+| `npm run test:watch` | Unit tests in watch mode |
+| `npm run test:e2e` | Playwright smoke (starts `next dev` if needed) |
+| `npm run test:e2e:ui` | Playwright UI mode |
+| `npm run test:all` | Unit + E2E |
+| `npm run lint` | ESLint |
+
+### Unit (Vitest)
+
+Specs live next to source as `*.test.ts` (e.g. `shared/lib/aiCredits.test.ts`). Covered today:
+
+- AI credit limits / period reset
+- `buildMeaningFromPicks` (TR/EN locale)
+- Tarot encyclopedia helpers (locale-aware)
+- Shared Zod form schemas (auth, forgot/reset, journey, category, step)
+- Auth callback URL helpers (`authUrls`)
+
+Not covered yet (deferred): real email confirm/reset links, authenticated E2E (needs Supabase seed user).
+
+```bash
+npm test
+```
+
+### E2E smoke (Playwright)
+
+Public flows only (no login/Supabase seed yet):
+
+- `/` home
+- `/tarot` library hub
+- `/tarot/cards`
+- `/auth` + `/auth?mode=forgot`
+- `/en/tarot` locale prefix
+
+**Local:** uses your installed Google Chrome (`channel: "chrome"`), so you usually do **not** need `npx playwright install`.
+
+**CI:** installs Playwright Chromium via the workflow.
+
+```bash
+npm run test:e2e
+```
+
+If you prefer Playwright’s bundled Chromium locally:
+
+```bash
+npx playwright install chromium
+CI=true npm run test:e2e
+```
+
+### CI
+
+GitHub Actions (`.github/workflows/ci.yml`) on push/PR:
+
+1. `npm ci` → `lint` → `npm test`
+2. Playwright smoke with Chromium
+
+### Current status (local)
+
+| Suite | Result |
+|-------|--------|
+| Vitest unit | 38 passed (5 files) |
+| Playwright smoke | 6 passed (public only) |
+| ESLint | 0 errors (1 known RHF `watch` warning) |
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Playwright](https://playwright.dev)
+- [Vitest](https://vitest.dev)

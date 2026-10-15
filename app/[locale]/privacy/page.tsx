@@ -4,8 +4,8 @@ export default async function PrivacyPage() {
   const t = await getTranslations("privacy")
 
   return (
-    <main className="mx-auto min-h-0 w-full max-w-3xl flex-1 bg-surface px-4 py-12 text-primary md:px-6">
-      <div className="stack-section">
+    <main className="mx-auto min-h-0 w-full max-w-3xl flex-1 bg-surface px-4 py-10 text-primary sm:py-12 md:px-6">
+      <article className="stack-section">
         <header className="stack-tight">
           <h1 className="heading-3 font-semibold">{t("title")}</h1>
           <p className="text-base leading-7 text-primary/85">{t("intro")}</p>
@@ -55,14 +55,14 @@ export default async function PrivacyPage() {
             {t("questions.bodyBefore")}{" "}
             <a
               href="mailto:esmaari.dev@gmail.com"
-              className="font-medium text-secondary underline-offset-2 hover:underline"
+              className="font-medium text-secondary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
             >
               esmaari.dev@gmail.com
             </a>
             {t("questions.bodyAfter")}
           </p>
         </section>
-      </div>
+      </article>
     </main>
   )
 }

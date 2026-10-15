@@ -1,8 +1,75 @@
 {
+  "brand": "CosmicTrack · Tarot",
   "eyebrow": "TAROT",
-  "titleLine1": "Kartları öğren,",
-  "titleLine2": "sembolleri keşfet.",
-  "intro": "Kartları öğren, sembolleri keşfet veya üç kartlık bir demo çekim dene. Journey kaydı ve AI yorumu için ücretsiz hesap oluşturabilirsin.",
+  "title": "Tarot kütüphanesi",
+  "titleLine1": "Bir kart aç.",
+  "titleLine2": "Yanında kal.",
+  "intro": "Kart anlamları, semboller, takımlar ve tarotun kısa tarihi — desteyi öğrenmek için buradasın.",
+  "topics": {
+    "title": "Konular",
+    "items": {
+      "meanings": {
+        "title": "Kart anlamları",
+        "body": "78 kartın özeti, anahtar kelimeleri ve sembolizmi. Major ve Minor Arcana.",
+        "cta": "Kartlara git"
+      },
+      "symbols": {
+        "title": "Semboller",
+        "body": "Resimlerin dilini çöz: suit temaları ve Major Arcana anahtarları.",
+        "cta": "Sembollere git"
+      },
+      "history": {
+        "title": "Tarot tarihi",
+        "body": "Tarot nereden gelir ve CosmicTrack’te okumalar journey’ye nasıl bağlanır.",
+        "cta": "Tarihi oku"
+      }
+    }
+  },
+  "suits": {
+    "title": "Takımlara göre bak",
+    "intro": "Minor Arcana dört takıma ayrılır. Birini seç — o suit’in kartlarını aç.",
+    "majorCta": "Major Arcana’yı gör",
+    "cta": "Sembollere daha derin bak",
+    "items": {
+      "cups": { "name": "Kupalar", "hint": "Duygu · kalp · akış" },
+      "swords": { "name": "Kılıçlar", "hint": "Zihin · hakikat · hava" },
+      "wands": { "name": "Asalar", "hint": "Ateş · irade · kıvılcım" },
+      "pentacles": { "name": "Tılsımlar", "hint": "Beden · toprak · zanaat" }
+    }
+  },
+  "practice": {
+    "title": "Pratik çekim",
+    "body": "Öğrendiklerini denemek için üç kartlık klasik bir çekim yap — hesap gerekmez.",
+    "cta": "Kartlara sor"
+  },
+  "hero": {
+    "primaryCta": "Kartlara sor",
+    "secondaryCta": "78 kartı gez",
+    "featuredAlt": "Ay",
+    "featuredHint": "Bu geceki kapı: Ay — sezgi, gölge, rüya.",
+    "featuredLink": "Ay kartını oku →"
+  },
+  "learn": {
+    "title": "Nereden başlamak istersin?",
+    "intro": "Desteye üç sessiz kapı. Checklist değil — seni çeken kapıyı seç.",
+    "paths": {
+      "cards": {
+        "title": "78 kart",
+        "body": "Kısa özetler ve sembolizm. Bir kart aç ve biraz yanında otur.",
+        "cta": "Gir"
+      },
+      "symbols": {
+        "title": "Gizli dil",
+        "body": "Kupalar, kılıçlar, asalar, tılsımlar — resimlerin arkasındaki anahtarlar.",
+        "cta": "Keşfet"
+      },
+      "history": {
+        "title": "Kökler ve yol",
+        "body": "Tarot nereden gelir, CosmicTrack okumaları nasıl journey’ye çevirir.",
+        "cta": "Oku"
+      }
+    }
+  },
   "tiles": {
     "encyclopedia": {
       "number": "01",
@@ -45,8 +112,8 @@
     "button": "Tüm demo çekimi dene →"
   },
   "savePanel": {
-    "title": "Journey’lerini kaydet",
-    "body": "Okumalarını adım adım sakla, kategorilere ayır ve planına göre AI yorumu al.",
+    "title": "Okumalarını journey olarak tut",
+    "body": "Bir kart sende kaldığında adımları kaydet — kategoriler, notlar ve destedeki kendi yolun.",
     "button": "Ücretsiz hesap oluştur"
   },
   "cardsPage": {
@@ -59,20 +126,39 @@
   },
   "askPage": {
     "title": "Kartlara sor",
-    "intro": "Üç kart seç ve onayla. Düz veya ters pozisyona göre klasik anlamlar gösterilir — yapay zeka kullanılmaz."
+    "intro": "Üç kart seç ve onayla. CosmicTrack destesinden klasik düz veya ters anlamlar gösterilir."
   },
   "askDemo": {
-    "disclaimer": "Bu demo yalnızca CosmicTrack kart metinlerini gösterir. AI veya hesap kaydı kullanılmaz.",
+    "disclaimer": "Bu demo yalnızca CosmicTrack kart metinlerini gösterir. Hesap oluşturmadan hiçbir şey kaydedilmez.",
     "questionLabel": "Soru veya niyet (isteğe bağlı)",
     "questionPlaceholder": "Örn. Bu ay neye odaklanmalıyım?",
-    "ctaBody": "Okumalarını journey olarak kaydetmek ve planına göre AI yorumu almak için hesap oluştur.",
+    "ctaBody": "Okumalarını journey olarak tutmak için hesap oluştur — adımlar, kategoriler ve notlar bir arada.",
     "signUpFree": "Ücretsiz kayıt ol"
+  },
+  "historyPage": {
+    "title": "Tarot tarihine kısa bakış",
+    "intro": "Tarot, erken oyun destelerinden yansıma için sembolik bir dile dönüşmüştür. CosmicTrack’te kartları öğrenip kendi yolunu kaydedebilirsin.",
+    "sections": {
+      "origins": {
+        "heading": "Kökenler",
+        "body": "15. yüzyıl İtalya’sında trionfi ve benzeri destelerle ilişkilendirilen erken örnekler tarotun köklerini oluşturur. Zamanla farklı bölgeler kendi deste stillerini geliştirmiştir."
+      },
+      "symbolism": {
+        "heading": "Sembolizm ve okuma",
+        "body": "19. ve 20. yüzyılda okült ve psikolojik yorumlar güçlenmiş; Rider–Waite gibi desteler yaygın referans haline gelmiştir. Bugün birçok kişi kartları farkındalık ve yansıtma için kullanır."
+      },
+      "cosmictrack": {
+        "heading": "CosmicTrack’te tarot",
+        "body": "Anlamları özgürce keşfet, Kartlara sor’da üç kartlık bir çekim dene ve bir okumayı adım adım journey olarak saklamak istediğinde kaydet."
+      }
+    }
   },
   "pageShell": {
     "backToTarot": "Tarot",
     "backToCards": "Kartlar"
   },
   "cardsBrowser": {
+    "filtersLabel": "Kart filtreleri",
     "filterAll": "Tümü",
     "filterMajor": "Major",
     "filterWands": "Asalar",
@@ -90,5 +176,37 @@
   "symbolsExplorer": {
     "meaningHeading": "ANLAM",
     "majorArcanaSummary": "Arketipler · Dönüm noktaları"
+  },
+  "symbolsContent": {
+    "suits": {
+      "wands": {
+        "name": "Asalar (Wands)",
+        "element": "Ateş",
+        "themes": "İlham, tutku, yaratıcılık, hareket",
+        "body": "Asalar niyet ve enerjinin nereye aktığını gösterir. Yeni başlangıçlar, projeler ve iç motivasyon bu seride sık görülür."
+      },
+      "cups": {
+        "name": "Kupalar (Cups)",
+        "element": "Su",
+        "themes": "Duygu, ilişki, sezgi, uyum",
+        "body": "Kupalar kalp dünyasıyla ilgilidir: sevgi, bağ, empati ve içsel tatmin. Duygusal farkındalık bu kartların merkezindedir."
+      },
+      "swords": {
+        "name": "Kılıçlar (Swords)",
+        "element": "Hava",
+        "themes": "Düşünce, karar, iletişim, gerilim",
+        "body": "Kılıçlar zihin ve gerçeklerle yüzleşmeyi temsil eder. Netlik, sınır koyma ve zor kararlar bu serinin konusudur."
+      },
+      "pentacles": {
+        "name": "Tılsımlar (Pentacles)",
+        "element": "Toprak",
+        "themes": "İş, para, sağlık, somut sonuç",
+        "body": "Tılsımlar maddi dünya ve emeğin karşılığını anlatır. Güvenlik, beceri ve uzun vadeli istikrar burada öne çıkar."
+      }
+    },
+    "major": {
+      "heading": "Major Arcana",
+      "body": "22 büyük kart (The Fool'dan The World'e) arketipsel yaşam derslerini ve dönüm noktalarını simgeler. Journey kayıtlarında sıkça güçlü temalar taşır."
+    }
   }
 }

@@ -13,6 +13,7 @@ const CosmicInput = React.forwardRef<HTMLInputElement, React.ComponentProps<type
   ({ className, type, readOnly, ...props }, ref) => {
     return (
       <Input
+        {...props}
         ref={ref}
         type={type}
         readOnly={readOnly}
@@ -28,7 +29,6 @@ const CosmicInput = React.forwardRef<HTMLInputElement, React.ComponentProps<type
               ],
           className,
         )}
-        {...props}
       />
     )
   },

@@ -1,5 +1,5 @@
 {
-  "brand": "COSMICTRACK",
+  "brand": "CosmicTrack",
   "heroTitleLine1": "Track your",
   "heroTitleLine2": "journey.",
   "heroTitleLine3": "One step",
@@ -9,20 +9,28 @@
   "ctaTarot": "Explore tarot",
   "ctaAskCards": "Ask the cards",
   "ctaNewJourney": "Create new journey",
-  "suitsTitle": "BUILT FOR FOCUS. DESIGNED FOR CALM.",
+  "suitsTitle": "Four suits · one deck",
   "suits": {
-    "cups": "CUPS",
-    "swords": "SWORDS",
-    "wands": "WANDS",
-    "pentacles": "PENTACLES"
+    "cups": "Cups",
+    "swords": "Swords",
+    "wands": "Wands",
+    "pentacles": "Pentacles"
   },
-  "features": {
-    "journeyTitle": "Journey journaling",
-    "journeyBody": "Record your readings step by step. Keep a living log of your tarot journey over time.",
-    "categoriesTitle": "Categories & favorites",
-    "categoriesBody": "Organize by energy, love, nature, work and more. Star what matters most.",
-    "aiTitle": "AI interpretation",
-    "aiBody": "Get a personalized AI reading that considers your full journey context and intentions."
+  "paths": {
+    "title": "What you can do here",
+    "journeys": {
+      "title": "Journey journaling",
+      "body": "Record readings step by step — a living log of your path through the cards."
+    },
+    "organize": {
+      "title": "Categories & favorites",
+      "body": "Sort by energy, love, work, and more. Keep what matters close."
+    },
+    "learn": {
+      "title": "Learn the deck",
+      "body": "Meanings, symbols, suits, and history — open the tarot library anytime.",
+      "cta": "Open tarot library"
+    }
   },
   "ctaPanel": {
     "title": "Begin your journey today.",

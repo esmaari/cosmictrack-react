@@ -22,17 +22,20 @@
   },
   "detail": {
     "title": "Journey Details",
+    "backToList": "Back to My Journeys",
     "stepsHeading": "Steps",
-    "categoriesHeading": "Categories"
+    "stepsHint": "Add readings and notes as steps on this journey.",
+    "categoriesHeading": "Categories",
+    "categoriesHint": "Tap to assign or remove. Use the pencil to edit or delete a category."
   },
   "empty": {
     "none": {
       "title": "No journeys yet",
-      "hint": "Add your first journey with the New journey button (top right)."
+      "hint": "Create your first journey to start tracking readings and notes."
     },
     "noFavorites": {
       "title": "No favorites yet",
-      "hint": "Open a journey and tap the star to save it here."
+      "hint": "Tap the heart on a journey card to save it here."
     },
     "favoritesNoMatch": {
       "title": "No favorite journeys match",
@@ -53,8 +56,11 @@
   },
   "filters": {
     "showAll": "Show All",
+    "showAllShort": "All",
     "showFavorites": "Show Favorites",
+    "showFavoritesShort": "Favorites",
     "categoriesSelected": "{count} categories selected",
+    "clearCategories": "Clear categories",
     "noCategoriesFound": "No categories found."
   }
 }

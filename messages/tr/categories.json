@@ -21,9 +21,11 @@
   },
   "toggle": {
     "emptyTitle": "Henüz kategori yok",
-    "emptyHintBefore": "Aşağıdaki",
-    "emptyHintButton": "Yeni kategori ekle",
+    "emptyHintBefore": "Yukarıdaki",
+    "emptyHintButton": "Kategori Ekle",
     "emptyHintAfter": "ile bir tane oluştur.",
+    "assigned": "Açık",
+    "notAssigned": "Kapalı",
     "addAria": "Journey'ye kategori ekle",
     "removeAria": "Journey'den kategoriyi kaldır",
     "toastAdded": "Kategori journey'ye eklendi",

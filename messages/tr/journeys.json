@@ -22,17 +22,20 @@
   },
   "detail": {
     "title": "Journey Detayları",
+    "backToList": "Journey’lerime dön",
     "stepsHeading": "Adımlar",
-    "categoriesHeading": "Kategoriler"
+    "stepsHint": "Bu journey’ye okuma ve notları adım olarak ekle.",
+    "categoriesHeading": "Kategoriler",
+    "categoriesHint": "Dokunarak ekle veya çıkar. Kalem ile kategoriyi düzenle veya sil."
   },
   "empty": {
     "none": {
       "title": "Henüz journey yok",
-      "hint": "Sağ üstteki Yeni Journey düğmesiyle ilk journey'ni ekle."
+      "hint": "Okuma ve notlarını takip etmek için ilk journey'ni oluştur."
     },
     "noFavorites": {
       "title": "Henüz favori yok",
-      "hint": "Bir journey aç ve yıldıza dokunarak buraya kaydet."
+      "hint": "Bir journey kartındaki kalbe dokunarak buraya kaydet."
     },
     "favoritesNoMatch": {
       "title": "Eşleşen favori journey yok",
@@ -53,8 +56,11 @@
   },
   "filters": {
     "showAll": "Tümünü Göster",
+    "showAllShort": "Tümü",
     "showFavorites": "Favorileri Göster",
+    "showFavoritesShort": "Favoriler",
     "categoriesSelected": "{count} kategori seçildi",
+    "clearCategories": "Kategorileri temizle",
     "noCategoriesFound": "Kategori bulunamadı."
   }
 }

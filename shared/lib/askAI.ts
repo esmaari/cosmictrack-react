@@ -1,6 +1,6 @@
 import { FunctionsHttpError } from "@supabase/supabase-js"
 import { createSupabaseBrowserClient } from "@/core/supabase/browser"
-import { tarotReadingCards } from "@/shared/content/tarot"
+import { getTarotReadingCards } from "@/shared/content/tarot"
 import type { PickedCard } from "@/shared/types/db"
 
 export type AskAIResult = {
@@ -31,8 +31,7 @@ async function parseFunctionError(
     if (code === "LIMIT_REACHED") {
       return {
         code,
-        message:
-          "You've used all your AI interpretations for this period. Free plan: 1 per day. Premium: 100 per month.",
+        message: "LIMIT_REACHED",
       }
     }
     if (body.error) {
@@ -47,12 +46,17 @@ async function parseFunctionError(
   }
 }
 
-export async function askAI(pickedCards: PickedCard[], title: string): Promise<AskAIResult> {
+export async function askAI(
+  pickedCards: PickedCard[],
+  title: string,
+  locale?: string | null,
+): Promise<AskAIResult> {
   const supabase = createSupabaseBrowserClient()
+  const deck = getTarotReadingCards(locale)
 
   const cardsInfo = pickedCards
     .map((card) => {
-      const name = tarotReadingCards.find((c) => c.id === card.id)?.name
+      const name = deck.find((c) => c.id === card.id)?.name
       const orientation = card.isReversed ? "Reversed" : "Upright"
       return `${name ?? card.id} (${orientation})`
     })
@@ -90,10 +94,7 @@ Senden İstenenler ve Kesin Kurallar:
   }
 
   if (data?.code === "LIMIT_REACHED" || data?.error === "AI limit reached") {
-    throw new AskAIError(
-      "You've used all your AI interpretations for this period. Free plan: 1 per day. Premium: 100 per month.",
-      "LIMIT_REACHED",
-    )
+    throw new AskAIError("LIMIT_REACHED", "LIMIT_REACHED")
   }
 
   if (!data?.text) {

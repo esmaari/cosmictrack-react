@@ -12,13 +12,13 @@ import { CosmicTextarea } from "@/shared/ui/CosmicTextarea"
 import CardPicker from "./CardPicker"
 import type { PickedCard } from "@/shared/types/db"
 import { buildMeaningFromPicks } from "@/shared/lib/buildMeaningFromPicks"
+import { createStepSchema } from "@/shared/lib/formSchemas"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { AskAIError, askAI } from "@/shared/lib/askAI"
-import { formatAiRemaining } from "@/shared/lib/aiCredits"
 import { useProfileContext } from "@/shared/lib/ProfileProvider"
 import { SparklesIcon } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 
 
 export default function AddStepForm(props: {journeyId: string, onSaveButtonClicked?: (pending: boolean) => void, setOpen: (open: boolean) => void }) {
@@ -27,17 +27,15 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
     const tFields = useTranslations("common.fields")
     const tValidation = useTranslations("common.validation")
     const tToast = useTranslations("common.toast")
+    const locale = useLocale()
 
     const formSchema = useMemo(
         () =>
-            z.object({
-                title: z
-                    .string()
-                    .min(1, { message: tValidation("titleRequired") })
-                    .max(80, { message: tValidation("titleMax", { max: 80 }) }),
-                cards: z.array(z.object({ id: z.number(), isReversed: z.boolean() })).min(3, { message: tValidation("cardsRequired") }),
-                meaning: z.string().optional(),
-                note: z.string().max(500, { message: tValidation("noteMax", { max: 500 }) }).optional(),
+            createStepSchema({
+                titleRequired: tValidation("titleRequired"),
+                titleMax: tValidation("titleMax", { max: 80 }),
+                cardsRequired: tValidation("cardsRequired"),
+                noteMax: tValidation("noteMax", { max: 500 }),
             }),
         [tValidation],
     )
@@ -109,16 +107,18 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
     const getMeaningFromAI = async () => {
         setAiLoading(true)
         try {
-            const result = await askAI(form.getValues("cards"), form.getValues("title"))
+            const result = await askAI(form.getValues("cards"), form.getValues("title"), locale)
             form.setValue("meaning", result.text, { shouldValidate: true })
             await refetchProfile()
         } catch (error) {
             const message =
-                error instanceof AskAIError
-                    ? error.message
-                    : error instanceof Error
-                      ? error.message
-                      : t("form.aiFailed")
+                error instanceof AskAIError && error.code === "LIMIT_REACHED"
+                    ? t("form.aiLimitReached")
+                    : error instanceof AskAIError
+                      ? t("form.aiFailed")
+                      : error instanceof Error && error.message
+                        ? error.message
+                        : t("form.aiFailed")
             toast.error(message)
             await refetchProfile()
         } finally {
@@ -126,7 +126,23 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
         }
     }
 
-    const aiRemainingLabel = credits ? formatAiRemaining(credits) : null
+    const aiRemainingLabel = (() => {
+        if (!credits) return null
+        const period =
+            credits.plan === "premium" ? t("form.aiPeriodMonth") : t("form.aiPeriodToday")
+        if (credits.remaining === 0) {
+            return credits.plan === "premium"
+                ? t("form.aiExhaustedPremium", { limit: credits.limit, period })
+                : t("form.aiExhaustedFree", { period })
+        }
+        return credits.plan === "premium"
+            ? t("form.aiRemainingPremium", {
+                  remaining: credits.remaining,
+                  limit: credits.limit,
+                  period,
+              })
+            : t("form.aiRemainingFree", { remaining: credits.remaining, period })
+    })()
     const aiDisabled = aiLoading || !credits || credits.remaining === 0
 
     return (
@@ -142,7 +158,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                     name="title"
                     render={({ field }) => (
                         <FormItem className="flex flex-col gap-1">
-                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("title")}</FormLabel>
+                            <FormLabel>{tFields("title")}</FormLabel>
                             <FormControl>
                                 <CosmicInput {...field} />
                             </FormControl>
@@ -155,14 +171,14 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                     name="cards"
                     render={({ field }) => (
                         <FormItem className="flex flex-col gap-1">
-                            <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("cards")}</FormLabel>
+                            <FormLabel>{tFields("cards")}</FormLabel>
                             <FormControl>
                                  <div className="flex flex-col gap-1">
                                     <CardPicker 
                                         mode="add" 
                                         onCardsConfirmed={(cards: PickedCard[]) => {
                                             field.onChange(cards)
-                                            form.setValue("meaning", buildMeaningFromPicks(cards), {
+                                            form.setValue("meaning", buildMeaningFromPicks(cards, locale), {
                                                 shouldValidate: true,
                                             })
                                         }} />
@@ -179,7 +195,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                     <FormItem className="flex flex-col gap-1">
                         <div className="flex flex-row gap-2 items-center">
                                                 
-                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("meaning")}</FormLabel>
+                        <FormLabel>{tFields("meaning")}</FormLabel>
                         {cards.length === 3 ? (
                             <>
                                 <Button
@@ -193,7 +209,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                                     {aiLoading ? t("form.generating") : t("form.askAi")}
                                 </Button>
                                 {aiRemainingLabel ? (
-                                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                                    <span className="text-xs text-primary/85">
                                         {aiRemainingLabel}
                                     </span>
                                 ) : null}
@@ -201,7 +217,9 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                         ) : null}
                         </div>
                         <FormControl>
-                            <div>{field.value}</div>
+                            <div className="min-h-16 whitespace-pre-line rounded-md border border-border-neutral bg-input px-3 py-2 text-sm leading-6 text-primary/85">
+                                {field.value || "—"}
+                            </div>
                         </FormControl>
                     </FormItem>
                 )}
@@ -212,7 +230,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                 name="note"
                 render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
-                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("note")}</FormLabel>
+                        <FormLabel>{tFields("note")}</FormLabel>
                         <FormControl>
                             <CosmicTextarea {...field} />
                         </FormControl>

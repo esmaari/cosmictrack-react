@@ -2,19 +2,25 @@
 
 import Image from "next/image"
 import { Link, useRouter } from "@/i18n/navigation"
-import { Suspense, useMemo } from "react"
+import { Suspense, useEffect, useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
+import { z } from "zod"
 
 import { createSupabaseBrowserClient } from "@/core/supabase/browser"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { getAuthCallbackUrl, safeAuthNextPath } from "@/shared/lib/authUrls"
+import {
+  createForgotPasswordSchema,
+  createLoginSchema,
+  createRegisterSchema,
+} from "@/shared/lib/formSchemas"
 import { CosmicInput } from "@/shared/ui/CosmicInput"
 
 function AuthPageContent() {
@@ -23,36 +29,49 @@ function AuthPageContent() {
   const tPlaceholders = useTranslations("common.placeholders")
   const tValidation = useTranslations("common.validation")
   const tToast = useTranslations("common.toast")
-  const tActions = useTranslations("common.actions")
+  const locale = useLocale()
 
   const loginSchema = useMemo(
     () =>
-      z.object({
-        email: z.string().email(tValidation("email")),
-        password: z.string().min(6, tValidation("passwordMin")),
+      createLoginSchema({
+        email: tValidation("email"),
+        passwordMin: tValidation("passwordMin"),
       }),
     [tValidation],
   )
 
   const registerSchema = useMemo(
     () =>
-      z
-        .object({
-          email: z.string().email(tValidation("email")),
-          password: z.string().min(6, tValidation("passwordMin")),
-          confirm: z.string().min(6, tValidation("confirmPassword")),
-        })
-        .refine((data) => data.password === data.confirm, {
-          message: tValidation("passwordsNoMatch"),
-          path: ["confirm"],
-        }),
+      createRegisterSchema({
+        email: tValidation("email"),
+        passwordMin: tValidation("passwordMin"),
+        confirmPassword: tValidation("confirmPassword"),
+        passwordsNoMatch: tValidation("passwordsNoMatch"),
+      }),
+    [tValidation],
+  )
+
+  const forgotSchema = useMemo(
+    () =>
+      createForgotPasswordSchema({
+        email: tValidation("email"),
+      }),
     [tValidation],
   )
 
   const supabase = useMemo(() => createSupabaseBrowserClient(), [])
   const router = useRouter()
   const searchParams = useSearchParams()
-  const isRegister = searchParams.get("mode") === "register"
+  const mode = searchParams.get("mode")
+  const isRegister = mode === "register"
+  const isForgot = mode === "forgot"
+  const afterAuthPath = safeAuthNextPath(searchParams.get("next"))
+
+  useEffect(() => {
+    if (searchParams.get("error") === "link") {
+      toast.error(t("linkError"))
+    }
+  }, [searchParams, t])
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -62,6 +81,11 @@ function AuthPageContent() {
   const registerForm = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: { email: "", password: "", confirm: "" },
+  })
+
+  const forgotForm = useForm<z.infer<typeof forgotSchema>>({
+    resolver: zodResolver(forgotSchema),
+    defaultValues: { email: "" },
   })
 
   const loginMutation = useMutation({
@@ -75,7 +99,7 @@ function AuthPageContent() {
     },
     onSuccess: () => {
       router.refresh()
-      router.push("/")
+      router.push(afterAuthPath)
     },
     onError: (error) => {
       const message = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
@@ -88,6 +112,9 @@ function AuthPageContent() {
       const { data, error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
+        options: {
+          emailRedirectTo: getAuthCallbackUrl(locale, afterAuthPath),
+        },
       })
       if (error) throw error
       return data
@@ -95,7 +122,7 @@ function AuthPageContent() {
     onSuccess: (data) => {
       if (data.session) {
         router.refresh()
-        router.push("/")
+        router.push(afterAuthPath)
         return
       }
       toast.success(t("confirmEmailToast"))
@@ -108,9 +135,35 @@ function AuthPageContent() {
     },
   })
 
+  const forgotMutation = useMutation({
+    mutationFn: async (values: z.infer<typeof forgotSchema>) => {
+      const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
+        redirectTo: getAuthCallbackUrl(locale, "/auth/reset"),
+      })
+      if (error) throw error
+      return true
+    },
+    onSuccess: () => {
+      toast.success(t("forgotEmailToast"))
+      forgotForm.reset()
+      router.replace("/auth")
+    },
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : String(error) ?? tToast("unknownError")
+      forgotForm.setError("root", { message })
+    },
+  })
+
+  const title = isForgot ? t("forgotTitle") : isRegister ? t("registerTitle") : t("signInTitle")
+  const subtitle = isForgot
+    ? t("forgotSubtitle")
+    : isRegister
+      ? t("registerSubtitle")
+      : t("signInSubtitle")
+
   return (
     <div className="flex min-h-0 flex-1 flex-col bg-app px-4 py-10 text-on-dark">
-      <div className="mx-auto mb-8 flex w-full max-w-md flex-col items-center gap-2 text-center">
+      <div className="mx-auto mb-6 flex w-full max-w-md flex-col items-center gap-3 text-center">
         <div className="relative mx-auto h-14 w-[180px]">
           <Image
             src="/logos/Logo_CT_Badge.png"
@@ -121,23 +174,67 @@ function AuthPageContent() {
             priority
           />
         </div>
-        <h1 className="heading-3 mb-2 p-4 font-semibold text-on-dark">
-          {isRegister ? t("registerTitle") : t("signInTitle")}
-        </h1>
-        <p className="text-sm text-on-dark/75">
-          {isRegister ? t("registerSubtitle") : t("signInSubtitle")}
-        </p>
       </div>
 
       <Card className="mx-auto w-full max-w-md border-border-neutral bg-surface text-primary shadow-lg">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-primary">{isRegister ? t("registerCardTitle") : t("loginCardTitle")}</CardTitle>
-          <CardDescription className="text-primary/70">
-            {isRegister ? t("registerCardDescription") : t("loginCardDescription")}
-          </CardDescription>
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-xl font-semibold text-primary">{title}</CardTitle>
+          <CardDescription className="text-primary/70">{subtitle}</CardDescription>
         </CardHeader>
         <CardContent>
-          {isRegister ? (
+          {isForgot ? (
+            <Form {...forgotForm}>
+              <form
+                onSubmit={forgotForm.handleSubmit((v) => {
+                  forgotForm.clearErrors("root")
+                  forgotMutation.mutate(v)
+                })}
+                className="stack-card"
+              >
+                <FormField
+                  control={forgotForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel>{tFields("email")}</FormLabel>
+                      <FormControl>
+                        <CosmicInput
+                          type="email"
+                          autoComplete="email"
+                          autoFocus
+                          placeholder={tPlaceholders("email")}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {forgotForm.formState.errors.root?.message && (
+                  <div className="rounded-md border border-error/40 bg-error/10 px-3 py-2 text-sm text-error">
+                    {forgotForm.formState.errors.root.message}
+                  </div>
+                )}
+                <Button
+                  type="submit"
+                  disabled={forgotMutation.isPending}
+                  variant="cosmicPrimary"
+                  size="cosmicMd"
+                  className="w-full"
+                >
+                  {forgotMutation.isPending ? t("sendingReset") : t("sendResetButton")}
+                </Button>
+                <p className="text-center text-sm text-primary/75">
+                  <Link
+                    href="/auth"
+                    className="font-medium text-btn-link-dark underline underline-offset-4 hover:text-btn-link-dark-hover"
+                  >
+                    {t("backToSignIn")}
+                  </Link>
+                </p>
+              </form>
+            </Form>
+          ) : isRegister ? (
             <Form {...registerForm}>
               <form
                 onSubmit={registerForm.handleSubmit((v) => {
@@ -201,7 +298,10 @@ function AuthPageContent() {
                 </Button>
                 <p className="text-center text-sm text-primary/75">
                   {t("hasAccount")}{" "}
-                  <Link href="/auth" className="font-medium text-secondary underline-offset-2 hover:underline">
+                  <Link
+                    href="/auth"
+                    className="font-medium text-btn-link-dark underline underline-offset-4 hover:text-btn-link-dark-hover"
+                  >
                     {t("signInLink")}
                   </Link>
                 </p>
@@ -257,10 +357,18 @@ function AuthPageContent() {
                   {loginMutation.isPending ? t("signingIn") : t("loginButton")}
                 </Button>
                 <p className="text-center text-sm text-primary/75">
+                  <Link
+                    href="/auth?mode=forgot"
+                    className="font-medium text-btn-link-dark underline underline-offset-4 hover:text-btn-link-dark-hover"
+                  >
+                    {t("forgotPasswordLink")}
+                  </Link>
+                </p>
+                <p className="text-center text-sm text-primary/75">
                   {t("noAccount")}{" "}
                   <Link
                     href="/auth?mode=register"
-                    className="text-btn-link-dark  hover:text-btn-link-dark-hover"
+                    className="font-medium text-btn-link-dark underline underline-offset-4 hover:text-btn-link-dark-hover"
                   >
                     {t("registerLink")}
                   </Link>

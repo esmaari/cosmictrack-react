@@ -126,8 +126,8 @@
   .heading-secondary { @apply text-secondary; }
 
   /* Displays (Forum) */
-  .heading-display-1 { @apply font-heading text-9xl/none tracking-tight font-black mb-8; }
-  .heading-display-2 { @apply font-heading text-8xl/none tracking-tight font-extrabold mb-6; }
+  .heading-display-1 { @apply font-heading text-5xl/none sm:text-7xl/none lg:text-9xl/none tracking-tight font-black mb-6 sm:mb-8; }
+  .heading-display-2 { @apply font-heading text-4xl/none sm:text-6xl/none lg:text-8xl/none tracking-tight font-extrabold mb-4 sm:mb-6; }
 
   /* Headings (Body font, Roboto) */
   .heading-1 { @apply font-body text-4xl/10 font-bold mb-6; }
@@ -181,7 +181,7 @@
   }
 
   .divider {
-    @apply border-t border-slate-200 my-6;
+    @apply my-6 border-t border-border-neutral;
   }
 
 }

@@ -15,6 +15,7 @@ import { CosmicInput } from "@/shared/ui/CosmicInput"
 import { CosmicTextarea } from "@/shared/ui/CosmicTextarea"
 import DeleteJourneyButton from "@/features/journey-delete/DeleteJourneyButton"
 import { useTranslations } from "next-intl"
+import { createJourneySchema } from "@/shared/lib/formSchemas"
 
 export default function JourneyDetailsEditable(props: {journey: Journey}) {
 
@@ -29,15 +30,10 @@ export default function JourneyDetailsEditable(props: {journey: Journey}) {
 
     const formSchema = useMemo(
         () =>
-            z.object({
-                title: z
-                    .string()
-                    .min(3, { message: tValidation("titleMin", { min: 3 }) })
-                    .max(50, { message: tValidation("titleMax", { max: 50 }) }),
-                description: z
-                    .string()
-                    .max(200, { message: tValidation("descriptionMax", { max: 200 }) })
-                    .optional(),
+            createJourneySchema({
+                titleMin: tValidation("titleMin", { min: 3 }),
+                titleMax: tValidation("titleMax", { max: 50 }),
+                descriptionMax: tValidation("descriptionMax", { max: 200 }),
             }),
         [tValidation],
     )
@@ -90,17 +86,17 @@ export default function JourneyDetailsEditable(props: {journey: Journey}) {
         <>
         {!isEditing ?
         <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-                <h2 className="heading-3 min-w-0 truncate font-semibold text-primary">
+            <div className="flex items-start gap-2">
+                <h1 className="heading-3 mb-0 min-w-0 flex-1 font-semibold text-primary">
                     {props.journey.title}
-                </h2>
+                </h1>
                 <Button
                     type="button"
                     onClick={() => setIsEditing(true)}
                     disabled={mutation.isPending}
-                    variant="cosmicPrimary"
+                    variant="cosmicTertiary"
                     size="icon"
-                    className="shrink-0 mb-3"
+                    className="mt-0.5 shrink-0"
                     aria-label={t("edit.editAria")}
                     title={t("edit.editAria")}
                 >
@@ -108,7 +104,7 @@ export default function JourneyDetailsEditable(props: {journey: Journey}) {
                 </Button>
             </div>
 
-            <p className="mt-2 text-sm text-primary/70">
+            <p className="mt-2 text-sm leading-6 text-primary/75">
                 {props.journey.description || tFields("noDescription")}
             </p>
 
@@ -122,7 +118,7 @@ export default function JourneyDetailsEditable(props: {journey: Journey}) {
                 name="title"
                 render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
-                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("title")}</FormLabel>
+                        <FormLabel>{tFields("title")}</FormLabel>
                         <FormControl>
                             <CosmicInput {...field} />
                         </FormControl>
@@ -136,7 +132,7 @@ export default function JourneyDetailsEditable(props: {journey: Journey}) {
                 name="description"
                 render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
-                        <FormLabel className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{tFields("description")}</FormLabel>
+                        <FormLabel>{tFields("description")}</FormLabel>
                         <FormControl>
                             <CosmicTextarea {...field} />
                         </FormControl>
@@ -145,23 +141,22 @@ export default function JourneyDetailsEditable(props: {journey: Journey}) {
                 )}
             />
 
-            <div className="flex items-center justify-start">
+            <div className="flex flex-col gap-3 border-t border-border-neutral pt-3 sm:flex-row sm:items-center sm:justify-between">
                 <DeleteJourneyButton journeyId={props.journey.id} />
-            </div>
-
-            <div className="flex items-center justify-end gap-2">
-                <Button
-                    type="button"
-                    onClick={() => setIsEditing(false)}
-                    disabled={mutation.isPending}
-                    variant="cosmicTertiary"
-                    size="cosmicMd"
-                >
-                    {mutation.isPending ? tActions("cancelling") : tActions("cancel")}
-                </Button>
-                <Button type="submit" disabled={mutation.isPending} variant="cosmicPrimary" size="cosmicMd">
-                    {mutation.isPending ? tActions("saving") : tActions("save")}
-                </Button>
+                <div className="flex items-center justify-end gap-2">
+                    <Button
+                        type="button"
+                        onClick={() => setIsEditing(false)}
+                        disabled={mutation.isPending}
+                        variant="cosmicTertiary"
+                        size="cosmicMd"
+                    >
+                        {mutation.isPending ? tActions("cancelling") : tActions("cancel")}
+                    </Button>
+                    <Button type="submit" disabled={mutation.isPending} variant="cosmicPrimary" size="cosmicMd">
+                        {mutation.isPending ? tActions("saving") : tActions("save")}
+                    </Button>
+                </div>
             </div>
           </form>
         </Form>

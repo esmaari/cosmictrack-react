@@ -3,10 +3,11 @@
 import { Link, usePathname } from "@/i18n/navigation"
 import { routing } from "@/i18n/routing"
 import { cn } from "@/lib/utils"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { useSearchParams } from "next/navigation"
 
 export default function LocaleSwitcher() {
+  const t = useTranslations("nav")
   const locale = useLocale()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -17,16 +18,17 @@ export default function LocaleSwitcher() {
   return (
     <div
       role="group"
-      aria-label="Language"
-      className="flex items-center rounded-md border border-heading/40 p-0.5"
+      aria-label={t("language")}
+      className="flex items-center rounded-md border border-heading/40 p-1"
     >
       {routing.locales.map((l) => (
         <Link
           key={l}
           href={href}
           locale={l}
+          aria-current={locale === l ? "true" : undefined}
           className={cn(
-            "rounded px-2 py-1 text-xs font-bold uppercase tracking-wide transition-colors",
+            "inline-flex min-h-9 min-w-9 items-center justify-center rounded px-2.5 text-xs font-bold uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-btn-link-light-focus",
             locale === l
               ? "bg-heading/15 text-heading"
               : "text-heading/85 hover:bg-heading/10 hover:text-heading",

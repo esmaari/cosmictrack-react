@@ -1,32 +1,33 @@
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import TarotPageShell from "@/features/tarot-public/ui/TarotPageShell"
-import { getEncyclopediaEntryById, tarotEncyclopediaEntries } from "@/shared/content/tarot"
-import { getTranslations } from "next-intl/server"
+import { getEncyclopediaEntryById, getTarotEncyclopediaEntries } from "@/shared/content/tarot"
+import { getLocale, getTranslations } from "next-intl/server"
 
 type PageProps = {
   params: Promise<{ id: string }>
 }
 
 export function generateStaticParams() {
-  return tarotEncyclopediaEntries.map((card) => ({ id: String(card.id) }))
+  return getTarotEncyclopediaEntries("tr").map((card) => ({ id: String(card.id) }))
 }
 
 export default async function TarotCardDetailPage({ params }: PageProps) {
   const { id } = await params
+  const locale = await getLocale()
   const t = await getTranslations("tarot.cardDetail")
   const tShell = await getTranslations("tarot.pageShell")
 
   const cardId = Number(id)
   if (Number.isNaN(cardId)) notFound()
 
-  const card = getEncyclopediaEntryById(cardId)
+  const card = getEncyclopediaEntryById(cardId, locale)
   if (!card) notFound()
 
   return (
     <TarotPageShell title={card.name} backHref="/tarot/cards" backLabel={tShell("backToCards")}>
       <div className="grid gap-8 lg:grid-cols-[minmax(0,240px)_1fr] lg:items-start">
-        <div className="relative mx-auto aspect-6/11 w-full max-w-[240px] overflow-hidden rounded-lg border-2 border-solar-gold bg-shadow-veil shadow-md">
+        <div className="relative mx-auto aspect-6/11 w-full max-w-[240px] overflow-hidden rounded-lg border-2 border-heading bg-app-darker shadow-md">
           <Image
             src={card.image}
             alt={card.name}
@@ -38,16 +39,16 @@ export default async function TarotCardDetailPage({ params }: PageProps) {
         </div>
 
         <div className="stack-section min-w-0">
-          <p className="text-sm font-medium text-secondary">
+          <p className="text-sm font-medium text-heading">
             {card.arcana === "Major" ? t("majorArcana") : card.suit ?? t("minorArcana")}
-            {card.arcana === "Minor" ? ` · ${card.number}` : ` · ${card.number}`}
+            {` · ${card.number}`}
           </p>
 
           <div className="flex flex-wrap gap-2">
             {card.keywords.map((keyword) => (
               <span
                 key={keyword}
-                className="rounded-full border border-cosmic-indigo/20 bg-input px-2.5 py-1 text-xs font-medium text-primary"
+                className="rounded-full border border-heading/35 bg-black/20 px-2.5 py-1 text-xs font-medium text-on-dark"
               >
                 {keyword}
               </span>
@@ -55,15 +56,14 @@ export default async function TarotCardDetailPage({ params }: PageProps) {
           </div>
 
           <section className="stack-card">
-            <h2 className="text-lg font-semibold text-primary">{t("summaryHeading")}</h2>
-            <p className="text-base leading-7 text-primary/85">{card.summary}</p>
+            <h2 className="heading-4 mb-0 font-semibold text-heading">{t("summaryHeading")}</h2>
+            <p className="text-base leading-7 text-on-dark/85">{card.summary}</p>
           </section>
 
           <section className="stack-card">
-            <h2 className="text-lg font-semibold text-primary">{t("symbolismHeading")}</h2>
-            <p className="text-base leading-7 text-primary/85">{card.symbolism}</p>
+            <h2 className="heading-4 mb-0 font-semibold text-heading">{t("symbolismHeading")}</h2>
+            <p className="text-base leading-7 text-on-dark/85">{card.symbolism}</p>
           </section>
-
         </div>
       </div>
     </TarotPageShell>

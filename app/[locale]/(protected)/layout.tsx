@@ -1,12 +1,18 @@
 import { createSupabaseServerClient } from "@/core/supabase/server"
 import { redirect } from "@/i18n/navigation"
 import { getLocale } from "next-intl/server"
-import { User } from "@supabase/supabase-js"
+import type { User } from "@supabase/supabase-js"
 
+/**
+ * Safety net — unauthenticated users are usually redirected earlier in `proxy.ts`
+ * with `?next=` preserved. This catches edge cases without a return URL.
+ */
 export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createSupabaseServerClient()
 
-  const { data: { user } } = await supabase.auth.getUser() as { data: { user: User } }
+  const {
+    data: { user },
+  } = (await supabase.auth.getUser()) as { data: { user: User } }
   if (!user?.id) {
     return redirect({ href: "/auth", locale: await getLocale() })
   }

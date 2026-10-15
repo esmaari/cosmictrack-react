@@ -1,5 +1,6 @@
-/** Editorial copy for /tarot/symbols — suits & major themes */
-
+/**
+ * @deprecated Prefer `tarot.symbolsContent` messages (en/tr). Kept for reference only.
+ */
 export const tarotSymbolsContent = {
   title: "Tarot Sembolleri",
   intro:

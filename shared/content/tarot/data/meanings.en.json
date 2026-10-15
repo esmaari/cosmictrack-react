@@ -1,0 +1,314 @@
+{
+  "0": {
+    "upright": "A fresh start, leap of faith, and open-hearted curiosity into the unknown.",
+    "reversed": "Recklessness, naivety, or hesitation that delays a needed beginning."
+  },
+  "1": {
+    "upright": "Willpower and focused skill turn intention into tangible results.",
+    "reversed": "Scattered energy, manipulation, or talent used without clear purpose."
+  },
+  "2": {
+    "upright": "Trust intuition and the quiet wisdom beneath the surface.",
+    "reversed": "Secrets withheld, disconnected instincts, or ignored inner guidance."
+  },
+  "3": {
+    "upright": "Abundance, nurture, creativity, and fertile growth in life or work.",
+    "reversed": "Smothering care, creative block, or dependence that stifles growth."
+  },
+  "4": {
+    "upright": "Structure, leadership, and stable foundations create lasting order.",
+    "reversed": "Rigidity, control issues, or authority used without empathy."
+  },
+  "5": {
+    "upright": "Tradition, shared wisdom, and guidance within a trusted system.",
+    "reversed": "Dogma, rebellion without direction, or blind conformity."
+  },
+  "6": {
+    "upright": "A meaningful choice rooted in values, connection, and alignment.",
+    "reversed": "Indecision, temptation, or a bond that pulls you off course."
+  },
+  "7": {
+    "upright": "Directed will and determination move you through obstacles.",
+    "reversed": "Aggression, lack of direction, or stalled momentum."
+  },
+  "8": {
+    "upright": "Courage, patience, and gentle strength master fear.",
+    "reversed": "Self-doubt, force without grace, or untamed impulses."
+  },
+  "9": {
+    "upright": "Solitude and reflection bring clarifying inner light.",
+    "reversed": "Isolation, withdrawal, or refusing needed guidance."
+  },
+  "10": {
+    "upright": "Cycles turn; fate and change open a new chapter.",
+    "reversed": "Resistance to change, bad timing, or clinging to the past."
+  },
+  "11": {
+    "upright": "Fairness, truth, and balanced judgment restore equilibrium.",
+    "reversed": "Bias, dishonesty, or avoiding accountability."
+  },
+  "12": {
+    "upright": "Surrender and a new perspective unlock what struggle could not.",
+    "reversed": "Stalling, martyrdom, or refusing a necessary pause."
+  },
+  "13": {
+    "upright": "Ending and transformation clear space for renewal.",
+    "reversed": "Fear of change, stagnation, or clinging to what is finished."
+  },
+  "14": {
+    "upright": "Balance, patience, and blending opposites create harmony.",
+    "reversed": "Excess, impatience, or extremes that tip the scales."
+  },
+  "15": {
+    "upright": "Awareness of attachment frees you from unhealthy binds.",
+    "reversed": "Entrapment, dependency, or denial of a limiting pattern."
+  },
+  "16": {
+    "upright": "Sudden upheaval breaks false structures so truth can stand.",
+    "reversed": "Avoided collapse, lingering chaos, or fear of necessary rupture."
+  },
+  "17": {
+    "upright": "Hope, healing, and quiet faith restore the path forward.",
+    "reversed": "Discouragement, lost faith, or inspiration deferred."
+  },
+  "18": {
+    "upright": "Dreams, intuition, and shadow work deepen your inner knowing.",
+    "reversed": "Confusion, illusion, or anxiety clouding clear sight."
+  },
+  "19": {
+    "upright": "Clarity, vitality, and joy illuminate success and warmth.",
+    "reversed": "Temporary clouds, ego glare, or delayed recognition."
+  },
+  "20": {
+    "upright": "Awakening and honest reckoning call you to a higher choice.",
+    "reversed": "Self-judgment, refusal to reflect, or ignored inner calling."
+  },
+  "21": {
+    "upright": "Completion, integration, and wholeness close a major cycle.",
+    "reversed": "Incompletion, loose ends, or resisting a fulfilling close."
+  },
+  "22": {
+    "upright": "Creative spark and the courage to begin.",
+    "reversed": "Blocked inspiration or a false start."
+  },
+  "23": {
+    "upright": "Planning the path and holding a future vision.",
+    "reversed": "Fear of the unknown or cancelled plans."
+  },
+  "24": {
+    "upright": "Expanding horizons through collaboration and foresight.",
+    "reversed": "Delays in expansion or frustrated teamwork."
+  },
+  "25": {
+    "upright": "Celebration, stability, and shared achievement.",
+    "reversed": "Unstable foundations or celebration postponed."
+  },
+  "26": {
+    "upright": "Creative tension and rivalry that demand focus.",
+    "reversed": "Pointless conflict or avoiding necessary tension."
+  },
+  "27": {
+    "upright": "Recognition, progress, and hard-won confidence.",
+    "reversed": "Ego trip, delayed recognition, or fall from progress."
+  },
+  "28": {
+    "upright": "Defending your ground with courage and conviction.",
+    "reversed": "Feeling overwhelmed or giving up the fight too soon."
+  },
+  "29": {
+    "upright": "Swift movement and messages that accelerate change.",
+    "reversed": "Delays, miscommunication, or scattered haste."
+  },
+  "30": {
+    "upright": "Resilience after struggle; prepare but do not quit.",
+    "reversed": "Exhaustion, paranoia, or refusing to rest."
+  },
+  "31": {
+    "upright": "Heavy responsibility; release what is no longer yours to carry.",
+    "reversed": "Burnout from carrying burdens that are not yours."
+  },
+  "32": {
+    "upright": "Curious spark and a message of creative possibility.",
+    "reversed": "Scattered ideas, delays, or immature enthusiasm."
+  },
+  "33": {
+    "upright": "Bold action and adventurous pursuit of a vision.",
+    "reversed": "Impulsiveness, haste, or conflict without a plan."
+  },
+  "34": {
+    "upright": "Confident warmth and charismatic creative leadership.",
+    "reversed": "Jealousy, insecurity, or demanding attention."
+  },
+  "35": {
+    "upright": "Visionary leadership that inspires bold action.",
+    "reversed": "Domineering ego, impulsiveness, or high expectations."
+  },
+  "36": {
+    "upright": "Emotional opening and a new flow of feeling.",
+    "reversed": "Emotional block or repressed feeling."
+  },
+  "37": {
+    "upright": "Partnership, mutual care, and heartfelt connection.",
+    "reversed": "Imbalance in a partnership or broken trust."
+  },
+  "38": {
+    "upright": "Friendship, celebration, and shared joy.",
+    "reversed": "Overindulgence or shallow social connection."
+  },
+  "39": {
+    "upright": "Apathy or discontent that asks for honest reflection.",
+    "reversed": "Missed opportunity while lost in discontent."
+  },
+  "40": {
+    "upright": "Grief and loss, with remaining cups still available.",
+    "reversed": "Clinging to loss or refusing to see what remains."
+  },
+  "41": {
+    "upright": "Nostalgia, kindness, and simple emotional gifts.",
+    "reversed": "Living in the past or rose-tinted nostalgia."
+  },
+  "42": {
+    "upright": "Many choices; discern fantasy from true desire.",
+    "reversed": "Illusion, distraction, or poor choices among options."
+  },
+  "43": {
+    "upright": "Walking away from what no longer nourishes the heart.",
+    "reversed": "Fear of leaving, or wandering without purpose."
+  },
+  "44": {
+    "upright": "Wish fulfillment and emotional satisfaction.",
+    "reversed": "Greed, dissatisfaction, or hollow wishes."
+  },
+  "45": {
+    "upright": "Harmonious belonging and lasting emotional fulfillment.",
+    "reversed": "Family discord or fractured emotional security."
+  },
+  "46": {
+    "upright": "Gentle emotional news and open-hearted sensitivity.",
+    "reversed": "Emotional immaturity, moodiness, or blocked feelings."
+  },
+  "47": {
+    "upright": "Romantic pursuit and emotionally driven movement.",
+    "reversed": "Mood swings, unrealistic ideals, or fleeing feelings."
+  },
+  "48": {
+    "upright": "Empathic depth and emotionally wise compassion.",
+    "reversed": "Over-sensitivity, codependence, or emotional fog."
+  },
+  "49": {
+    "upright": "Emotionally mature guidance and calm compassion.",
+    "reversed": "Emotional manipulation, withdrawal, or mood control."
+  },
+  "50": {
+    "upright": "Mental clarity and a breakthrough of truth.",
+    "reversed": "Confusion, misuse of intellect, or delayed clarity."
+  },
+  "51": {
+    "upright": "Difficult stalemate that needs a balanced decision.",
+    "reversed": "False peace or refusal to choose."
+  },
+  "52": {
+    "upright": "Heartache and painful truth that still clears the path.",
+    "reversed": "Recovering from heartbreak or lingering pain."
+  },
+  "53": {
+    "upright": "Rest, recovery, and a pause before the next move.",
+    "reversed": "Restlessness, burnout, or refused recovery."
+  },
+  "54": {
+    "upright": "Hollow victory; ego conflict that costs connection.",
+    "reversed": "Desire for reconciliation after hollow conflict."
+  },
+  "55": {
+    "upright": "Transition toward calmer waters after struggle.",
+    "reversed": "Stuck transition or returning to troubled waters."
+  },
+  "56": {
+    "upright": "Strategy, stealth, or cleverness that needs ethics.",
+    "reversed": "Getting caught, self-deception, or clumsy strategy."
+  },
+  "57": {
+    "upright": "Feeling trapped by thoughts; the exit is mental.",
+    "reversed": "Releasing mental bonds or seeking help to see exits."
+  },
+  "58": {
+    "upright": "Anxiety and worry that exaggerate the night’s fears.",
+    "reversed": "Facing fears or night anxieties beginning to lift."
+  },
+  "59": {
+    "upright": "Rock bottom ending that makes rebirth possible.",
+    "reversed": "Survival after endings; the worst is passing."
+  },
+  "60": {
+    "upright": "Mental curiosity and a message that sharpens clarity.",
+    "reversed": "Gossip, harsh words, or restless overthinking."
+  },
+  "61": {
+    "upright": "Swift intellect and decisive communication.",
+    "reversed": "Ruthlessness, haste in judgment, or cutting words."
+  },
+  "62": {
+    "upright": "Clear perception and honest, principled speech.",
+    "reversed": "Coldness, bitterness, or overly critical judgment."
+  },
+  "63": {
+    "upright": "Intellectual authority and fair, decisive truth.",
+    "reversed": "Tyranny of intellect, cruelty, or rigid logic."
+  },
+  "64": {
+    "upright": "A practical opportunity and seed of material growth.",
+    "reversed": "Missed opportunity or unstable resources."
+  },
+  "65": {
+    "upright": "Juggling priorities; stay adaptable with resources.",
+    "reversed": "Overwhelmed juggling or financial disarray."
+  },
+  "66": {
+    "upright": "Skillful collaboration and craftsmanship.",
+    "reversed": "Poor teamwork or mediocre craftsmanship."
+  },
+  "67": {
+    "upright": "Conserving resources; security that may cling too tight.",
+    "reversed": "Greed, scarcity mindset, or blocked generosity."
+  },
+  "68": {
+    "upright": "Hardship and isolation that ask for support.",
+    "reversed": "Recovery from hardship or help finally arriving."
+  },
+  "69": {
+    "upright": "Generosity, fairness, and balanced exchange.",
+    "reversed": "Strings attached, debt imbalance, or unfair giving."
+  },
+  "70": {
+    "upright": "Patient investment; assess long-term results.",
+    "reversed": "Impatience with results or poor long-term choices."
+  },
+  "71": {
+    "upright": "Diligent practice refining mastery.",
+    "reversed": "Perfectionism, boredom, or uninspired work."
+  },
+  "72": {
+    "upright": "Self-sufficiency and well-earned comfort.",
+    "reversed": "Overdependence, isolation in comfort, or vanity."
+  },
+  "73": {
+    "upright": "Legacy, family wealth, and lasting security.",
+    "reversed": "Family money issues or unstable legacy."
+  },
+  "74": {
+    "upright": "Practical learning and a chance to build skill.",
+    "reversed": "Laziness, missed opportunity, or unfocused effort."
+  },
+  "75": {
+    "upright": "Steady progress through reliable, methodical work.",
+    "reversed": "Stubborn pace, inertia, or work without inspiration."
+  },
+  "76": {
+    "upright": "Nurturing abundance grounded in practical care.",
+    "reversed": "Possessiveness, work-life imbalance, or smothering security."
+  },
+  "77": {
+    "upright": "Reliable mastery of resources and protective leadership.",
+    "reversed": "Materialism, stubborn control, or status obsession."
+  }
+}

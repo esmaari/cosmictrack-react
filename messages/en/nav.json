@@ -3,6 +3,8 @@
   "tarot": "Tarot",
   "myJourneys": "My Journeys",
   "profile": "Profile",
+  "planFree": "Free",
+  "planPremium": "Premium",
   "login": "Login",
   "register": "Sign up",
   "logout": "Logout",
@@ -11,5 +13,8 @@
   "impressum": "Impressum",
   "privacy": "Privacy",
   "styleguide": "Styleguide",
-  "copyright": "© {year} CosmicTrack. All rights reserved."
+  "copyright": "© {year} CosmicTrack. All rights reserved.",
+  "footerNav": "Footer",
+  "mainNav": "Main",
+  "language": "Language"
 }

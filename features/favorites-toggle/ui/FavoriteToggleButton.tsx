@@ -97,11 +97,12 @@ export default function FavoriteToggleButton(props: {journeyId: string, isFavori
     const pending = addFavoriteMutation.isPending || removeFavoriteMutation.isPending
 
     const className = `
-        flex items-center justify-center transition-all duration-300 select-none
-        h-6 w-6
+        flex items-center justify-center rounded-md transition-all duration-300 select-none
+        min-h-10 min-w-10
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral
         ${pending 
-            ? "scale-125 opacity-70 animate-pulse"
-            : "cursor-pointer hover:scale-110 active:scale-90" 
+            ? "scale-110 opacity-70 animate-pulse"
+            : "cursor-pointer hover:scale-105 active:scale-95" 
         }
     `;
 
@@ -109,12 +110,15 @@ export default function FavoriteToggleButton(props: {journeyId: string, isFavori
         <button
             type="button"
             className={className}
-            onClick={() => removeFavoriteMutation.mutate()}
+            onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                removeFavoriteMutation.mutate()
+            }}
             aria-label={t("removeAria")}
             title={t("removeTitle")}
             disabled={pending}
             aria-busy={pending}
-
         >
          <Heart className="size-5 fill-favorite text-favorite" />
         </button>
@@ -122,12 +126,15 @@ export default function FavoriteToggleButton(props: {journeyId: string, isFavori
         <button
             type="button"
             className={className}
-            onClick={() => addFavoriteMutation.mutate()}
+            onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                addFavoriteMutation.mutate()
+            }}
             aria-label={t("addAria")}
             title={t("addTitle")}
             disabled={pending}
             aria-busy={pending}
-
         >
             <Heart className="size-5 text-favorite" />
         </button>

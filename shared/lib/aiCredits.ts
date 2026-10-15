@@ -18,6 +18,31 @@ export type AiCreditsState = {
   periodLabel: string
 }
 
+export type AiCreditsCopy = {
+  periodToday: string
+  periodMonth: string
+  remainingPremium: string
+  remainingFree: string
+  exhaustedPremium: string
+  exhaustedFree: string
+}
+
+const DEFAULT_COPY: AiCreditsCopy = {
+  periodToday: "today",
+  periodMonth: "this month",
+  remainingPremium: "{remaining}/{limit} AI left {period}",
+  remainingFree: "{remaining} AI left {period}",
+  exhaustedPremium: "Monthly AI limit reached ({limit}/{period})",
+  exhaustedFree: "Daily AI limit reached (resets {period})",
+}
+
+function fillTemplate(
+  template: string,
+  values: Record<string, string | number>,
+): string {
+  return template.replace(/\{(\w+)\}/g, (_, key: string) => String(values[key] ?? ""))
+}
+
 export function isPremiumPlan(plan: string): boolean {
   return plan === "premium"
 }
@@ -62,19 +87,42 @@ export function getAiCreditsFromProfile(profile: ProfileAiFields): AiCreditsStat
   }
 }
 
-export function formatAiRemaining(credits: AiCreditsState): string {
+export function formatAiRemaining(
+  credits: AiCreditsState,
+  copy: Partial<AiCreditsCopy> = {},
+): string {
   if (credits.remaining === 0) {
-    return planExhaustedMessage(credits)
+    return planExhaustedMessage(credits, copy)
   }
+
+  const labels = { ...DEFAULT_COPY, ...copy }
+  const period = credits.plan === "premium" ? labels.periodMonth : labels.periodToday
+
   if (credits.plan === "premium") {
-    return `${credits.remaining}/${credits.limit} AI left ${credits.periodLabel}`
+    return fillTemplate(labels.remainingPremium, {
+      remaining: credits.remaining,
+      limit: credits.limit,
+      period,
+    })
   }
-  return `${credits.remaining} AI left ${credits.periodLabel}`
+  return fillTemplate(labels.remainingFree, {
+    remaining: credits.remaining,
+    period,
+  })
 }
 
-export function planExhaustedMessage(credits: AiCreditsState): string {
+export function planExhaustedMessage(
+  credits: AiCreditsState,
+  copy: Partial<AiCreditsCopy> = {},
+): string {
+  const labels = { ...DEFAULT_COPY, ...copy }
+  const period = credits.plan === "premium" ? labels.periodMonth : labels.periodToday
+
   if (credits.plan === "premium") {
-    return `Monthly AI limit reached (${credits.limit}/${credits.periodLabel})`
+    return fillTemplate(labels.exhaustedPremium, {
+      limit: credits.limit,
+      period,
+    })
   }
-  return `Daily AI limit reached (resets ${credits.periodLabel})`
+  return fillTemplate(labels.exhaustedFree, { period })
 }

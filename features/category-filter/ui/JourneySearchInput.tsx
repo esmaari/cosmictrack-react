@@ -1,40 +1,60 @@
-'use client'
-import { useRouter } from "@/i18n/navigation";
-import { useSearchParams } from "next/navigation";
-import { Search } from "lucide-react";
-import { useTranslations } from "next-intl";
+"use client"
+
+import { useRouter } from "@/i18n/navigation"
+import { useSearchParams } from "next/navigation"
+import { Search } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useEffect, useState } from "react"
 
 export default function JourneySearchInput() {
+  const tPlaceholders = useTranslations("common.placeholders")
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const urlQuery = searchParams.get("q") ?? ""
+  const [value, setValue] = useState(urlQuery)
 
-    const tPlaceholders = useTranslations("common.placeholders")
-    const router = useRouter()
-    const searchParams = useSearchParams()
+  // Keep input in sync when URL changes externally (back/forward, clear filters).
+  useEffect(() => {
+    const id = window.setTimeout(() => setValue(urlQuery), 0)
+    return () => window.clearTimeout(id)
+  }, [urlQuery])
 
-    const handleInput = (searchItem: string) => {
-    
-        const basePath = "/my-journeys"
-        const params = new URLSearchParams(searchParams.toString())
-        
-        if(searchItem.length > 0){
-            params.set("q", searchItem)
-            router.push(params.toString() ? `${basePath}?${params.toString()}` : basePath)
-            router.refresh()
-        } else {
-            params.delete("q")
-            router.push(params.toString() ? `${basePath}?${params.toString()}` : basePath)
-            router.refresh()
-        }   
-    }
-    return(
-        <div className="relative w-full max-w-xs">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
-            <input
-                type="text"
-                id="searchTerm"
-                placeholder={tPlaceholders("searchJourneys")}
-                onChange={(e) => handleInput(e.target.value)}
-                className="h-9 w-full rounded-lg border border-zinc-200 bg-white pl-9 pr-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-200 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-600 dark:focus:ring-zinc-800"
-            />
-        </div>
-    )
+  useEffect(() => {
+    if (value === urlQuery) return
+
+    const timeoutId = window.setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString())
+      const trimmed = value.trim()
+
+      if (trimmed) {
+        params.set("q", trimmed)
+      } else {
+        params.delete("q")
+      }
+
+      const qs = params.toString()
+      router.push(qs ? `/my-journeys?${qs}` : "/my-journeys")
+      router.refresh()
+    }, 300)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [value, urlQuery, router, searchParams])
+
+  return (
+    <div className="relative w-full min-w-0 sm:max-w-xs">
+      <Search
+        className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-light"
+        aria-hidden
+      />
+      <input
+        type="search"
+        id="searchTerm"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={tPlaceholders("searchJourneys")}
+        aria-label={tPlaceholders("searchJourneys")}
+        className="h-10 w-full rounded-lg border border-border-dark bg-app-darker pl-9 pr-3 text-sm text-on-dark placeholder:text-light focus:border-heading/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
+      />
+    </div>
+  )
 }

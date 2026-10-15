@@ -4,9 +4,15 @@ import TarotPageShell from "@/features/tarot-public/ui/TarotPageShell"
 
 export default async function TarotAskPage() {
   const t = await getTranslations("tarot.askPage")
+  const tShell = await getTranslations("tarot.pageShell")
 
   return (
-    <TarotPageShell title={t("title")} intro={t("intro")}>
+    <TarotPageShell
+      title={t("title")}
+      intro={t("intro")}
+      backLabel={tShell("backToTarot")}
+      contentTone="surface"
+    >
       <TarotAskDemo />
     </TarotPageShell>
   )

@@ -97,15 +97,17 @@ export default async function MyJourneys(props: { searchParams: Promise<{ fav?: 
 
     return (
         <div className="stack-section">
-            <header className="stack-card">
-                <h1 className="heading-3 mb-0 font-semibold text-on-dark">{t("pageTitle")}</h1>
-                <div className="stack-row justify-between">
-                    <p className="sm text-light">{t("pageSubtitle")}</p>
-                    <AddNewJourneyDialog />
+            <header className="space-y-2">
+                <div className="flex items-center justify-between gap-3">
+                    <h1 className="heading-3 mb-0 font-semibold text-on-dark">{t("pageTitle")}</h1>
+                    <div className="shrink-0">
+                        <AddNewJourneyDialog />
+                    </div>
                 </div>
+                <p className="max-w-2xl text-sm leading-6 text-on-dark/80">{t("pageSubtitle")}</p>
             </header>
 
-            <div className="stack-row justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <JourneySearchInput />
                 <MyJourneysFiltersBar
                     filteredCategoryIds={filteredCategoryIds}
@@ -117,7 +119,12 @@ export default async function MyJourneys(props: { searchParams: Promise<{ fav?: 
             {searchFilteredJourneys.length === 0 ? (
                 <div className="stack-card rounded-xl border border-white/10 bg-app-darker/50 px-6 py-12 text-center">
                     <p className="heading-4 mb-0 font-semibold text-on-dark">{emptyMyJourneysCopy.title}</p>
-                    <p className="text-sm text-light">{emptyMyJourneysCopy.hint}</p>
+                    <p className="text-sm text-on-dark/80">{emptyMyJourneysCopy.hint}</p>
+                    {journeys.length === 0 ? (
+                        <div className="flex justify-center pt-2">
+                            <AddNewJourneyDialog />
+                        </div>
+                    ) : null}
                 </div>
             ) : (
                 <JourneysGrid

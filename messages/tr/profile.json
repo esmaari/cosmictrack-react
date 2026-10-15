@@ -1,4 +1,45 @@
 {
   "title": "Profil",
-  "subtitle": "Hesap ayarları (profil silme, tercihler vb.) burada olacak."
+  "subtitle": "Hesap ve üyelik özetin. CosmicTrack beta aşamasında — ödeme daha sonra açılacak.",
+  "betaBanner": "Beta: üyelik satın alma henüz açık değil. Planlar ve metinler lansman için hazır.",
+  "emailLabel": "E-posta",
+  "planLabel": "Güncel plan",
+  "planFree": "Ücretsiz",
+  "planPremium": "Premium",
+  "loading": "Profil yükleniyor…",
+  "unsigned": "Profilini görmek için giriş yap.",
+  "goJourneys": "Journey’lerime git",
+  "signIn": "Giriş yap",
+  "membershipTitle": "Üyelik",
+  "membershipIntro": "Journey’lerinle nasıl çalıştığına göre planını seç. Satın alma, beta testinden sonra açılacak.",
+  "betaPurchaseHint": "Şu an test aşamasında — satın alma henüz mümkün değil.",
+  "plans": {
+    "free": {
+      "name": "Ücretsiz",
+      "price": "€0",
+      "period": "süresiz",
+      "description": "Okumalarını kaydetmeye ve journey’lerini düzenlemeye başla.",
+      "features": {
+        "f1": "Journey ve adım kaydı",
+        "f2": "Kategoriler ve favoriler",
+        "f3": "Tarot ansiklopedisi ve demo çekim"
+      },
+      "cta": "Mevcut planın",
+      "ctaOther": "Dahil"
+    },
+    "premium": {
+      "name": "Premium",
+      "price": "Yakında",
+      "period": "aylık",
+      "description": "Daha fazla alan ve ileride açılacak premium araçlar için.",
+      "features": {
+        "f1": "Ücretsiz plandaki her şey",
+        "f2": "Yeni özelliklere öncelikli erişim",
+        "f3": "Premium üyelik rozeti"
+      },
+      "cta": "Premium’a geç",
+      "ctaCurrent": "Senin planın"
+    }
+  },
+  "comingSoonNote": "Daha fazla hesap ayarı (şifre, bildirimler) yakında burada olacak."
 }

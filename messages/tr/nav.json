@@ -3,6 +3,8 @@
   "tarot": "Tarot",
   "myJourneys": "Journey'lerim",
   "profile": "Profil",
+  "planFree": "Ücretsiz",
+  "planPremium": "Premium",
   "login": "Giriş",
   "register": "Kayıt ol",
   "logout": "Çıkış",
@@ -11,5 +13,8 @@
   "impressum": "Künye",
   "privacy": "Gizlilik",
   "styleguide": "Stil rehberi",
-  "copyright": "© {year} CosmicTrack. Tüm hakları saklıdır."
+  "copyright": "© {year} CosmicTrack. Tüm hakları saklıdır.",
+  "footerNav": "Alt menü",
+  "mainNav": "Ana menü",
+  "language": "Dil"
 }

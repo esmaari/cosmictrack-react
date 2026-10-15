@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Plus } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useTranslations } from "next-intl"
+import { createJourneySchema } from "@/shared/lib/formSchemas"
 
 export default function AddNewJourneyDialog() {
     const t = useTranslations("journeys")
@@ -25,15 +26,10 @@ export default function AddNewJourneyDialog() {
 
     const formSchema = useMemo(
         () =>
-            z.object({
-                title: z
-                    .string()
-                    .min(3, { message: tValidation("titleMin", { min: 3 }) })
-                    .max(50, { message: tValidation("titleMax", { max: 50 }) }),
-                description: z
-                    .string()
-                    .max(200, { message: tValidation("descriptionMax", { max: 200 }) })
-                    .optional(),
+            createJourneySchema({
+                titleMin: tValidation("titleMin", { min: 3 }),
+                titleMax: tValidation("titleMax", { max: 50 }),
+                descriptionMax: tValidation("descriptionMax", { max: 200 }),
             }),
         [tValidation],
     )
@@ -92,14 +88,21 @@ export default function AddNewJourneyDialog() {
     const formId = "add-new-journey-form"
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog
+            open={open}
+            onOpenChange={(next) => {
+                if (mutation.isPending) return
+                setOpen(next)
+                if (!next) form.reset()
+            }}
+        >
             <DialogTrigger asChild>
                 <Button type="button" variant="cosmicPrimary" size="cosmicMd">
                     <Plus className="size-4" />
                     {t("newJourneyButton")}
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent size="md">
                 <DialogHeader>
                     <DialogTitle>{t("addDialog.title")}</DialogTitle>
                     <DialogDescription>
@@ -120,7 +123,7 @@ export default function AddNewJourneyDialog() {
                                     <FormItem>
                                         <FormLabel>{tFields("title")}</FormLabel>
                                         <FormControl>
-                                            <CosmicInput placeholder={tPlaceholders("newJourney")} {...field} />
+                                            <CosmicInput placeholder={tPlaceholders("newJourney")} disabled={mutation.isPending} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -134,7 +137,7 @@ export default function AddNewJourneyDialog() {
                                     <FormItem>
                                         <FormLabel>{tFields("description")}</FormLabel>
                                         <FormControl>
-                                            <CosmicTextarea placeholder={tPlaceholders("optional")} {...field} />
+                                            <CosmicTextarea placeholder={tPlaceholders("optional")} disabled={mutation.isPending} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -145,7 +148,7 @@ export default function AddNewJourneyDialog() {
 
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button type="button" variant="cosmicTertiary" size="cosmicMd">
+                        <Button type="button" variant="cosmicTertiary" size="cosmicMd" disabled={mutation.isPending}>
                             {tActions("cancel")}
                         </Button>
                     </DialogClose>

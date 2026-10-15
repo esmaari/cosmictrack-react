@@ -377,7 +377,7 @@ export default function StyleguideView() {
                 Simple dialog
               </Button>
             </DialogTrigger>
-            <DialogContent className="border-border-neutral bg-surface text-primary">
+            <DialogContent size="md">
               <DialogHeader>
                 <DialogTitle>Delete journey?</DialogTitle>
                 <DialogDescription>This is a sample alert-style copy.</DialogDescription>
@@ -399,7 +399,7 @@ export default function StyleguideView() {
                 Dialog with form
               </Button>
             </DialogTrigger>
-            <DialogContent className="border-border-neutral bg-surface text-primary sm:max-w-md">
+            <DialogContent size="md">
               <DialogHeader>
                 <DialogTitle>Add step</DialogTitle>
                 <DialogDescription>CosmicInput / CosmicTextarea inside dialog.</DialogDescription>

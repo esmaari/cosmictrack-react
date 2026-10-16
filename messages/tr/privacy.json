@@ -22,8 +22,8 @@
   },
   "choices": {
     "title": "Seçeneklerin",
-    "item1": "Hesap silme talep ederek verilerinin sistemlerimizden kaldırılmasını isteyebilirsin.",
-    "item2": "Profil bilgilerini uygulama içinde istediğin zaman güncelleyebilirsin."
+    "item1": "Profil’den hesabını silerek verilerini sistemlerimizden kaldırabilirsin.",
+    "item2": "Journey ve hesap bilgilerini uygulama içinde istediğin zaman güncelleyebilirsin."
   },
   "questions": {
     "title": "Sorular",

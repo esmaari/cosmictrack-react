@@ -1,7 +1,7 @@
 {
   "title": "Profile",
-  "subtitle": "Your account and membership overview. CosmicTrack is in beta — billing opens later.",
-  "betaBanner": "Beta: membership purchase is not available yet. Plans and copy are ready for launch.",
+  "subtitle": "Your free CosmicTrack account. Billing and AI stay off for this first friend-beta.",
+  "betaBanner": "Friend beta: free account only. Card meanings come from the CosmicTrack deck — AI interpretations are coming later.",
   "emailLabel": "Email",
   "planLabel": "Current plan",
   "planFree": "Free",
@@ -10,36 +10,37 @@
   "unsigned": "Sign in to see your profile.",
   "goJourneys": "Go to My Journeys",
   "signIn": "Sign in",
-  "membershipTitle": "Membership",
-  "membershipIntro": "Choose the plan that fits how you work with your journeys. Purchase will open after the beta test phase.",
-  "betaPurchaseHint": "Currently in testing — purchase is not available yet.",
+  "membershipTitle": "Your plan",
+  "membershipIntro": "Everyone on this beta uses the free plan. No payment, no AI credits.",
   "plans": {
     "free": {
       "name": "Free",
       "price": "€0",
-      "period": "forever",
-      "description": "Start journaling your readings and organizing journeys.",
+      "period": "this beta",
+      "description": "Save readings as journeys, organize with categories, and browse the tarot library.",
       "features": {
         "f1": "Save journeys and steps",
         "f2": "Categories & favorites",
-        "f3": "Tarot card encyclopedia & demo draw"
+        "f3": "Deck meanings (no AI yet)"
       },
-      "cta": "Current plan",
-      "ctaOther": "Included"
-    },
-    "premium": {
-      "name": "Premium",
-      "price": "Coming soon",
-      "period": "monthly",
-      "description": "For readers who want more space and future premium tools.",
-      "features": {
-        "f1": "Everything in Free",
-        "f2": "Priority access to new features",
-        "f3": "Premium membership badge"
-      },
-      "cta": "Upgrade to Premium",
-      "ctaCurrent": "Your plan"
+      "cta": "Your plan"
     }
   },
-  "comingSoonNote": "More account settings (password, notifications) will land here later."
+  "aiPreview": {
+    "eyebrow": "Coming soon",
+    "title": "AI card readings",
+    "body": "Ask AI for a short interpretation will live here later. For now, meanings are filled from CosmicTrack’s card texts when you pick three cards.",
+    "cta": "Coming soon"
+  },
+  "deleteAccount": {
+    "sectionTitle": "Delete account",
+    "sectionBody": "Permanently removes your journeys, steps, categories, and login. This cannot be undone.",
+    "button": "Delete my account",
+    "title": "Delete your account?",
+    "description": "All of your CosmicTrack data will be removed. Type your email to confirm.",
+    "confirmHint": "Type {email} to confirm",
+    "confirm": "Delete forever",
+    "toastDeleted": "Account deleted",
+    "toastFailed": "Could not delete account"
+  }
 }

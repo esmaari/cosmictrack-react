@@ -22,8 +22,8 @@
   },
   "choices": {
     "title": "Your choices",
-    "item1": "Request account deletion to remove your data from our systems.",
-    "item2": "Update your profile info anytime in the app."
+    "item1": "Delete your account in Profile to remove your data from our systems.",
+    "item2": "Update your journeys and account info anytime in the app."
   },
   "questions": {
     "title": "Questions",

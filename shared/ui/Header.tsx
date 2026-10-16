@@ -9,7 +9,6 @@ import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useProfileContext } from "@/shared/lib/ProfileProvider"
 import LocaleSwitcher from "@/shared/ui/LocaleSwitcher"
 import { useTranslations } from "next-intl"
 
@@ -92,7 +91,6 @@ export default function Header() {
   const pathname = usePathname()
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState<User | null | undefined>(undefined)
-  const { credits, loading: profileLoading } = useProfileContext()
 
   useEffect(() => {
     void supabase.auth.getUser().then(({ data: { user: u } }) => {
@@ -177,9 +175,9 @@ export default function Header() {
             <span className="h-10 w-24 shrink-0 rounded-md bg-white/5" aria-hidden />
           ) : isAuthed ? (
             <>
-              {!profileLoading && credits ? (
+              {user ? (
                 <span className="hidden rounded-full border border-white/25 bg-white/10 px-2.5 py-1 text-xs font-semibold text-btn-link-light sm:inline-flex">
-                  {credits.plan === "premium" ? t("planPremium") : t("planFree")}
+                  {t("planFree")}
                 </span>
               ) : null}
               <Button

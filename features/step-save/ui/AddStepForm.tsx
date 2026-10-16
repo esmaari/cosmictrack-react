@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { AskAIError, askAI } from "@/shared/lib/askAI"
 import { useProfileContext } from "@/shared/lib/ProfileProvider"
+import { isAiEnabled } from "@/shared/config/features"
 import { SparklesIcon } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 
@@ -51,6 +52,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
     })
 
     const cards = form.watch("cards")
+    const aiEnabled = isAiEnabled()
     const { credits, refetch: refetchProfile } = useProfileContext()
     const [aiLoading, setAiLoading] = useState(false)
 
@@ -105,6 +107,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
     }
 
     const getMeaningFromAI = async () => {
+        if (!aiEnabled) return
         setAiLoading(true)
         try {
             const result = await askAI(form.getValues("cards"), form.getValues("title"), locale)
@@ -127,7 +130,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
     }
 
     const aiRemainingLabel = (() => {
-        if (!credits) return null
+        if (!aiEnabled || !credits) return null
         const period =
             credits.plan === "premium" ? t("form.aiPeriodMonth") : t("form.aiPeriodToday")
         if (credits.remaining === 0) {
@@ -143,7 +146,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
               })
             : t("form.aiRemainingFree", { remaining: credits.remaining, period })
     })()
-    const aiDisabled = aiLoading || !credits || credits.remaining === 0
+    const aiDisabled = !aiEnabled || aiLoading || !credits || credits.remaining === 0
 
     return (
         <Form {...form}>
@@ -203,12 +206,21 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
                                     size="lg"
                                     variant="cosmicLinkDark"
                                     disabled={aiDisabled}
+                                    title={!aiEnabled ? t("form.aiComingSoonHint") : undefined}
                                     onClick={() => void getMeaningFromAI()}
                                 >
                                     <SparklesIcon className={cn("w-4 h-4", aiLoading && "animate-pulse")} />
-                                    {aiLoading ? t("form.generating") : t("form.askAi")}
+                                    {!aiEnabled
+                                        ? t("form.aiComingSoon")
+                                        : aiLoading
+                                          ? t("form.generating")
+                                          : t("form.askAi")}
                                 </Button>
-                                {aiRemainingLabel ? (
+                                {!aiEnabled ? (
+                                    <span className="text-xs text-primary/70">
+                                        {t("form.aiComingSoonHint")}
+                                    </span>
+                                ) : aiRemainingLabel ? (
                                     <span className="text-xs text-primary/85">
                                         {aiRemainingLabel}
                                     </span>

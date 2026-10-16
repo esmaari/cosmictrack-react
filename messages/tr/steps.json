@@ -11,6 +11,8 @@
   "form": {
     "generating": "Üretiliyor…",
     "askAi": "AI'ya sor",
+    "aiComingSoon": "AI — yakında",
+    "aiComingSoonHint": "Şimdilik anlamlar CosmicTrack deste metinlerinden gelir.",
     "toastAdded": "Adım eklendi",
     "toastSaved": "Adım kaydedildi",
     "toastFailed": "Adım eklenemedi",

@@ -6,7 +6,7 @@ Next.js (App Router) + Supabase + next-intl. Default locale: Turkish (`tr`); Eng
 
 ```bash
 npm install
-cp .env.example .env.local   # fill NEXT_PUBLIC_SUPABASE_URL + ANON_KEY
+cp .env.example .env.local   # fill URL + PUBLISHABLE_KEY (+ SECRET_KEY for account delete)
 npm run dev
 ```
 

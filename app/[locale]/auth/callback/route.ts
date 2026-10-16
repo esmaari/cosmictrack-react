@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
+import { tryGetSupabasePublishableKey, tryGetSupabaseUrl } from "@/core/supabase/env"
 import { routing } from "@/i18n/routing"
 
 function safeNextPath(next: string | null, locale: string): string {
@@ -24,10 +25,10 @@ export async function GET(
   const authErrorPath =
     locale === routing.defaultLocale ? "/auth?error=link" : `/${locale}/auth?error=link`
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
+  const supabaseUrl = tryGetSupabaseUrl()
+  const publishableKey = tryGetSupabasePublishableKey()
 
-  if (!code || !supabaseUrl || !supabaseAnonKey || !/^https?:\/\//i.test(supabaseUrl)) {
+  if (!code || !supabaseUrl || !publishableKey) {
     return NextResponse.redirect(`${origin}${authErrorPath}`)
   }
 
@@ -38,7 +39,7 @@ export async function GET(
 
   let response = NextResponse.redirect(`${redirectBase}${next}`)
 
-  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+  const supabase = createServerClient(supabaseUrl, publishableKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll()

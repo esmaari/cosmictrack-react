@@ -1,6 +1,7 @@
 import createIntlMiddleware from "next-intl/middleware"
 import { NextResponse, type NextRequest } from "next/server"
 import { createServerClient } from "@supabase/ssr"
+import { tryGetSupabasePublishableKey, tryGetSupabaseUrl } from "@/core/supabase/env"
 import { routing } from "./i18n/routing"
 import { safeAuthNextPath, stripLocalePrefix } from "./shared/lib/authUrls"
 
@@ -35,18 +36,14 @@ export async function proxy(request: NextRequest) {
     return response
   }
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
+  const supabaseUrl = tryGetSupabaseUrl()
+  const publishableKey = tryGetSupabasePublishableKey()
 
-  if (!supabaseUrl || !supabaseAnonKey) {
+  if (!supabaseUrl || !publishableKey) {
     return response
   }
 
-  if (!/^https?:\/\//i.test(supabaseUrl)) {
-    return response
-  }
-
-  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+  const supabase = createServerClient(supabaseUrl, publishableKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll()

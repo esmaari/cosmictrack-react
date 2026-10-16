@@ -11,6 +11,8 @@
   "form": {
     "generating": "Generating…",
     "askAi": "Ask AI",
+    "aiComingSoon": "AI — coming soon",
+    "aiComingSoonHint": "Meanings use CosmicTrack card texts for now.",
     "toastAdded": "Step added",
     "toastSaved": "Step saved",
     "toastFailed": "Failed to add step",

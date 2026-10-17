@@ -21,12 +21,13 @@ export default async function ImpressumPage() {
             <strong className="text-primary">{t("emailLabel")}:</strong>{" "}
             <a
               href={`mailto:${t("emailValue")}`}
-              className="font-medium text-secondary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
+              className="font-medium text-btn-link-dark underline underline-offset-4 hover:text-btn-link-dark-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
             >
               {t("emailValue")}
             </a>
           </li>
         </ul>
+        <p className="text-sm leading-6 text-primary/70">{t("note")}</p>
       </div>
     </main>
   )

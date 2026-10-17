@@ -1,11 +1,12 @@
 {
   "title": "Impressum",
   "subtitle": "Legal Disclosure",
-  "intro": "Information in accordance with Section 5 TMG (Germany):",
+  "intro": "CosmicTrack is operated from Germany. Operator details in accordance with Section 5 TMG (the Impressum follows the operator’s location, even when the site is offered in Turkish and English):",
   "nameLabel": "Name",
   "nameValue": "Esma Ari",
   "addressLabel": "Address",
   "addressValue": "Munich, Germany (full address available upon request)",
   "emailLabel": "Email",
-  "emailValue": "esmaari.dev@gmail.com"
+  "emailValue": "esmaari.dev@gmail.com",
+  "note": "Users may be in Turkey, Germany, or elsewhere; the UI language (TR/EN) does not change this Impressum."
 }

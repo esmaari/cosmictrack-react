@@ -14,7 +14,7 @@ export default async function AboutPage() {
             <strong className="text-primary">{t("emailLabel")}:</strong>{" "}
             <a
               href="mailto:esmaari.dev@gmail.com"
-              className="font-medium text-secondary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
+              className="font-medium text-btn-link-dark underline underline-offset-4 hover:text-btn-link-dark-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
             >
               esmaari.dev@gmail.com
             </a>
@@ -23,7 +23,7 @@ export default async function AboutPage() {
             <strong className="text-primary">{t("instagramLabel")}:</strong>{" "}
             <a
               href="https://instagram.com/kozmiktarotesma"
-              className="font-medium text-secondary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
+              className="font-medium text-btn-link-dark underline underline-offset-4 hover:text-btn-link-dark-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
               target="_blank"
               rel="noreferrer"
             >
@@ -34,7 +34,7 @@ export default async function AboutPage() {
             <strong className="text-primary">{t("githubLabel")}:</strong>{" "}
             <a
               href="https://github.com/esmaari"
-              className="font-medium text-secondary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
+              className="font-medium text-btn-link-dark underline underline-offset-4 hover:text-btn-link-dark-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
               target="_blank"
               rel="noreferrer"
             >

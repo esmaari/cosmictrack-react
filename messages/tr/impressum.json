@@ -1,11 +1,12 @@
 {
   "title": "Künye",
   "subtitle": "Yasal bilgilendirme",
-  "intro": "Almanya TMG § 5 uyarınca bilgiler:",
+  "intro": "CosmicTrack Almanya’dan işletilir. Almanya TMG § 5 uyarınca işletmeci bilgileri (site Türkçe ve İngilizce sunulsa da künye işletmecinin bulunduğu ülkeye göredir):",
   "nameLabel": "Ad",
   "nameValue": "Esma Ari",
   "addressLabel": "Adres",
   "addressValue": "Münih, Almanya (tam adres talep üzerine)",
   "emailLabel": "E-posta",
-  "emailValue": "esmaari.dev@gmail.com"
+  "emailValue": "esmaari.dev@gmail.com",
+  "note": "Kullanıcılar Türkiye, Almanya veya başka ülkelerden gelebilir; arayüz dili (TR/EN) künye içeriğini değiştirmez."
 }

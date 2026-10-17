@@ -83,7 +83,7 @@ export default async function PrivacyPage() {
             {t("questions.bodyBefore")}{" "}
             <a
               href="mailto:esmaari.dev@gmail.com"
-              className="font-medium text-secondary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
+              className="font-medium text-btn-link-dark underline underline-offset-4 hover:text-btn-link-dark-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
             >
               esmaari.dev@gmail.com
             </a>

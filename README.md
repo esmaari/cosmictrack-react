@@ -37,21 +37,31 @@ Specs live next to source as `*.test.ts` (e.g. `shared/lib/aiCredits.test.ts`). 
 - Shared Zod form schemas (auth, forgot/reset, journey, category, step)
 - Auth callback URL helpers (`authUrls`)
 
-Not covered yet (deferred): real email confirm/reset links, authenticated E2E (needs Supabase seed user).
+Not covered yet (deferred): real email confirm/reset links end-to-end.
 
 ```bash
 npm test
 ```
 
-### E2E smoke (Playwright)
+### E2E (Playwright)
 
-Public flows only (no login/Supabase seed yet):
+**Public smoke** (always):
 
 - `/` home
 - `/tarot` library hub
 - `/tarot/cards`
 - `/auth` + `/auth?mode=forgot`
 - `/en/tarot` locale prefix
+- Guest redirect from `/my-journeys` and `/profile` → `/auth?next=...`
+
+**Authenticated** (optional): set in `.env.local`:
+
+```bash
+E2E_USER_EMAIL=your-test-user@example.com
+E2E_USER_PASSWORD=...
+```
+
+Uses a real Supabase login against local `.env.local` keys. Skipped when those vars are missing (CI stays green without secrets).
 
 **Local:** uses your installed Google Chrome (`channel: "chrome"`), so you usually do **not** need `npx playwright install`.
 
@@ -73,14 +83,14 @@ CI=true npm run test:e2e
 GitHub Actions (`.github/workflows/ci.yml`) on push/PR:
 
 1. `npm ci` → `lint` → `npm test`
-2. Playwright smoke with Chromium
+2. Playwright (public smoke + guest redirect; auth suite skipped without secrets)
 
 ### Current status (local)
 
 | Suite | Result |
 |-------|--------|
 | Vitest unit | 38 passed (5 files) |
-| Playwright smoke | 6 passed (public only) |
+| Playwright | public smoke + guest redirect; auth when `E2E_USER_*` set |
 | ESLint | 0 errors (1 known RHF `watch` warning) |
 
 ## Learn More

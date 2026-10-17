@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { Link, useRouter } from "@/i18n/navigation"
-import { Suspense, useEffect, useMemo } from "react"
+import { Suspense, useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -66,6 +66,11 @@ function AuthPageContent() {
   const isRegister = mode === "register"
   const isForgot = mode === "forgot"
   const afterAuthPath = safeAuthNextPath(searchParams.get("next"))
+  const [clientReady, setClientReady] = useState(false)
+
+  useEffect(() => {
+    setClientReady(true)
+  }, [])
 
   useEffect(() => {
     if (searchParams.get("error") === "link") {
@@ -185,6 +190,8 @@ function AuthPageContent() {
           {isForgot ? (
             <Form {...forgotForm}>
               <form
+                method="post"
+                data-auth-ready={clientReady ? "true" : "false"}
                 onSubmit={forgotForm.handleSubmit((v) => {
                   forgotForm.clearErrors("root")
                   forgotMutation.mutate(v)
@@ -237,6 +244,8 @@ function AuthPageContent() {
           ) : isRegister ? (
             <Form {...registerForm}>
               <form
+                method="post"
+                data-auth-ready={clientReady ? "true" : "false"}
                 onSubmit={registerForm.handleSubmit((v) => {
                   registerForm.clearErrors("root")
                   registerMutation.mutate(v)
@@ -310,6 +319,8 @@ function AuthPageContent() {
           ) : (
             <Form {...loginForm}>
               <form
+                method="post"
+                data-auth-ready={clientReady ? "true" : "false"}
                 onSubmit={loginForm.handleSubmit((v) => {
                   loginForm.clearErrors("root")
                   loginMutation.mutate(v)

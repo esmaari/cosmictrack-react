@@ -1,16 +1,32 @@
 import { defineConfig, devices } from "@playwright/test"
+import { loadEnvLocal } from "./e2e/helpers/loadEnvLocal"
+
+loadEnvLocal()
 
 const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 3000)
-const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${PORT}`
+// Prefer localhost over 127.0.0.1 so Next.js dev HMR/assets are not blocked as cross-origin.
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${PORT}`
+const isCi = !!process.env.CI
 
-/** Placeholder env so Next can boot when .env.local is missing (CI / fresh clone). */
-const supabaseEnv = {
-  NEXT_PUBLIC_SUPABASE_URL:
-    process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || "https://example.supabase.co",
-  NEXT_PUBLIC_SUPABASE_ANON_KEY:
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSJ9.placeholder",
-}
+/**
+ * CI without real Supabase secrets: placeholders so `next dev` boots for public smoke.
+ * Local: omit overrides so Next loads `.env.local` (needed for auth E2E).
+ */
+const supabaseEnv = isCi
+  ? {
+      NEXT_PUBLIC_SUPABASE_URL:
+        process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || "https://example.supabase.co",
+      NEXT_PUBLIC_SUPABASE_ANON_KEY:
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ||
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSJ9.placeholder",
+      ...(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim()
+        ? {
+            NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+              process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.trim(),
+          }
+        : {}),
+    }
+  : {}
 
 export default defineConfig({
   testDir: "e2e",

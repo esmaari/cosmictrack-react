@@ -1,29 +1,48 @@
 {
   "title": "Privacy Notice",
-  "intro": "How we handle your email and account data on CosmicTrack.",
+  "intro": "A short summary of how CosmicTrack handles your email, account, and journey data. This notice is written for the friend beta and is not legal advice.",
   "collect": {
     "title": "What we collect",
-    "item1": "Email address (required for login/register and account recovery).",
-    "item2": "Basic profile data you provide (e.g., name, avatar).",
-    "item3": "Usage data you create in the app (journeys, steps, categories, favorites)."
+    "item1": "Email address (required for register, login, and account recovery).",
+    "item2": "Password (we do not store it in plain text; it is held securely by our auth provider).",
+    "item3": "Basic profile data you provide (e.g. display name, avatar — if any).",
+    "item4": "Content you create in the app (journeys, steps, card picks, notes, categories, favorites)."
   },
   "why": {
     "title": "Why we collect it",
     "item1": "Authenticate you and secure your account.",
     "item2": "Sync your journeys and categories across devices.",
-    "item3": "Send essential account emails (confirmation, reset, security)."
+    "item3": "Send essential account emails (confirmation, password reset, security)."
+  },
+  "cookies": {
+    "title": "Cookies",
+    "item1": "We use strictly necessary / essential cookies to keep you signed in (Supabase auth session).",
+    "item2": "We do not currently use advertising, analytics, or marketing cookies, so we do not show a cookie-consent banner.",
+    "item3": "If we add analytics later, we will update this notice and ask for consent when required."
+  },
+  "processors": {
+    "title": "Where data is stored",
+    "item1": "Authentication and database: Supabase (your account and journey data live there).",
+    "item2": "App hosting: Netlify (serves the website; your account database is not stored on Netlify).",
+    "item3": "These providers are needed to run the service; we do not sell your email for marketing."
+  },
+  "ai": {
+    "title": "AI and card meanings",
+    "item1": "In this beta, “Ask AI” is off; card meanings are filled from CosmicTrack’s deck texts (local meaning files).",
+    "item2": "When AI is enabled, we will update this notice with what is sent where; we do not currently send personal content to AI."
   },
   "dosAndDonts": {
     "title": "What we do",
     "titleSuffix": "(and don't do)",
     "item1": "No selling or sharing emails with third parties for marketing.",
     "item2": "No marketing emails without your explicit opt-in.",
-    "item3": "We use Supabase as our backend; data is stored and secured there."
+    "item3": "We only process what is needed to run your account and the app."
   },
   "choices": {
     "title": "Your choices",
-    "item1": "Delete your account in Profile to remove your data from our systems.",
-    "item2": "Update your journeys and account info anytime in the app."
+    "item1": "Delete your account in Profile; your journeys, steps, categories, and login are removed from our systems.",
+    "item2": "Update your journeys and account info anytime in the app.",
+    "item3": "We keep data while your account exists; after deletion it is cleared within a reasonable time (short delay in backups is possible)."
   },
   "questions": {
     "title": "Questions",

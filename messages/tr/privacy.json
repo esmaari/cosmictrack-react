@@ -1,29 +1,48 @@
 {
   "title": "Gizlilik Bildirimi",
-  "intro": "CosmicTrack'te e-posta ve hesap verilerinizi nasıl işlediğimiz.",
+  "intro": "CosmicTrack’te e-posta, hesap ve journey verilerini nasıl işlediğimizin kısa özeti. Bu bildirim arkadaş-beta için yazıldı; yasal danışmanlık yerine geçmez.",
   "collect": {
     "title": "Topladıklarımız",
-    "item1": "E-posta adresi (giriş/kayıt ve hesap kurtarma için gerekli).",
-    "item2": "Sağladığın temel profil verileri (ör. ad, avatar).",
-    "item3": "Uygulamada oluşturduğun kullanım verileri (journey'ler, adımlar, kategoriler, favoriler)."
+    "item1": "E-posta adresi (kayıt, giriş ve hesap kurtarma için gerekli).",
+    "item2": "Şifre (biz düz metin olarak saklamayız; kimlik doğrulama sağlayıcımızda güvenli biçimde tutulur).",
+    "item3": "Sağladığın temel profil verileri (ör. görünen ad, avatar — varsa).",
+    "item4": "Uygulamada oluşturduğun içerik (journey’ler, adımlar, kart seçimleri, notlar, kategoriler, favoriler)."
   },
   "why": {
     "title": "Neden topluyoruz",
     "item1": "Kimliğini doğrulamak ve hesabını güvence altına almak.",
     "item2": "Journey ve kategorilerini cihazlar arasında senkronize etmek.",
-    "item3": "Zorunlu hesap e-postaları göndermek (onay, sıfırlama, güvenlik)."
+    "item3": "Zorunlu hesap e-postaları göndermek (onay, şifre sıfırlama, güvenlik)."
+  },
+  "cookies": {
+    "title": "Çerezler (cookies)",
+    "item1": "Giriş oturumunu sürdürmek için zorunlu / essential çerezler kullanırız (Supabase auth).",
+    "item2": "Şu an reklam, analitik veya pazarlama çerezi kullanmıyoruz; bu yüzden bir “çerez kabul” banner’ı göstermiyoruz.",
+    "item3": "İleride analitik eklersek bu bildirimi günceller ve gerektiğinde onay isteriz."
+  },
+  "processors": {
+    "title": "Veriyi nerede tutuyoruz",
+    "item1": "Kimlik doğrulama ve veritabanı: Supabase (hesap ve journey verilerin burada saklanır).",
+    "item2": "Web uygulaması barındırma: Netlify (sayfaları sunar; hesap veritabanın Netlify’de tutulmaz).",
+    "item3": "Bu sağlayıcılar hizmeti işletmek için teknik olarak gerekli; e-postanı pazarlama için satmayız."
+  },
+  "ai": {
+    "title": "AI ve kart anlamları",
+    "item1": "Bu beta’da “Ask AI” kapalıdır; kart yorumları CosmicTrack deste metinlerinden (yerel anlam dosyaları) doldurulur.",
+    "item2": "AI özelliği açıldığında hangi verinin nereye gideceğini bu bildirime ekleriz; şu an AI için kişisel içerik göndermiyoruz."
   },
   "dosAndDonts": {
     "title": "Ne yapıyoruz",
     "titleSuffix": "(ve yapmıyoruz)",
     "item1": "E-postaları pazarlama için üçüncü taraflarla satmıyor veya paylaşmıyoruz.",
     "item2": "Açık onayın olmadan pazarlama e-postası göndermiyoruz.",
-    "item3": "Backend olarak Supabase kullanıyoruz; veriler orada saklanır ve korunur."
+    "item3": "Yalnızca hesabı ve uygulamayı çalıştırmak için gerekli teknik işlemi yapıyoruz."
   },
   "choices": {
     "title": "Seçeneklerin",
-    "item1": "Profil’den hesabını silerek verilerini sistemlerimizden kaldırabilirsin.",
-    "item2": "Journey ve hesap bilgilerini uygulama içinde istediğin zaman güncelleyebilirsin."
+    "item1": "Profil’den hesabını silebilirsin; journey’ler, adımlar, kategoriler ve giriş bilgilerin sistemlerimizden kaldırılır.",
+    "item2": "Journey ve hesap bilgilerini uygulama içinde istediğin zaman güncelleyebilirsin.",
+    "item3": "Veriler hesabın durduğu sürece tutulur; silme talebinden sonra makul bir süre içinde temizlenir (yedeklerde kısa gecikme olabilir)."
   },
   "questions": {
     "title": "Sorular",

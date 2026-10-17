@@ -17,6 +17,7 @@ export default async function PrivacyPage() {
             <li>{t("collect.item1")}</li>
             <li>{t("collect.item2")}</li>
             <li>{t("collect.item3")}</li>
+            <li>{t("collect.item4")}</li>
           </ul>
         </section>
 
@@ -26,6 +27,32 @@ export default async function PrivacyPage() {
             <li>{t("why.item1")}</li>
             <li>{t("why.item2")}</li>
             <li>{t("why.item3")}</li>
+          </ul>
+        </section>
+
+        <section className="stack-tight">
+          <h2 className="text-xl font-semibold text-primary">{t("cookies.title")}</h2>
+          <ul className="list-disc space-y-1 pl-5 text-base leading-7 text-primary/85">
+            <li>{t("cookies.item1")}</li>
+            <li>{t("cookies.item2")}</li>
+            <li>{t("cookies.item3")}</li>
+          </ul>
+        </section>
+
+        <section className="stack-tight">
+          <h2 className="text-xl font-semibold text-primary">{t("processors.title")}</h2>
+          <ul className="list-disc space-y-1 pl-5 text-base leading-7 text-primary/85">
+            <li>{t("processors.item1")}</li>
+            <li>{t("processors.item2")}</li>
+            <li>{t("processors.item3")}</li>
+          </ul>
+        </section>
+
+        <section className="stack-tight">
+          <h2 className="text-xl font-semibold text-primary">{t("ai.title")}</h2>
+          <ul className="list-disc space-y-1 pl-5 text-base leading-7 text-primary/85">
+            <li>{t("ai.item1")}</li>
+            <li>{t("ai.item2")}</li>
           </ul>
         </section>
 
@@ -46,6 +73,7 @@ export default async function PrivacyPage() {
           <ul className="list-disc space-y-1 pl-5 text-base leading-7 text-primary/85">
             <li>{t("choices.item1")}</li>
             <li>{t("choices.item2")}</li>
+            <li>{t("choices.item3")}</li>
           </ul>
         </section>
 

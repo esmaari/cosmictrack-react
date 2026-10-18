@@ -26,6 +26,7 @@
     }
   },
   "suits": {
+    "tagline": "Dört suit · bir deste",
     "title": "Takımlara göre bak",
     "intro": "Minor Arcana dört takıma ayrılır. Birini seç — o suit’in kartlarını aç.",
     "majorCta": "Major Arcana’yı gör",
@@ -36,6 +37,11 @@
       "wands": { "name": "Asalar", "hint": "Ateş · irade · kıvılcım" },
       "pentacles": { "name": "Tılsımlar", "hint": "Beden · toprak · zanaat" }
     }
+  },
+  "symbolsHub": {
+    "title": "Tarot sembolleri",
+    "intro": "Kupalar, kılıçlar, asalar, tılsımlar — destenin gizli dili. Suit dilini öğren, sonra sembol rehberine in.",
+    "cta": "Sembol rehberini aç"
   },
   "practice": {
     "title": "Pratik çekim",
@@ -152,6 +158,19 @@
         "body": "Anlamları özgürce keşfet, Kartlara sor’da üç kartlık bir çekim dene ve bir okumayı adım adım journey olarak saklamak istediğinde kaydet."
       }
     }
+  },
+  "daily": {
+    "eyebrow": "Günün kartı",
+    "teaserTitle": "Bugün sana ne anlatıyor?",
+    "pageTitle": "Günün kartı",
+    "exploreMessage": "Kartın mesajını keşfet",
+    "hideMeaning": "Mesajı gizle",
+    "share": "Paylaş",
+    "shareAria": "Günün kartı linkini paylaş",
+    "shareTitle": "CosmicTrack · Günün kartı: {name}",
+    "shareText": "Bugünün kartı: {name}",
+    "linkCopied": "Link kopyalandı",
+    "shared": "Paylaşıldı"
   },
   "pageShell": {
     "backToTarot": "Tarot",

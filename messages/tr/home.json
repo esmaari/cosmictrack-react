@@ -1,39 +1,33 @@
 {
   "brand": "CosmicTrack",
-  "heroTitleLine1": "Yolculuğunu",
-  "heroTitleLine2": "takip et.",
-  "heroTitleLine3": "Adım adım",
-  "heroTitleLine4": "ilerle.",
-  "heroSubtitle": "Journey'lerini günlük gibi kaydet, adımları düzenle ve kategoriler ile favoriler sayesinde odağını koru.",
-  "ctaAuth": "Giriş / Kayıt",
-  "ctaTarot": "Tarot’u keşfet",
-  "ctaAskCards": "Kartlara sor",
+  "heroTitleLine1": "Yolculuğunu keşfet.",
+  "heroTitleLine2": "Kartlarını anlamlandır.",
+  "heroTitleLine3": "Kendine yaklaş.",
+  "heroSubtitle": "Tarot yolculuğunu kaydet, kartlarını anlamlandır ve kendi ritüel alanını oluştur. CosmicTrack, içsel yolculuğunu adım adım takip etmen için sakin bir alan sunar.",
+  "ctaStart": "Yolculuğa başla",
+  "ctaExploreCards": "Kartları keşfet",
   "ctaNewJourney": "Yeni journey oluştur",
-  "suitsTitle": "Dört suit · bir deste",
-  "suits": {
-    "cups": "Kupalar",
-    "swords": "Kılıçlar",
-    "wands": "Asalar",
-    "pentacles": "Tılsımlar"
-  },
   "paths": {
-    "title": "Burada neler yapabilirsin",
+    "title": "CosmicTrack’te seni neler bekliyor?",
+    "intro": "Kayıt, düzenleme ve öğrenme — üç net kapı.",
     "journeys": {
-      "title": "Journey günlüğü",
-      "body": "Okumalarını adım adım kaydet — destedeki yolunun canlı bir günlüğü."
+      "title": "Yolculuğunu kaydet",
+      "body": "Okumalarını adım adım tut, kendi ritüel günlüğünü oluştur.",
+      "cta": "Günlüğünü aç"
     },
     "organize": {
-      "title": "Kategoriler & favoriler",
-      "body": "Enerji, aşk, iş ve daha fazlasına göre düzenle. Önemlileri yanında tut."
+      "title": "Kendi alanını oluştur",
+      "body": "Kategoriler ve favorilerle önemli olanı yanında tut.",
+      "cta": "Kategorilerini düzenle"
     },
     "learn": {
-      "title": "Desteyi öğren",
-      "body": "Anlamlar, semboller, takımlar ve tarih — tarot kütüphanesini istediğin zaman aç.",
-      "cta": "Tarot kütüphanesine git"
+      "title": "Tarotu keşfet",
+      "body": "Kart anlamları, semboller ve tarot kütüphanesi.",
+      "cta": "Kart kütüphanesine git"
     }
   },
   "ctaPanel": {
-    "title": "Bugün başla.",
+    "title": "Bugün kendin için bir adım at.",
     "body": "Ücretsiz başla. Kart bilgisi gerekmez.",
     "button": "Ücretsiz hesap oluştur"
   }

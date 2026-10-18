@@ -4,7 +4,8 @@ import type { ReactNode } from "react"
 import { ArrowLeft } from "lucide-react"
 
 type TarotPageShellProps = {
-  title: string
+  /** When omitted, only the back link shows (e.g. Card of the Day page). */
+  title?: string
   intro?: string
   children: ReactNode
   backHref?: string
@@ -44,12 +45,14 @@ export default function TarotPageShell({
             {backLabel}
           </Link>
 
-          <header className="stack-tight max-w-3xl">
-            <h1 className="heading-3 mb-0 font-semibold text-heading">{title}</h1>
-            {intro ? (
-              <p className="text-base leading-7 text-on-dark/85">{intro}</p>
-            ) : null}
-          </header>
+          {title ? (
+            <header className="stack-tight max-w-3xl">
+              <h1 className="heading-3 mb-0 font-semibold text-heading">{title}</h1>
+              {intro ? (
+                <p className="text-base leading-7 text-on-dark/85">{intro}</p>
+              ) : null}
+            </header>
+          ) : null}
 
           {contentTone === "surface" ? (
             <div className="rounded-xl border border-heading/25 bg-surface p-4 text-primary shadow-sm sm:p-6">

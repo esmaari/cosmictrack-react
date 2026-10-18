@@ -26,6 +26,7 @@
     }
   },
   "suits": {
+    "tagline": "Four suits · one deck",
     "title": "Browse by suit",
     "intro": "The Minor Arcana is divided into four suits. Pick one to open that suit’s cards.",
     "majorCta": "See Major Arcana",
@@ -36,6 +37,11 @@
       "wands": { "name": "Wands", "hint": "Fire · will · spark" },
       "pentacles": { "name": "Pentacles", "hint": "Body · earth · craft" }
     }
+  },
+  "symbolsHub": {
+    "title": "Tarot symbols",
+    "intro": "Cups, swords, wands, pentacles — the deck’s quiet language. Learn the suits, then open the symbol guide.",
+    "cta": "Open symbol guide"
   },
   "practice": {
     "title": "Practice draw",
@@ -152,6 +158,19 @@
         "body": "Explore meanings freely, try a three-card draw in Ask the cards, and save journeys when you want to keep a reading as steps over time."
       }
     }
+  },
+  "daily": {
+    "eyebrow": "Card of the day",
+    "teaserTitle": "What is it telling you today?",
+    "pageTitle": "Card of the Day",
+    "exploreMessage": "Explore the card’s message",
+    "hideMeaning": "Hide message",
+    "share": "Share",
+    "shareAria": "Share today’s card link",
+    "shareTitle": "CosmicTrack · Card of the Day: {name}",
+    "shareText": "Today’s card: {name}",
+    "linkCopied": "Link copied",
+    "shared": "Shared"
   },
   "pageShell": {
     "backToTarot": "Tarot",

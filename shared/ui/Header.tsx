@@ -156,13 +156,22 @@ export default function Header() {
               {t("tarot")}
             </Link>
             {isAuthed ? (
-              <Link
-                href="/my-journeys"
-                className={navClass("/my-journeys")}
-                aria-current={pathname === "/my-journeys" ? "page" : undefined}
-              >
-                {t("myJourneys")}
-              </Link>
+              <>
+                <Link
+                  href="/my-journeys"
+                  className={navClass("/my-journeys")}
+                  aria-current={pathname === "/my-journeys" ? "page" : undefined}
+                >
+                  {t("myJourneys")}
+                </Link>
+                <Link
+                  href="/categories"
+                  className={navClass("/categories", true)}
+                  aria-current={pathname.startsWith("/categories") ? "page" : undefined}
+                >
+                  {t("categories")}
+                </Link>
+              </>
             ) : null}
           </nav>
         </div>

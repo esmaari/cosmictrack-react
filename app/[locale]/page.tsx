@@ -10,17 +10,17 @@ const paths = [
   {
     key: "journeys" as const,
     href: "/my-journeys",
-    image: "/cards/major_arcana/07_the_chariot.png",
+    image: "/images/tarotJournal.png",
   },
   {
     key: "organize" as const,
-    href: "/my-journeys",
-    image: "/cards/major_arcana/11_justice.png",
+    href: "/categories",
+    image: "/images/tarotCats.png",
   },
   {
     key: "learn" as const,
     href: "/tarot",
-    image: "/cards/major_arcana/02_the_high_priestess.png",
+    image: "/images/tarotHub.png",
   },
 ] as const
 
@@ -40,23 +40,11 @@ export default async function Home() {
         />
       </div>
 
-      {/* Small accent — asset is ~183px wide; keep display size near native to avoid blur */}
-      <div className="pointer-events-none absolute right-2 top-1 w-24 sm:right-6 sm:top-8 sm:w-30 md:top-10 md:right-12 md:w-38 lg:right-20 lg:top-12 lg:w-46">
-        <Image
-          src="/images/witchfool.png"
-          alt=""
-          width={183}
-          height={274}
-          className="h-auto w-full object-contain object-top"
-          priority
-          sizes="(max-width: 640px) 96px, (max-width: 1024px) 152px, 184px"
-        />
-      </div>
-
       <HomeAuthRoot>
-        <div className="relative mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 sm:py-18">
-          <section className="grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,440px)]">
-            <div className="stack-card text-left">
+        {/* Wider than page max-w-5xl, but inset from viewport edges. */}
+        <section className="relative w-full px-6 py-16 sm:px-10 sm:py-18 lg:px-16">
+          <div className="mx-auto grid w-full max-w-7xl items-center gap-8 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] md:gap-10 lg:gap-12">
+            <div className="stack-card min-w-0 text-left">
               <p className="text-sm font-semibold text-heading">{t("brand")}</p>
 
               <h1 className="heading-display-2 mb-0 text-heading">
@@ -66,30 +54,29 @@ export default async function Home() {
               </h1>
               <p className="heading-3 mb-0 font-semibold text-heading">{t("heroTitleLine3")}</p>
 
-              <p className="max-w-xl font-body text-base leading-7 text-on-dark/80">
+              <p className="max-w-2xl font-body text-base leading-7 text-on-dark/80">
                 {t("heroSubtitle")}
               </p>
 
               <HomeHeroCtas />
             </div>
 
-            <div className="relative hidden md:block">
-              <div className="relative mx-auto aspect-square w-full max-w-[420px]">
-                <div className="absolute inset-0 overflow-hidden rounded-full">
-                  <Image
-                    src="/images/homeCosmic.png"
-                    alt=""
-                    fill
-                    className="object-cover opacity-95"
-                    sizes="420px"
-                    priority
-                  />
-                </div>
-              </div>
+            <div className="relative mx-auto w-full max-w-[220px] min-w-0 sm:max-w-[280px] md:max-w-xl">
+              <Image
+                src="/images/witchFoolWithPlanets.png"
+                alt=""
+                width={1024}
+                height={843}
+                className="h-auto w-full object-contain"
+                sizes="(max-width: 640px) 220px, (max-width: 768px) 280px, 520px"
+                priority
+              />
             </div>
-          </section>
+          </div>
+        </section>
 
-          <CardOfTheDayTeaser variant="home" className="mt-12 sm:mt-14" />
+        <div className="relative mx-auto w-full max-w-5xl px-4 pb-16 sm:px-6 sm:pb-18">
+          <CardOfTheDayTeaser variant="home" className="mt-2 sm:mt-4" />
 
           <div className="mt-10 sm:mt-12" role="presentation">
             <TarotSuitsStrip variant="decorative" />
@@ -110,12 +97,12 @@ export default async function Home() {
                     href={path.href}
                     className="group flex h-full flex-col overflow-hidden rounded-2xl border border-heading/35 bg-app-darker/60 transition-colors hover:border-heading/55 hover:bg-app-darker/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
                   >
-                    <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-heading/25">
+                    <div className="relative aspect-[3/4] w-full overflow-hidden border-b border-heading/25">
                       <Image
                         src={path.image}
                         alt=""
                         fill
-                        className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                        className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
                         sizes="(max-width: 640px) 100vw, 33vw"
                       />
                     </div>

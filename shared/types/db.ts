@@ -39,6 +39,7 @@ export type Category = {
   user_id: DbId;
   title: string;
   color: string;
+  description?: string | null;
   created_at: IsoDateTime;
 };
 

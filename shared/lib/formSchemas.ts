@@ -22,6 +22,7 @@ export type CategorySchemaMessages = {
   titleMin: string
   titleMax: string
   colorRequired: string
+  descriptionMax: string
 }
 
 export type StepSchemaMessages = {
@@ -90,6 +91,7 @@ export function createCategorySchema(m: CategorySchemaMessages) {
   return z.object({
     title: z.string().min(2, { message: m.titleMin }).max(50, { message: m.titleMax }),
     color: z.string().min(1, { message: m.colorRequired }),
+    description: z.string().max(200, { message: m.descriptionMax }).optional(),
   })
 }
 

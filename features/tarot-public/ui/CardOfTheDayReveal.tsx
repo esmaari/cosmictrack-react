@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Check, Share2 } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { routing } from "@/i18n/routing"
 
 type CardOfTheDayRevealProps = {
@@ -11,6 +12,8 @@ type CardOfTheDayRevealProps = {
   meaning: string
   dayKey: string
   dailyMessage: string
+  /** Home desktop: left-aligned with the copy column. */
+  align?: "center" | "start"
 }
 
 export default function CardOfTheDayReveal({
@@ -18,11 +21,13 @@ export default function CardOfTheDayReveal({
   meaning,
   dayKey,
   dailyMessage,
+  align = "center",
 }: CardOfTheDayRevealProps) {
   const t = useTranslations("tarot.daily")
   const locale = useLocale()
   const [open, setOpen] = useState(false)
   const [shareState, setShareState] = useState<"idle" | "copied" | "shared">("idle")
+  const start = align === "start"
 
   const shareUrl = () => {
     const path =
@@ -52,21 +57,34 @@ export default function CardOfTheDayReveal({
   }
 
   return (
-    <div className="mx-auto w-full max-w-md">
-      <p className="font-body text-center text-base leading-7 text-on-dark/85">
+    <div className={cn("w-full", start ? "md:max-w-none" : "mx-auto max-w-md")}>
+      <p
+        className={cn(
+          "font-body text-base leading-7 text-on-dark/85",
+          start ? "text-center md:text-left" : "text-center",
+        )}
+      >
         {dailyMessage}
       </p>
 
       {open ? (
         <p
           id={`cotd-meaning-${dayKey}`}
-          className="mt-4 whitespace-pre-line border-t border-white/10 pt-4 font-body text-center text-base leading-7 text-on-dark/90"
+          className={cn(
+            "mt-4 whitespace-pre-line border-t border-white/10 pt-4 font-body text-base leading-7 text-on-dark/90",
+            start ? "text-center md:text-left" : "text-center",
+          )}
         >
           {meaning}
         </p>
       ) : null}
 
-      <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
+      <div
+        className={cn(
+          "mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4",
+          start ? "items-center md:items-start md:justify-start" : "items-center sm:justify-center",
+        )}
+      >
         <Button
           type="button"
           variant="cosmicSecondary"

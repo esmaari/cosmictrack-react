@@ -115,12 +115,26 @@ describe("createCategorySchema", () => {
     titleMin: "title min",
     titleMax: "title max",
     colorRequired: "color required",
+    descriptionMax: "desc max",
   })
 
   it("requires title and color", () => {
     expect(schema.safeParse({ title: "a", color: "bg-cat-energy" }).success).toBe(false)
     expect(schema.safeParse({ title: "Love", color: "" }).success).toBe(false)
     expect(schema.safeParse({ title: "Love", color: "bg-cat-love" }).success).toBe(true)
+  })
+
+  it("allows optional description up to 200", () => {
+    expect(
+      schema.safeParse({ title: "Love", color: "bg-cat-love", description: "ok" }).success,
+    ).toBe(true)
+    expect(
+      schema.safeParse({
+        title: "Love",
+        color: "bg-cat-love",
+        description: "x".repeat(201),
+      }).success,
+    ).toBe(false)
   })
 })
 

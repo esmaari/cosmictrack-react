@@ -12,6 +12,8 @@ function isProtectedPath(pathname: string): boolean {
   return (
     p === "/my-journeys" ||
     p.startsWith("/my-journeys/") ||
+    p === "/categories" ||
+    p.startsWith("/categories/") ||
     p === "/profile" ||
     p.startsWith("/profile/") ||
     p.startsWith("/journey/")

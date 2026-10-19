@@ -11,19 +11,19 @@
     "title": "What awaits you on CosmicTrack?",
     "intro": "Save, organize, and learn — three clear doors.",
     "journeys": {
-      "title": "Save your journey",
-      "body": "Keep readings step by step and build your ritual journal.",
+      "title": "Create your tarot journal",
+      "body": "Save your spreads and personal reflections.",
       "cta": "Open your journal"
     },
     "organize": {
-      "title": "Create your space",
-      "body": "Categories and favorites keep what matters close.",
-      "cta": "Organize categories"
+      "title": "Manage your categories",
+      "body": "Create your own categories, edit them, and keep journal entries organized.",
+      "cta": "Manage categories"
     },
     "learn": {
-      "title": "Explore tarot",
-      "body": "Card meanings, symbols, and the tarot library.",
-      "cta": "Open the card library"
+      "title": "Tarot guide",
+      "body": "Learn card meanings and the symbolic world of tarot.",
+      "cta": "Open the guide"
     }
   },
   "ctaPanel": {

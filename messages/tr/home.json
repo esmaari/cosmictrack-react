@@ -11,19 +11,19 @@
     "title": "CosmicTrack’te seni neler bekliyor?",
     "intro": "Kayıt, düzenleme ve öğrenme — üç net kapı.",
     "journeys": {
-      "title": "Yolculuğunu kaydet",
-      "body": "Okumalarını adım adım tut, kendi ritüel günlüğünü oluştur.",
+      "title": "Tarot günlüğünü oluştur",
+      "body": "Açılımlarını ve kişisel yorumlarını kaydet.",
       "cta": "Günlüğünü aç"
     },
     "organize": {
-      "title": "Kendi alanını oluştur",
-      "body": "Kategoriler ve favorilerle önemli olanı yanında tut.",
-      "cta": "Kategorilerini düzenle"
+      "title": "Kategorilerini yönet",
+      "body": "Kendi kategorilerini oluştur, düzenle ve günlük kayıtlarını düzenli tut.",
+      "cta": "Kategorilerini yönet"
     },
     "learn": {
-      "title": "Tarotu keşfet",
-      "body": "Kart anlamları, semboller ve tarot kütüphanesi.",
-      "cta": "Kart kütüphanesine git"
+      "title": "Tarot rehberi",
+      "body": "Kartların anlamlarını ve tarotun sembolik dünyasını öğren.",
+      "cta": "Rehbere git"
     }
   },
   "ctaPanel": {

@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CosmicInput } from "@/shared/ui/CosmicInput"
+import { CosmicTextarea } from "@/shared/ui/CosmicTextarea"
 import DeleteCategoryIcon from "@/features/category-delete/DeleteCategoryIcon"
 import {
   Dialog,
@@ -54,6 +55,7 @@ export default function EditCategoryFormDialog(props: { category: Category }) {
         titleMin: tValidation("titleMin", { min: 2 }),
         titleMax: tValidation("titleMax", { max: 50 }),
         colorRequired: tValidation("colorRequired"),
+        descriptionMax: tValidation("descriptionMax", { max: 200 }),
       }),
     [tValidation],
   )
@@ -63,11 +65,20 @@ export default function EditCategoryFormDialog(props: { category: Category }) {
     defaultValues: {
       title: props.category.title,
       color: props.category.color,
+      description: props.category.description ?? "",
     },
   })
 
   const mutation = useMutation({
-    mutationFn: async ({ title, color }: { title: string; color: string }) => {
+    mutationFn: async ({
+      title,
+      color,
+      description,
+    }: {
+      title: string
+      color: string
+      description?: string
+    }) => {
       const categoryID = props.category.id
 
       const response = await fetch("/api/categories", {
@@ -77,6 +88,7 @@ export default function EditCategoryFormDialog(props: { category: Category }) {
           categoryId: categoryID,
           categoryName: title,
           categoryColor: color,
+          categoryDescription: description ?? "",
         }),
       })
 
@@ -126,6 +138,7 @@ export default function EditCategoryFormDialog(props: { category: Category }) {
           form.reset({
             title: props.category.title,
             color: props.category.color,
+            description: props.category.description ?? "",
           })
         }
       }}
@@ -158,6 +171,24 @@ export default function EditCategoryFormDialog(props: { category: Category }) {
                   <FormLabel>{tFields("title")}</FormLabel>
                   <FormControl>
                     <CosmicInput {...field} disabled={mutation.isPending} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{tFields("description")}</FormLabel>
+                  <FormControl>
+                    <CosmicTextarea
+                      placeholder={t("form.descriptionPlaceholder")}
+                      disabled={mutation.isPending}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

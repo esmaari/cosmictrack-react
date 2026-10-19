@@ -1,5 +1,14 @@
 {
   "addButton": "Add Category",
+  "form": {
+    "descriptionPlaceholder": "Short description (optional)"
+  },
+  "manage": {
+    "title": "Manage your categories",
+    "subtitle": "See all your categories in one place, edit them, or create new ones.",
+    "emptyTitle": "No categories yet",
+    "emptyHint": "Create your first category to keep journal entries organized."
+  },
   "addDialog": {
     "title": "Add New Category",
     "description": "Fill in the details below to create a new category.",

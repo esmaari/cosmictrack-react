@@ -1,5 +1,14 @@
 {
   "addButton": "Kategori Ekle",
+  "form": {
+    "descriptionPlaceholder": "Kısa bir açıklama (isteğe bağlı)"
+  },
+  "manage": {
+    "title": "Kategorilerini yönet",
+    "subtitle": "Kategorilerini tek bir yerde gör, düzenle veya yenilerini oluştur.",
+    "emptyTitle": "Henüz kategori yok",
+    "emptyHint": "Günlük kayıtlarını düzenli tutmak için ilk kategorini oluştur."
+  },
   "addDialog": {
     "title": "Yeni Kategori Ekle",
     "description": "Yeni bir kategori oluşturmak için aşağıdaki alanları doldur.",

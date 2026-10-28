@@ -1,6 +1,5 @@
 import { FunctionsHttpError } from "@supabase/supabase-js"
 import { createSupabaseBrowserClient } from "@/core/supabase/browser"
-import { getTarotReadingCards } from "@/shared/content/tarot"
 import type { PickedCard } from "@/shared/types/db"
 
 export type AskAIResult = {
@@ -34,6 +33,9 @@ async function parseFunctionError(
         message: "LIMIT_REACHED",
       }
     }
+    if (code === "AI_DISABLED") {
+      return { code, message: body.error ?? "AI is disabled" }
+    }
     if (body.error) {
       return { code, message: body.error }
     }
@@ -46,35 +48,17 @@ async function parseFunctionError(
   }
 }
 
+/**
+ * Asks the tarot AI Edge Function for a step meaning.
+ * Sends only structured fields — the server owns the prompt template.
+ */
 export async function askAI(
   pickedCards: PickedCard[],
   title: string,
   locale?: string | null,
 ): Promise<AskAIResult> {
   const supabase = createSupabaseBrowserClient()
-  const deck = getTarotReadingCards(locale)
-
-  const cardsInfo = pickedCards
-    .map((card) => {
-      const name = deck.find((c) => c.id === card.id)?.name
-      const orientation = card.isReversed ? "Reversed" : "Upright"
-      return `${name ?? card.id} (${orientation})`
-    })
-    .join("\n")
-
-  const prompt = `
-Rolün: Sen bilge, gizemli ve deneyimli bir Tarot yorumcususun.
-
-Kullanıcının Sorusu / Odak Noktası: "${title}"
-Seçilen Kartlar:
-${cardsInfo}
-
-Senden İstenenler ve Kesin Kurallar:
-1. Eğer kullanıcının sorusu/odak noktası anlamsız, eksik veya belirsizse, soruyu mantıklı hale getirmeye çalışmak yerine doğrudan seçilen kartların kendi aralarındaki kombinasyonuna ve genel enerjisine en yakın, en anlamlı yorumu yap.
-2. Dil Kuralları: Eğer soru İngilizce ise tüm yanıt kesinlikle İngilizce olmalıdır. Eğer soru Türkçe ise tüm yanıt kesinlikle Türkçe olmalıdır. Türkçe yanıtlarda kartlardan bahsederken önce Türkçe adını yaz, hemen yanına parantez içinde İngilizce adını ve yönünü ekle. Örnek: "Deli (The Fool - Düz)" veya "Ölüm (Death - Ters)". İngilizce yanıtlarda ise normal İngilizce kart adlarını ve yönlerini kullan (Örnek: "The Fool - Upright").
-3. Format Kuralları: Sadece düz metin (plain text) olarak yanıt ver. Asla emoji kullanma. Metin içinde asla bold (**), italic (*), liste işaretleri veya özel markdown formatları kullanma. Tamamen düz, akıcı paragraflar şeklinde yaz.
-4. Uzunluk: Yorumun derin, bilgece ama net olsun. Maksimum 150 kelimeyi geçmesin.
-`.trim()
+  const trimmedTitle = title.trim()
 
   const { data, error } = await supabase.functions.invoke<{
     text?: string
@@ -82,7 +66,14 @@ Senden İstenenler ve Kesin Kurallar:
     code?: string
     error?: string
   }>("ai", {
-    body: { prompt },
+    body: {
+      title: trimmedTitle,
+      locale: locale === "en" ? "en" : "tr",
+      cards: pickedCards.map((card) => ({
+        id: card.id,
+        isReversed: card.isReversed,
+      })),
+    },
   })
 
   if (error) {
@@ -95,6 +86,10 @@ Senden İstenenler ve Kesin Kurallar:
 
   if (data?.code === "LIMIT_REACHED" || data?.error === "AI limit reached") {
     throw new AskAIError("LIMIT_REACHED", "LIMIT_REACHED")
+  }
+
+  if (data?.code === "AI_DISABLED") {
+    throw new AskAIError(data.error ?? "AI is disabled", "AI_DISABLED")
   }
 
   if (!data?.text) {

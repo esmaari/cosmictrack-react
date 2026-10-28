@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { Link, useRouter } from "@/i18n/navigation"
-import { Suspense, useEffect, useMemo, useState } from "react"
+import { Suspense, useEffect, useMemo, useSyncExternalStore } from "react"
 import { useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -66,11 +66,12 @@ function AuthPageContent() {
   const isRegister = mode === "register"
   const isForgot = mode === "forgot"
   const afterAuthPath = safeAuthNextPath(searchParams.get("next"))
-  const [clientReady, setClientReady] = useState(false)
-
-  useEffect(() => {
-    setClientReady(true)
-  }, [])
+  // Client-only flag for E2E (data-auth-ready) without setState-in-effect.
+  const clientReady = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
 
   useEffect(() => {
     if (searchParams.get("error") === "link") {

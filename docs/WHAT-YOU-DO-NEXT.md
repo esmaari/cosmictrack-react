@@ -49,7 +49,20 @@ Redeploy.
 
 ## Not (AI edge)
 
-`supabase/functions/ai` hâlâ legacy/edge secret formatında; AI v1’de kapalı. AI açılınca edge function ayrı migrate edilir.
+UI flag: `NEXT_PUBLIC_AI_ENABLED=true` (Netlify / `.env.local`).
+
+Edge kill-switch: Supabase → Edge Functions → `ai` → Secrets → `AI_ENABLED=true`.
+Without that secret the function returns `503 AI_DISABLED`.
+
+Apply SQL migration first (atomic quota):
+`supabase/migrations/20261028150000_reserve_ai_credit.sql` → SQL Editor → Run.
+
+Then deploy the function:
+```bash
+supabase functions deploy ai
+```
+(Or Dashboard.) Client sends `{ title, locale, cards }` only — not a raw `prompt`.
+Quota: `reserve_ai_credit` before OpenAI; `release_ai_credit` if upstream fails.
 
 ## Site adı düzeltmesi (cosmictrac → cosmictrack)
 

@@ -28,7 +28,9 @@ test.describe("authenticated session", () => {
     )
   })
 
-  test("login reaches my-journeys and profile (free beta)", async ({ page }) => {
+  test("login reaches my-journeys, profile, and categories (free beta)", async ({
+    page,
+  }) => {
     const { email, password } = credentials!
 
     // Explicit EN path — Playwright Chrome often prefers en via Accept-Language.
@@ -47,5 +49,12 @@ test.describe("authenticated session", () => {
     await page.goto("/en/profile")
     await expect(page.getByRole("heading", { name: /Profile/i })).toBeVisible()
     await expect(page.getByText(/free|AI|coming/i).first()).toBeVisible()
+
+    // Protected categories manage surface (CRUD UI; no write in CI without secrets).
+    await page.goto("/en/categories")
+    await expect(page).toHaveURL(/\/categories/)
+    await expect(
+      page.getByRole("heading", { name: /Manage your categories/i }),
+    ).toBeVisible()
   })
 })

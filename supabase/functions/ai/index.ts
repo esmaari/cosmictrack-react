@@ -31,11 +31,51 @@ type CreditRow = {
   remaining: number;
 };
 
-function jsonResponse(body: unknown, status: number): Response {
+type AiLogFields = {
+  requestId: string;
+  outcome: string;
+  status: number;
+  latencyMs: number;
+  userHash?: string;
+  locale?: string;
+  cardCount?: number;
+  titleLen?: number;
+  plan?: string | null;
+  promptTokens?: number;
+  completionTokens?: number;
+  totalTokens?: number;
+  upstreamStatus?: number;
+};
+
+function jsonResponse(body: unknown, status: number, requestId?: string): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json", ...corsHeaders },
+    headers: {
+      "Content-Type": "application/json",
+      ...corsHeaders,
+      ...(requestId ? { "X-Request-Id": requestId } : {}),
+    },
   });
+}
+
+/** One JSON line — never log secrets, tokens, emails, or raw titles. */
+function logAi(fields: AiLogFields): void {
+  console.log(JSON.stringify({ scope: "ai", ...fields }));
+}
+
+/**
+ * Short fingerprint of the user id for correlation.
+ * Optional Edge secret LOG_HASH_SALT improves irreversibility — set in Dashboard;
+ * never commit the value. Without it we still hash the id alone (no raw UUID in logs).
+ */
+async function hashUserId(userId: string): Promise<string> {
+  const salt = Deno.env.get("LOG_HASH_SALT") ?? "";
+  const bytes = new TextEncoder().encode(`${salt}:${userId}`);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
+    .slice(0, 12);
 }
 
 function resolveLocale(locale: unknown): "tr" | "en" {
@@ -161,13 +201,29 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  const requestId = crypto.randomUUID();
+  const started = Date.now();
+  const latency = () => Date.now() - started;
+
   if (Deno.env.get("AI_ENABLED") !== "true") {
-    return jsonResponse({ error: "AI is disabled", code: "AI_DISABLED" }, 503);
+    logAi({
+      requestId,
+      outcome: "AI_DISABLED",
+      status: 503,
+      latencyMs: latency(),
+    });
+    return jsonResponse({ error: "AI is disabled", code: "AI_DISABLED" }, 503, requestId);
   }
 
   const authHeader = req.headers.get("Authorization");
   if (!authHeader) {
-    return jsonResponse({ error: "Unauthorized" }, 401);
+    logAi({
+      requestId,
+      outcome: "UNAUTHORIZED",
+      status: 401,
+      latencyMs: latency(),
+    });
+    return jsonResponse({ error: "Unauthorized" }, 401, requestId);
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
@@ -175,10 +231,22 @@ Deno.serve(async (req) => {
   const serviceRoleKey = Deno.env.get("SERVICE_ROLE_KEY") ?? "";
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    return jsonResponse({ error: "Missing Supabase env" }, 500);
+    logAi({
+      requestId,
+      outcome: "MISCONFIGURED",
+      status: 500,
+      latencyMs: latency(),
+    });
+    return jsonResponse({ error: "Missing Supabase env" }, 500, requestId);
   }
   if (!serviceRoleKey) {
-    return jsonResponse({ error: "Missing SERVICE_ROLE_KEY" }, 500);
+    logAi({
+      requestId,
+      outcome: "MISCONFIGURED",
+      status: 500,
+      latencyMs: latency(),
+    });
+    return jsonResponse({ error: "Missing SERVICE_ROLE_KEY" }, 500, requestId);
   }
 
   const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
@@ -191,39 +259,82 @@ Deno.serve(async (req) => {
   } = await supabaseAuth.auth.getUser();
 
   if (authError || !user) {
-    return jsonResponse({ error: "Unauthorized" }, 401);
+    logAi({
+      requestId,
+      outcome: "UNAUTHORIZED",
+      status: 401,
+      latencyMs: latency(),
+    });
+    return jsonResponse({ error: "Unauthorized" }, 401, requestId);
   }
+
+  const userHash = await hashUserId(user.id);
 
   try {
     const body = await req.json();
 
     // Reject legacy client-built prompts — prompt must be assembled on the server.
     if (typeof body?.prompt === "string") {
+      logAi({
+        requestId,
+        userHash,
+        outcome: "INVALID_INPUT",
+        status: 400,
+        latencyMs: latency(),
+      });
       return jsonResponse(
         { error: "Client prompts are not accepted", code: "INVALID_INPUT" },
         400,
+        requestId,
       );
     }
 
     const titleRaw = typeof body?.title === "string" ? body.title.trim() : "";
     if (!titleRaw) {
-      return jsonResponse({ error: "Missing title", code: "INVALID_INPUT" }, 400);
+      logAi({
+        requestId,
+        userHash,
+        outcome: "INVALID_INPUT",
+        status: 400,
+        latencyMs: latency(),
+        titleLen: 0,
+      });
+      return jsonResponse({ error: "Missing title", code: "INVALID_INPUT" }, 400, requestId);
     }
     if (titleRaw.length > TITLE_MAX) {
+      logAi({
+        requestId,
+        userHash,
+        outcome: "INVALID_INPUT",
+        status: 400,
+        latencyMs: latency(),
+        titleLen: titleRaw.length,
+      });
       return jsonResponse(
         { error: `Title must be at most ${TITLE_MAX} characters`, code: "INVALID_INPUT" },
         400,
+        requestId,
       );
     }
 
     const parsedCards = parseCards(body?.cards);
     if (!parsedCards.ok) {
-      return jsonResponse({ error: parsedCards.error, code: "INVALID_INPUT" }, 400);
+      logAi({
+        requestId,
+        userHash,
+        outcome: "INVALID_INPUT",
+        status: 400,
+        latencyMs: latency(),
+        titleLen: titleRaw.length,
+      });
+      return jsonResponse({ error: parsedCards.error, code: "INVALID_INPUT" }, 400, requestId);
     }
 
     const locale = resolveLocale(body?.locale);
     const systemPrompt = buildSystemPrompt(locale);
     const userPrompt = buildUserPrompt(titleRaw, parsedCards.cards, locale);
+    const cardCount = parsedCards.cards.length;
+    const titleLen = titleRaw.length;
 
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
@@ -234,8 +345,22 @@ Deno.serve(async (req) => {
     );
 
     if (reserveError) {
-      console.error("reserve_ai_credit failed:", reserveError);
-      return jsonResponse({ error: "Failed to reserve AI credit", code: "INTERNAL" }, 500);
+      console.error("reserve_ai_credit failed", { requestId, code: reserveError.code });
+      logAi({
+        requestId,
+        userHash,
+        outcome: "RESERVE_FAILED",
+        status: 500,
+        latencyMs: latency(),
+        locale,
+        cardCount,
+        titleLen,
+      });
+      return jsonResponse(
+        { error: "Failed to reserve AI credit", code: "INTERNAL" },
+        500,
+        requestId,
+      );
     }
 
     const credit = (Array.isArray(reserveRows) ? reserveRows[0] : reserveRows) as
@@ -243,10 +368,31 @@ Deno.serve(async (req) => {
       | undefined;
 
     if (!credit || credit.plan == null) {
-      return jsonResponse({ error: "Profile not found" }, 404);
+      logAi({
+        requestId,
+        userHash,
+        outcome: "PROFILE_NOT_FOUND",
+        status: 404,
+        latencyMs: latency(),
+        locale,
+        cardCount,
+        titleLen,
+      });
+      return jsonResponse({ error: "Profile not found" }, 404, requestId);
     }
 
     if (!credit.allowed) {
+      logAi({
+        requestId,
+        userHash,
+        outcome: "LIMIT_REACHED",
+        status: 403,
+        latencyMs: latency(),
+        locale,
+        cardCount,
+        titleLen,
+        plan: credit.plan,
+      });
       return jsonResponse(
         {
           error: "AI limit reached",
@@ -257,18 +403,32 @@ Deno.serve(async (req) => {
           remaining: 0,
         },
         403,
+        requestId,
       );
     }
 
     const openaiKey = Deno.env.get("OPENAI_API_KEY");
     if (!openaiKey) {
       await supabaseAdmin.rpc("release_ai_credit", { p_user_id: user.id });
-      return jsonResponse({ error: "AI is not configured" }, 500);
+      logAi({
+        requestId,
+        userHash,
+        outcome: "OPENAI_NOT_CONFIGURED",
+        status: 500,
+        latencyMs: latency(),
+        locale,
+        cardCount,
+        titleLen,
+        plan: credit.plan,
+      });
+      return jsonResponse({ error: "AI is not configured" }, 500, requestId);
     }
 
     const releaseCredit = async () => {
       const { error } = await supabaseAdmin.rpc("release_ai_credit", { p_user_id: user.id });
-      if (error) console.error("release_ai_credit failed:", error);
+      if (error) {
+        console.error("release_ai_credit failed", { requestId, code: error.code });
+      }
     };
 
     let r: Response;
@@ -292,53 +452,165 @@ Deno.serve(async (req) => {
         }),
       });
     } catch (fetchError) {
-      console.error("OpenAI fetch failed:", fetchError);
+      const timedOut = fetchError instanceof DOMException && fetchError.name === "TimeoutError";
+      console.error("OpenAI fetch failed", {
+        requestId,
+        timedOut,
+        name: fetchError instanceof Error ? fetchError.name : "unknown",
+      });
       await releaseCredit();
-      return jsonResponse({ error: "AI request timed out or failed", code: "AI_UPSTREAM" }, 504);
+      logAi({
+        requestId,
+        userHash,
+        outcome: timedOut ? "AI_TIMEOUT" : "AI_UPSTREAM",
+        status: 504,
+        latencyMs: latency(),
+        locale,
+        cardCount,
+        titleLen,
+        plan: credit.plan,
+      });
+      return jsonResponse(
+        { error: "AI request timed out or failed", code: "AI_UPSTREAM" },
+        504,
+        requestId,
+      );
     }
 
     const bodyText = await r.text();
 
     if (!r.ok) {
-      console.error("OpenAI HTTP error:", r.status, bodyText.slice(0, 500));
+      console.error("OpenAI HTTP error", { requestId, upstreamStatus: r.status });
       await releaseCredit();
-      return jsonResponse({ error: "AI upstream error", code: "AI_UPSTREAM" }, 502);
+      logAi({
+        requestId,
+        userHash,
+        outcome: "AI_UPSTREAM",
+        status: 502,
+        latencyMs: latency(),
+        locale,
+        cardCount,
+        titleLen,
+        plan: credit.plan,
+        upstreamStatus: r.status,
+      });
+      return jsonResponse({ error: "AI upstream error", code: "AI_UPSTREAM" }, 502, requestId);
     }
 
-    let data: { choices?: Array<{ message?: { content?: string } }> };
+    let data: {
+      choices?: Array<{ message?: { content?: string } }>;
+      usage?: {
+        prompt_tokens?: number;
+        completion_tokens?: number;
+        total_tokens?: number;
+      };
+    };
     try {
       data = JSON.parse(bodyText);
     } catch {
-      console.error("OpenAI invalid JSON");
+      console.error("OpenAI invalid JSON envelope", { requestId });
       await releaseCredit();
-      return jsonResponse({ error: "Invalid AI response", code: "AI_UPSTREAM" }, 502);
+      logAi({
+        requestId,
+        userHash,
+        outcome: "AI_UPSTREAM",
+        status: 502,
+        latencyMs: latency(),
+        locale,
+        cardCount,
+        titleLen,
+        plan: credit.plan,
+      });
+      return jsonResponse({ error: "Invalid AI response", code: "AI_UPSTREAM" }, 502, requestId);
     }
+
+    const promptTokens = data.usage?.prompt_tokens;
+    const completionTokens = data.usage?.completion_tokens;
+    const totalTokens = data.usage?.total_tokens;
 
     const content = data?.choices?.[0]?.message?.content?.trim?.() ?? "";
     if (!content) {
       await releaseCredit();
-      return jsonResponse({ error: "Empty AI response", code: "EMPTY_RESPONSE" }, 502);
+      logAi({
+        requestId,
+        userHash,
+        outcome: "EMPTY_RESPONSE",
+        status: 502,
+        latencyMs: latency(),
+        locale,
+        cardCount,
+        titleLen,
+        plan: credit.plan,
+        promptTokens,
+        completionTokens,
+        totalTokens,
+      });
+      return jsonResponse({ error: "Empty AI response", code: "EMPTY_RESPONSE" }, 502, requestId);
     }
 
     const reading = parseAiReadingFromModel(content);
     if (!reading.ok) {
-      console.error("AI reading validation failed:", reading.error);
+      console.error("AI reading validation failed", { requestId, reason: reading.error });
       await releaseCredit();
+      logAi({
+        requestId,
+        userHash,
+        outcome: "INVALID_AI_READING",
+        status: 502,
+        latencyMs: latency(),
+        locale,
+        cardCount,
+        titleLen,
+        plan: credit.plan,
+        promptTokens,
+        completionTokens,
+        totalTokens,
+      });
       return jsonResponse(
         { error: "AI returned an invalid reading", code: "INVALID_AI_READING" },
         502,
+        requestId,
       );
     }
 
-    return jsonResponse({
-      interpretation: reading.interpretation,
+    logAi({
+      requestId,
+      userHash,
+      outcome: "OK",
+      status: 200,
+      latencyMs: latency(),
+      locale,
+      cardCount,
+      titleLen,
       plan: credit.plan,
-      limit: credit.limit_count,
-      used: credit.used,
-      remaining: credit.remaining,
-    }, 200);
+      promptTokens,
+      completionTokens,
+      totalTokens,
+    });
+
+    return jsonResponse(
+      {
+        interpretation: reading.interpretation,
+        plan: credit.plan,
+        limit: credit.limit_count,
+        used: credit.used,
+        remaining: credit.remaining,
+      },
+      200,
+      requestId,
+    );
   } catch (e) {
-    console.error("AI function error:", e);
-    return jsonResponse({ error: "Unexpected AI error", code: "INTERNAL" }, 500);
+    console.error("AI function error", {
+      requestId,
+      name: e instanceof Error ? e.name : "unknown",
+    });
+    logAi({
+      requestId,
+      userHash,
+      outcome: "INTERNAL",
+      status: 500,
+      latencyMs: latency(),
+    });
+    return jsonResponse({ error: "Unexpected AI error", code: "INTERNAL" }, 500, requestId);
   }
 });

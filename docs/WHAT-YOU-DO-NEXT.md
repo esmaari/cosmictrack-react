@@ -66,6 +66,21 @@ Quota: `reserve_ai_credit` before OpenAI; `release_ai_credit` if upstream fails.
 Response shape: `{ interpretation, plan, limit, used, remaining }` (JSON from the model, validated server-side).
 Invalid model JSON → `502 INVALID_AI_READING` and credit released.
 
+### Observability (Edge logs)
+
+Each AI request logs one JSON line (`scope: "ai"`) to Supabase Edge Function logs:
+
+- `requestId`, `outcome` (e.g. `OK`, `LIMIT_REACHED`), `status`, `latencyMs`
+- `userHash` — SHA-256 fingerprint (not email / not raw UUID)
+- `locale`, `cardCount`, `titleLen` (title text is **not** logged)
+- `plan`, token counts when OpenAI returns `usage`
+
+Optional Edge secret `LOG_HASH_SALT` (Dashboard → Edge Functions → `ai` → Secrets):
+set a long random string yourself — **do not paste it into chat or git**.
+Without it, hashing still runs on the user id alone.
+
+Response header: `X-Request-Id` (same id as the log line).
+
 ## Site adı düzeltmesi (cosmictrac → cosmictrack)
 
 Repo içinde eski `cosmictrac-react` URL’si yok. **Senin Dashboard’da** güncelle:

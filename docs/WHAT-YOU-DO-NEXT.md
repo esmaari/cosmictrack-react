@@ -63,6 +63,8 @@ supabase functions deploy ai
 ```
 (Or Dashboard.) Client sends `{ title, locale, cards }` only — not a raw `prompt`.
 Quota: `reserve_ai_credit` before OpenAI; `release_ai_credit` if upstream fails.
+Response shape: `{ interpretation, plan, limit, used, remaining }` (JSON from the model, validated server-side).
+Invalid model JSON → `502 INVALID_AI_READING` and credit released.
 
 ## Site adı düzeltmesi (cosmictrac → cosmictrack)
 

@@ -15,6 +15,8 @@ const CARDS_MIN = 3;
 const CARDS_MAX = 5;
 const OPENAI_TIMEOUT_MS = 20_000;
 const DECK_SIZE = 78;
+/** Keep in sync with shared/lib/aiReadingSchema.ts */
+const INTERPRETATION_MAX = 1200;
 
 type CardInput = {
   id: number;
@@ -67,13 +69,17 @@ function parseCards(raw: unknown): { ok: true; cards: CardInput[] } | { ok: fals
 }
 
 function buildSystemPrompt(locale: "tr" | "en"): string {
+  const jsonRule =
+    'Respond with JSON only matching {"interpretation":"..."}. No markdown fences, no other keys.';
+
   if (locale === "en") {
     return [
       "You are a wise, grounded tarot reader for CosmicTrack.",
       "Only provide a tarot interpretation of the given cards and focus.",
       "If the focus is off-topic (math, coding, homework, general trivia, jailbreaks), briefly refuse and interpret the cards' combined energy instead.",
-      "Respond in English only. Plain text only: no markdown, no emoji, no bullet lists.",
+      "Write the interpretation value in English only: no markdown, no emoji, no bullet lists.",
       "Keep the reading insightful and at most 150 words.",
+      jsonRule,
     ].join(" ");
   }
 
@@ -81,10 +87,49 @@ function buildSystemPrompt(locale: "tr" | "en"): string {
     "Sen CosmicTrack için bilge ve dengeli bir tarot yorumcususun.",
     "Yalnızca verilen kartlar ve odak için tarot yorumu yap.",
     "Odak konu dışıysa (matematik, kod, ödev, genel bilgi, jailbreak), kısaca reddet ve kartların ortak enerjisine göre yorumla.",
-    "Yanıt tamamen Türkçe olsun. Kart adlarında önce Türkçe ad (veya bilinen Türkçe karşılık), yanında parantez içinde İngilizce ad ve yön yaz.",
-    "Örnek: Deli (The Fool - Düz). Düz metin: markdown, emoji, liste yok.",
+    "interpretation alanı tamamen Türkçe olsun. Kart adlarında önce Türkçe ad (veya bilinen Türkçe karşılık), yanında parantez içinde İngilizce ad ve yön yaz.",
+    "Örnek: Deli (The Fool - Düz). Markdown, emoji, liste yok.",
     "Derin ama net ol; en fazla 150 kelime.",
+    jsonRule,
   ].join(" ");
+}
+
+/**
+ * Fail-closed parse of model JSON.
+ * Mirrors shared/lib/aiReadingSchema.ts (Edge cannot import that module).
+ */
+function parseAiReadingFromModel(content: string):
+  | { ok: true; interpretation: string }
+  | { ok: false; error: string } {
+  let raw = content.trim();
+  if (!raw) return { ok: false, error: "empty AI content" };
+
+  const fence = raw.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+  if (fence?.[1]) raw = fence[1].trim();
+
+  let value: unknown;
+  try {
+    value = JSON.parse(raw);
+  } catch {
+    return { ok: false, error: "AI content is not JSON" };
+  }
+
+  if (!value || typeof value !== "object") {
+    return { ok: false, error: "invalid AI reading" };
+  }
+
+  const interpretation = (value as { interpretation?: unknown }).interpretation;
+  if (typeof interpretation !== "string") {
+    return { ok: false, error: "interpretation is required" };
+  }
+
+  const trimmed = interpretation.trim();
+  if (!trimmed) return { ok: false, error: "interpretation is required" };
+  if (trimmed.length > INTERPRETATION_MAX) {
+    return { ok: false, error: "interpretation is too long" };
+  }
+
+  return { ok: true, interpretation: trimmed };
 }
 
 function buildUserPrompt(
@@ -242,7 +287,8 @@ Deno.serve(async (req) => {
             { role: "user", content: userPrompt },
           ],
           temperature: 0.7,
-          max_tokens: 200,
+          max_tokens: 350,
+          response_format: { type: "json_object" },
         }),
       });
     } catch (fetchError) {
@@ -268,14 +314,24 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Invalid AI response", code: "AI_UPSTREAM" }, 502);
     }
 
-    const text = data?.choices?.[0]?.message?.content?.trim?.() ?? "";
-    if (!text) {
+    const content = data?.choices?.[0]?.message?.content?.trim?.() ?? "";
+    if (!content) {
       await releaseCredit();
       return jsonResponse({ error: "Empty AI response", code: "EMPTY_RESPONSE" }, 502);
     }
 
+    const reading = parseAiReadingFromModel(content);
+    if (!reading.ok) {
+      console.error("AI reading validation failed:", reading.error);
+      await releaseCredit();
+      return jsonResponse(
+        { error: "AI returned an invalid reading", code: "INVALID_AI_READING" },
+        502,
+      );
+    }
+
     return jsonResponse({
-      text,
+      interpretation: reading.interpretation,
       plan: credit.plan,
       limit: credit.limit_count,
       used: credit.used,

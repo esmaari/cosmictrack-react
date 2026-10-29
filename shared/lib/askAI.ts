@@ -1,9 +1,10 @@
 import { FunctionsHttpError } from "@supabase/supabase-js"
 import { createSupabaseBrowserClient } from "@/core/supabase/browser"
 import type { PickedCard } from "@/shared/types/db"
+import { parseAiReading } from "@/shared/lib/aiReadingSchema"
 
 export type AskAIResult = {
-  text: string
+  interpretation: string
   remaining: number
 }
 
@@ -51,6 +52,7 @@ async function parseFunctionError(
 /**
  * Asks the tarot AI Edge Function for a step meaning.
  * Sends only structured fields — the server owns the prompt template.
+ * Expects a validated `{ interpretation }` reading from the Edge Function.
  */
 export async function askAI(
   pickedCards: PickedCard[],
@@ -61,6 +63,8 @@ export async function askAI(
   const trimmedTitle = title.trim()
 
   const { data, error } = await supabase.functions.invoke<{
+    interpretation?: string
+    /** Legacy plain-text field from older Edge deploys. */
     text?: string
     remaining?: number
     code?: string
@@ -92,12 +96,30 @@ export async function askAI(
     throw new AskAIError(data.error ?? "AI is disabled", "AI_DISABLED")
   }
 
-  if (!data?.text) {
-    throw new AskAIError(data?.error ?? "AI returned an empty response.", "EMPTY_RESPONSE")
+  if (data?.code === "INVALID_AI_READING") {
+    throw new AskAIError(
+      data.error ?? "AI returned an invalid reading.",
+      "INVALID_AI_READING",
+    )
+  }
+
+  const reading = parseAiReading(
+    data?.interpretation != null
+      ? { interpretation: data.interpretation }
+      : data?.text != null
+        ? { interpretation: data.text }
+        : null,
+  )
+
+  if (!reading.ok) {
+    throw new AskAIError(
+      data?.error ?? "AI returned an empty response.",
+      "EMPTY_RESPONSE",
+    )
   }
 
   return {
-    text: data.text,
-    remaining: typeof data.remaining === "number" ? data.remaining : 0,
+    interpretation: reading.data.interpretation,
+    remaining: typeof data?.remaining === "number" ? data.remaining : 0,
   }
 }

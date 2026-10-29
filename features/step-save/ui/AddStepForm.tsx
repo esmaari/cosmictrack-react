@@ -111,7 +111,7 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
         setAiLoading(true)
         try {
             const result = await askAI(form.getValues("cards"), form.getValues("title"), locale)
-            form.setValue("meaning", result.text, { shouldValidate: true })
+            form.setValue("meaning", result.interpretation, { shouldValidate: true })
             await refetchProfile()
         } catch (error) {
             const message =

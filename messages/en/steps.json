@@ -18,6 +18,7 @@
     "toastFailed": "Failed to add step",
     "toastSaveFailed": "Failed to save step",
     "aiFailed": "AI request failed",
+    "aiFailedRetry": "AI request failed. You still have {remaining} left — you can try the same question again.",
     "aiLimitReached": "You've used all your AI interpretations for this period. Free plan: 1 per day. Premium: 100 per month.",
     "aiRemainingPremium": "{remaining}/{limit} AI left {period}",
     "aiRemainingFree": "{remaining} AI left {period}",

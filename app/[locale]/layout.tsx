@@ -5,6 +5,7 @@ import type { ReactNode } from "react"
 import { routing } from "@/i18n/routing"
 import Header from "@/shared/ui/Header"
 import SiteFooter from "@/shared/ui/SiteFooter"
+import SkipToContentLink from "@/shared/ui/SkipToContentLink"
 
 type Props = {
   children: ReactNode
@@ -27,8 +28,11 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <NextIntlClientProvider messages={messages}>
+      <SkipToContentLink />
       <Header />
-      <div className="flex min-h-0 flex-1 flex-col">{children}</div>
+      <main id="main-content" className="flex min-h-0 flex-1 flex-col">
+        {children}
+      </main>
       <SiteFooter />
     </NextIntlClientProvider>
   )

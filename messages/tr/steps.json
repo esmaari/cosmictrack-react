@@ -18,6 +18,7 @@
     "toastFailed": "Adım eklenemedi",
     "toastSaveFailed": "Adım kaydedilemedi",
     "aiFailed": "AI isteği başarısız",
+    "aiFailedRetry": "AI isteği başarısız. Hâlâ {remaining} hakkın var — aynı soruyu tekrar deneyebilirsin.",
     "aiLimitReached": "Bu dönem için tüm AI yorum haklarını kullandın. Ücretsiz plan: günde 1. Premium: ayda 100.",
     "aiRemainingPremium": "{period} {remaining}/{limit} AI kaldı",
     "aiRemainingFree": "{period} {remaining} AI kaldı",

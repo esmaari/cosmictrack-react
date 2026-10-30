@@ -43,7 +43,7 @@ export default function JourneySearchInput() {
   return (
     <div className="relative w-full min-w-0 sm:max-w-xs">
       <Search
-        className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-light"
+        className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-on-dark/65"
         aria-hidden
       />
       <input
@@ -53,7 +53,7 @@ export default function JourneySearchInput() {
         onChange={(e) => setValue(e.target.value)}
         placeholder={tPlaceholders("searchJourneys")}
         aria-label={tPlaceholders("searchJourneys")}
-        className="h-10 w-full rounded-lg border border-border-dark bg-app-darker pl-9 pr-3 text-sm text-on-dark placeholder:text-light focus:border-heading/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
+        className="h-10 w-full rounded-lg border border-border-dark bg-app-darker pl-9 pr-3 text-sm text-on-dark placeholder:text-on-dark/65 focus:border-heading/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral"
       />
     </div>
   )

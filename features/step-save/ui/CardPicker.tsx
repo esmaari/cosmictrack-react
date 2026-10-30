@@ -116,7 +116,7 @@ export default function CardPicker(props: {
 
   return (
     <div className="text-center">
-      <p className="mb-3 text-sm text-primary/85">
+      <p className="mb-3 text-sm text-primary/85" aria-live="polite" aria-atomic="true">
         {t("choose", { count: pickedCards.length })}
       </p>
       <div className="mx-auto flex w-full max-w-[min(1100px,100%)] justify-center overflow-x-auto overflow-y-visible px-1 py-2 [-webkit-overflow-scrolling:touch]">
@@ -137,10 +137,10 @@ export default function CardPicker(props: {
                 aria-label={card.name}
                 disabled={confirmed}
                 className={cn(
-                  "h-30 w-14 shrink-0 overflow-hidden rounded-md bg-app-darker transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral",
+                  "h-30 w-14 shrink-0 overflow-hidden rounded-md bg-app-darker motion-safe:transition-transform motion-safe:duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-neutral",
                   isSelected
-                    ? "z-20 scale-105 border-2 border-heading"
-                    : "z-10 border border-border-dark hover:-translate-y-1",
+                    ? "z-20 border-2 border-heading motion-safe:scale-105"
+                    : "z-10 border border-border-dark motion-safe:hover:-translate-y-1",
                 )}
               >
                 <img

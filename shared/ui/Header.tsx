@@ -49,14 +49,24 @@ function AuthNavLinks({
         <>
           <Link
             href="/my-journeys"
-            className={cn(navClass("/my-journeys"), "min-h-10 flex-1 text-center")}
+            className={cn(navClass("/my-journeys"), "min-h-10 flex-1 px-1 text-center text-xs sm:text-sm")}
             aria-current={pathname === "/my-journeys" ? "page" : undefined}
           >
             {t("myJourneys")}
           </Link>
           <Link
+            href="/categories"
+            className={cn(
+              navClass("/categories", true),
+              "min-h-10 flex-1 px-1 text-center text-xs sm:text-sm",
+            )}
+            aria-current={pathname.startsWith("/categories") ? "page" : undefined}
+          >
+            {t("categories")}
+          </Link>
+          <Link
             href="/profile"
-            className={cn(navClass("/profile"), "min-h-10 flex-1 text-center")}
+            className={cn(navClass("/profile"), "min-h-10 flex-1 px-1 text-center text-xs sm:text-sm")}
             aria-current={pathname === "/profile" ? "page" : undefined}
           >
             {t("profile")}

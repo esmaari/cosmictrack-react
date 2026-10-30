@@ -114,14 +114,20 @@ export default function AddStepForm(props: {journeyId: string, onSaveButtonClick
             form.setValue("meaning", result.interpretation, { shouldValidate: true })
             await refetchProfile()
         } catch (error) {
-            const message =
-                error instanceof AskAIError && error.code === "LIMIT_REACHED"
-                    ? t("form.aiLimitReached")
-                    : error instanceof AskAIError
-                      ? t("form.aiFailed")
-                      : error instanceof Error && error.message
-                        ? error.message
-                        : t("form.aiFailed")
+            let message = t("form.aiFailed")
+            if (error instanceof AskAIError && error.code === "LIMIT_REACHED") {
+                message = t("form.aiLimitReached")
+            } else if (
+                error instanceof AskAIError &&
+                credits &&
+                credits.remaining > 0
+            ) {
+                message = t("form.aiFailedRetry", { remaining: credits.remaining })
+            } else if (error instanceof AskAIError) {
+                message = t("form.aiFailed")
+            } else if (error instanceof Error && error.message) {
+                message = error.message
+            }
             toast.error(message)
             await refetchProfile()
         } finally {

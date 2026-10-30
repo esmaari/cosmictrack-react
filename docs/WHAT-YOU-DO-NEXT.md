@@ -81,6 +81,12 @@ Without it, hashing still runs on the user id alone.
 
 Response header: `X-Request-Id` (same id as the log line).
 
+CORS: allowlist only (`localhost:3000` + production Netlify). Optional Edge secret
+`CORS_ALLOWED_ORIGINS` (comma-separated) for preview URLs — no `*`.
+
+AI plan limits: `shared/lib/aiQuotaLimits.ts` must match SQL `reserve_ai_credit`
+(free=1/day, premium=100/month).
+
 ## Site adı düzeltmesi (cosmictrac → cosmictrack)
 
 Repo içinde eski `cosmictrac-react` URL’si yok. **Senin Dashboard’da** güncelle:

@@ -1,5 +1,5 @@
-export const FREE_DAILY_LIMIT = 1
-export const PREMIUM_MONTHLY_LIMIT = 100
+export { FREE_DAILY_LIMIT, PREMIUM_MONTHLY_LIMIT } from "@/shared/lib/aiQuotaLimits"
+import { FREE_DAILY_LIMIT, PREMIUM_MONTHLY_LIMIT } from "@/shared/lib/aiQuotaLimits"
 
 export type UserPlan = "free" | "premium"
 
